@@ -2,351 +2,727 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Bringo</title>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800;900&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;500;600;700;800;900&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --or:#FF5C00;--or2:#FF7A30;--orl:rgba(255,92,0,.12);
-  --bg:#0A0A12;--s1:#111119;--s2:#18181F;--s3:#1F1F28;
+  --or:#FF5C00;--orl:rgba(255,92,0,.13);--orb:rgba(255,92,0,.3);
+  --bg:#08080F;--s1:#0F0F18;--s2:#151520;--s3:#1A1A28;--s4:#202030;
   --bd:rgba(255,255,255,.06);--bd2:rgba(255,255,255,.11);
-  --t1:#F0F0FF;--t2:#7A7A99;--t3:#3A3A55;
+  --t1:#EEEEFF;--t2:#6868A0;--t3:#303050;
   --g:#22C55E;--gl:rgba(34,197,94,.13);
   --nav:62px;
 }
 html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(--t1);overflow:hidden}
-
-.app{max-width:430px;height:100dvh;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;position:relative;overflow:hidden}
-
-/* SCROLL */
-.content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
-.content::-webkit-scrollbar{display:none}
-
-/* PAGES */
-.page{display:none;padding-bottom:calc(var(--nav) + 16px)}
-.page.active{display:block;animation:up .22s ease}
-@keyframes up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.app{max-width:430px;height:100dvh;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;overflow:hidden}
+.scr{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.scr::-webkit-scrollbar{display:none}
+.pg{display:none;padding-bottom:calc(var(--nav)+20px)}
+.pg.on{display:block;animation:fadeUp .2s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
 /* NAV */
-.nav{height:var(--nav);background:var(--s1);border-top:1px solid var(--bd);display:flex;align-items:stretch;flex-shrink:0;padding-bottom:env(safe-area-inset-bottom)}
-.nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;color:var(--t3);cursor:pointer;transition:.15s;position:relative}
+.nav{height:var(--nav);background:var(--s1);border-top:1px solid var(--bd);display:flex;flex-shrink:0;padding-bottom:env(safe-area-inset-bottom)}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;color:var(--t3);cursor:pointer;transition:.15s;position:relative;padding-top:6px}
 .nb.on{color:var(--or)}
+.nb-dot{position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:3px;background:var(--or);border-radius:0 0 5px 5px;transition:.2s}
+.nb.on .nb-dot{width:30px}
 .nb .ni{font-size:22px;transition:.2s}
 .nb.on .ni{transform:scale(1.1)}
-.nb .nl{font-size:9.5px;font-weight:700;letter-spacing:.3px}
-.nb::after{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:2px;background:var(--or);border-radius:0 0 3px 3px;transition:.2s}
-.nb.on::after{width:28px}
+.nb .nl{font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-family:'Geologica',sans-serif}
 
-/* ─── HOME ─── */
-.topbar{padding:18px 18px 10px;display:flex;align-items:center;justify-content:space-between}
-.logo{font-family:'Unbounded',sans-serif;font-size:20px;font-weight:900;color:var(--or);letter-spacing:-1px}
-.city-pill{display:flex;align-items:center;gap:5px;background:var(--s2);border:1px solid var(--bd2);border-radius:20px;padding:6px 11px;font-size:11px;font-weight:700;color:var(--t2)}
+/* TOPBAR */
+.tb{padding:16px 18px 10px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Geologica',sans-serif;font-size:22px;font-weight:900;color:var(--or);letter-spacing:-1px}
+.city{background:var(--s2);border:1px solid var(--bd2);border-radius:20px;padding:6px 12px;font-size:11px;font-weight:600;color:var(--t2);font-family:'Geologica',sans-serif}
 
-.search{margin:0 18px 18px;background:var(--s2);border:1.5px solid var(--bd2);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:9px;color:var(--t2);font-size:13px;font-weight:600}
+/* SEARCH */
+.srch{margin:0 18px 16px;background:var(--s2);border:1.5px solid var(--bd2);border-radius:13px;padding:11px 14px;display:flex;align-items:center;gap:9px;color:var(--t2);font-size:13px;font-weight:600}
 
-.hero{margin:0 18px 18px;border-radius:20px;background:linear-gradient(135deg,#FF5C00,#C83000);padding:24px 22px;position:relative;overflow:hidden;min-height:138px;display:flex;flex-direction:column;justify-content:flex-end}
-.hero::before{content:'🛵';position:absolute;right:-12px;top:-16px;font-size:100px;opacity:.15;transform:rotate(-8deg);line-height:1}
-.hero-tag{font-size:10px;font-weight:800;letter-spacing:1px;opacity:.75;text-transform:uppercase;margin-bottom:6px}
-.hero h2{font-family:'Unbounded',sans-serif;font-size:17px;font-weight:900;line-height:1.25;margin-bottom:10px}
-.hero-btn{display:inline-flex;align-items:center;gap:5px;background:#fff;color:var(--or);border-radius:10px;padding:8px 14px;font-family:'Unbounded',sans-serif;font-size:11px;font-weight:800;width:fit-content}
+/* HERO */
+.hero{margin:0 18px 20px;border-radius:22px;background:linear-gradient(130deg,#FF5C00,#C82800);padding:24px 22px 22px;position:relative;overflow:hidden;min-height:145px;display:flex;flex-direction:column;justify-content:flex-end}
+.hero::before{content:'🛵';position:absolute;right:-8px;top:-12px;font-size:110px;opacity:.12;transform:rotate(-7deg);line-height:1;pointer-events:none}
+.hero-tag{font-size:10px;font-weight:700;letter-spacing:1.2px;opacity:.75;text-transform:uppercase;margin-bottom:6px;font-family:'Geologica',sans-serif}
+.hero h2{font-family:'Geologica',sans-serif;font-size:19px;font-weight:900;line-height:1.25;margin-bottom:13px}
+.hero-cta{display:inline-flex;align-items:center;gap:6px;background:#fff;color:var(--or);border-radius:10px;padding:9px 16px;font-family:'Geologica',sans-serif;font-size:11px;font-weight:800;cursor:pointer;position:relative;z-index:1;border:none}
 
-.sec{padding:0 18px;margin-bottom:20px}
-.sec-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}
-.sec-hd h3{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800}
-.sec-hd span{font-size:11px;color:var(--or);font-weight:700}
-
-/* PROMO */
-.promos{display:flex;gap:10px;overflow-x:auto;padding:0 18px 2px;margin-bottom:20px;scrollbar-width:none}
+/* PROMOS */
+.promos{display:flex;gap:10px;overflow-x:auto;padding:0 18px 4px;margin-bottom:20px;scrollbar-width:none}
 .promos::-webkit-scrollbar{display:none}
-.promo{flex-shrink:0;border-radius:15px;padding:13px 14px;width:155px;display:flex;flex-direction:column;gap:6px}
-.promo.a{background:linear-gradient(135deg,#FF5C00,#FF8C30)}
-.promo.b{background:linear-gradient(135deg,#5B21B6,#8B5CF6)}
-.promo.c{background:linear-gradient(135deg,#0369A1,#38BDF8)}
-.promo-ic{font-size:24px}
-.promo h4{font-family:'Unbounded',sans-serif;font-size:11px;font-weight:800;line-height:1.3}
+.promo{flex-shrink:0;border-radius:16px;padding:13px 14px;width:152px}
+.promo.a{background:linear-gradient(135deg,#FF5C00,#FF8830)}
+.promo.b{background:linear-gradient(135deg,#4338CA,#7C3AED)}
+.promo.c{background:linear-gradient(135deg,#0369A1,#0EA5E9)}
+.promo-ic{font-size:24px;margin-bottom:5px}
+.promo h4{font-family:'Geologica',sans-serif;font-size:11px;font-weight:800;line-height:1.3;margin-bottom:2px}
 .promo p{font-size:10px;opacity:.82}
 
-/* REST CARDS scroll */
-.rscroll{display:flex;gap:12px;overflow-x:auto;padding:0 18px 4px;scrollbar-width:none}
-.rscroll::-webkit-scrollbar{display:none}
-.rcard{flex-shrink:0;width:195px;background:var(--s2);border:1px solid var(--bd);border-radius:16px;overflow:hidden;cursor:pointer;transition:.18s;active:transform:scale(.97)}
-.rcard:active{transform:scale(.97)}
-.rcard-img{height:108px;background-size:cover;background-position:center;position:relative}
-.rcard-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.65),transparent 55%)}
-.rcard-badges{position:absolute;bottom:7px;left:8px;display:flex;gap:5px}
-.rbadge{background:rgba(0,0,0,.7);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:3px 7px;font-size:10px;font-weight:700}
-.rbadge.o{background:rgba(255,92,0,.85);border-color:transparent}
-.rcard-body{padding:10px 11px}
-.rcard-name{font-family:'Unbounded',sans-serif;font-size:11.5px;font-weight:800;margin-bottom:3px}
-.rcard-meta{font-size:10px;color:var(--t2)}
+/* SECTION HEADER */
+.sh{padding:0 18px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.sh h3{font-family:'Geologica',sans-serif;font-size:14px;font-weight:800}
+.sh a{font-size:11px;color:var(--or);font-weight:700;cursor:pointer;text-decoration:none}
+
+/* REST CARDS (horizontal) */
+.rrow{display:flex;gap:12px;overflow-x:auto;padding:0 18px 4px;scrollbar-width:none}
+.rrow::-webkit-scrollbar{display:none}
+.rc{flex-shrink:0;width:192px;background:var(--s2);border:1px solid var(--bd);border-radius:17px;overflow:hidden;cursor:pointer}
+.rc:active{transform:scale(.97)}
+.rc-img{height:112px;background-size:cover;background-position:center;position:relative}
+.rc-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.65),transparent 55%)}
+.rc-badges{position:absolute;bottom:8px;left:8px;display:flex;gap:5px}
+.rb{background:rgba(0,0,0,.72);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:3px 8px;font-size:10px;font-weight:700}
+.rb.o{background:rgba(255,92,0,.88);border-color:transparent}
+.rc-body{padding:10px 12px}
+.rc-name{font-family:'Geologica',sans-serif;font-size:12px;font-weight:800;margin-bottom:3px}
+.rc-meta{font-size:10px;color:var(--t2)}
 
 /* SHOPS */
-.shop{display:flex;align-items:center;gap:12px;padding:13px;background:var(--s2);border:1px solid var(--bd);border-radius:14px;margin-bottom:9px;text-decoration:none;color:var(--t1);cursor:pointer;transition:.15s;active:transform:translateX(3px)}
-.shop:active{transform:translateX(3px)}
+.shop{display:flex;align-items:center;gap:12px;padding:13px;background:var(--s2);border:1px solid var(--bd);border-radius:14px;margin:0 18px 10px;color:var(--t1);text-decoration:none;cursor:pointer}
+.shop:active{opacity:.8}
 .shop-ic{width:44px;height:44px;background:var(--orl);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.shop-nm{font-family:'Unbounded',sans-serif;font-size:12px;font-weight:800;margin-bottom:2px}
+.shop-nm{font-family:'Geologica',sans-serif;font-size:12px;font-weight:800;margin-bottom:2px}
 .shop-sub{font-size:10px;color:var(--t2)}
 .shop-arr{margin-left:auto;color:var(--t3);font-size:18px}
 
-/* ─── RESTAURANTS PAGE ─── */
-.filters{display:flex;gap:8px;overflow-x:auto;padding:0 18px 2px;margin-bottom:16px;scrollbar-width:none}
+/* FILTERS */
+.filters{display:flex;gap:8px;overflow-x:auto;padding:0 18px 4px;margin-bottom:14px;scrollbar-width:none}
 .filters::-webkit-scrollbar{display:none}
-.filter{flex-shrink:0;padding:7px 14px;background:var(--s2);border:1.5px solid var(--bd);border-radius:20px;font-size:11.5px;font-weight:700;color:var(--t2);cursor:pointer;transition:.15s;white-space:nowrap}
-.filter.on{background:var(--orl);border-color:var(--or);color:var(--or)}
+.fi{flex-shrink:0;padding:7px 14px;background:var(--s2);border:1.5px solid var(--bd);border-radius:20px;font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;font-family:'Geologica',sans-serif}
+.fi.on{background:var(--orl);border-color:var(--or);color:var(--or)}
 
+/* REST LIST */
 .rlist{padding:0 18px}
-.ritem{display:flex;gap:12px;background:var(--s2);border:1px solid var(--bd);border-radius:15px;padding:12px;margin-bottom:10px;cursor:pointer;transition:.15s}
-.ritem:active{transform:scale(.99);border-color:var(--or)}
-.ritem-img{width:64px;height:64px;border-radius:11px;background-size:cover;background-position:center;flex-shrink:0}
-.ritem-info{flex:1;min-width:0}
-.ritem-name{font-family:'Unbounded',sans-serif;font-size:12px;font-weight:800;margin-bottom:3px}
-.ritem-meta{font-size:10px;color:var(--t2);margin-bottom:6px}
+.ri{display:flex;gap:12px;background:var(--s2);border:1px solid var(--bd);border-radius:15px;padding:12px;margin-bottom:10px;cursor:pointer}
+.ri:active{border-color:var(--or)}
+.ri-img{width:64px;height:64px;border-radius:11px;background-size:cover;background-position:center;flex-shrink:0}
+.ri-name{font-family:'Geologica',sans-serif;font-size:12px;font-weight:800;margin-bottom:3px}
+.ri-meta{font-size:10px;color:var(--t2);margin-bottom:6px}
 .tags{display:flex;gap:5px;flex-wrap:wrap}
 .tag{background:var(--s3);border-radius:5px;padding:2px 7px;font-size:9px;font-weight:700;color:var(--t2)}
-.ritem-arr{color:var(--t3);font-size:16px;align-self:center;flex-shrink:0}
+.ri-arr{color:var(--t3);font-size:17px;align-self:center;flex-shrink:0;margin-left:auto}
 
-/* ─── ORDERS PAGE ─── */
-.orders-empty{text-align:center;padding:60px 28px 30px}
-.orders-empty .big-em{font-size:64px;margin-bottom:16px;opacity:.25;display:block}
-.orders-empty h3{font-family:'Unbounded',sans-serif;font-size:15px;font-weight:800;margin-bottom:8px}
-.orders-empty p{font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:22px}
-.cta-btn{display:inline-block;background:var(--or);color:#fff;border-radius:12px;padding:12px 24px;font-family:'Unbounded',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:.15s;border:none}
-.cta-btn:active{transform:scale(.97)}
+/* ── REST PAGE ── */
+.rest-banner{height:185px;background-size:cover;background-position:center;position:relative;flex-shrink:0}
+.rest-banner-ov{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,transparent 55%)}
+.rest-hd{padding:10px 18px 0}
+.rest-nm{font-family:'Geologica',sans-serif;font-size:20px;font-weight:900;margin-bottom:8px}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.chip{background:var(--s2);border:1px solid var(--bd2);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:600;color:var(--t2)}
+.chip.g{background:var(--gl);border-color:rgba(34,197,94,.3);color:var(--g)}
+.chip.o{background:var(--orl);border-color:var(--orb);color:var(--or)}
 
-/* ─── PROFILE PAGE ─── */
-.prof-top{margin:0 18px 18px;background:var(--s2);border:1px solid var(--bd);border-radius:18px;padding:20px;display:flex;align-items:center;gap:14px}
+/* CAT TABS */
+.cat-tabs{display:flex;gap:7px;overflow-x:auto;padding:8px 18px 10px;scrollbar-width:none;position:sticky;top:0;background:var(--bg);z-index:10}
+.cat-tabs::-webkit-scrollbar{display:none}
+.ct{flex-shrink:0;padding:7px 14px;background:var(--s2);border:1.5px solid var(--bd);border-radius:20px;font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;font-family:'Geologica',sans-serif;transition:.13s}
+.ct.on{background:var(--orl);border-color:var(--or);color:var(--or)}
+
+/* MENU GRID */
+.msec-title{font-family:'Geologica',sans-serif;font-size:11px;font-weight:800;color:var(--or);text-transform:uppercase;letter-spacing:.8px;padding:0 18px;margin-bottom:10px}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 18px;margin-bottom:18px}
+.mc{background:var(--s2);border:1px solid var(--bd);border-radius:14px;overflow:hidden;cursor:pointer}
+.mc:active{transform:scale(.97);border-color:var(--orb)}
+.mc-img{height:98px;background-size:cover;background-position:center;background-color:var(--s3)}
+.mc-body{padding:9px 10px 10px}
+.mc-name{font-family:'Geologica',sans-serif;font-size:11.5px;font-weight:800;margin-bottom:2px;line-height:1.3}
+.mc-desc{font-size:10px;color:var(--t2);line-height:1.35;margin-bottom:7px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mc-foot{display:flex;align-items:center;justify-content:space-between}
+.mc-price{font-family:'Geologica',sans-serif;font-size:12px;font-weight:900;color:var(--or)}
+.mc-add{width:28px;height:28px;background:var(--or);border:none;border-radius:8px;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mc-add:active{transform:scale(.88)}
+
+/* BACK */
+.back{display:flex;align-items:center;gap:6px;padding:12px 18px 6px;font-size:13px;font-weight:700;color:var(--t2);cursor:pointer;font-family:'Geologica',sans-serif}
+.back:active{color:var(--or)}
+
+/* ── PRODUCT MODAL ── */
+.mov{position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(6px);z-index:300;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:.22s}
+.mov.on{opacity:1;pointer-events:all}
+.modal{width:100%;max-width:430px;background:var(--s1);border-radius:24px 24px 0 0;max-height:90vh;display:flex;flex-direction:column;transform:translateY(16px);transition:.26s cubic-bezier(.4,0,.2,1);overflow:hidden}
+.mov.on .modal{transform:translateY(0)}
+.modal-drag{width:36px;height:4px;background:var(--bd2);border-radius:10px;margin:10px auto 0;flex-shrink:0}
+.modal-img{width:100%;height:195px;background-size:cover;background-position:center;background-color:var(--s3);flex-shrink:0}
+.modal-scr{flex:1;overflow-y:auto;scrollbar-width:none}
+.modal-scr::-webkit-scrollbar{display:none}
+.modal-body{padding:16px 18px 4px}
+.modal-name{font-family:'Geologica',sans-serif;font-size:19px;font-weight:900;margin-bottom:5px}
+.modal-desc{font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:16px}
+.modal-sec-lbl{font-family:'Geologica',sans-serif;font-size:10px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:.9px;margin-bottom:10px}
+.opts{display:flex;flex-direction:column;gap:8px;margin-bottom:8px;padding:0 18px}
+.opt{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--s2);border:1.5px solid var(--bd2);border-radius:13px;cursor:pointer;transition:.15s}
+.opt.on{background:var(--orl);border-color:var(--or)}
+.opt-name{font-size:13px;font-weight:700}
+.opt.on .opt-name{color:var(--or)}
+.opt-sub{font-size:10px;color:var(--t2);margin-top:1px}
+.opt-r{display:flex;align-items:center;gap:10px}
+.opt-price{font-family:'Geologica',sans-serif;font-size:13px;font-weight:900;color:var(--or)}
+.opt-chk{width:22px;height:22px;border-radius:50%;border:2px solid var(--bd2);display:flex;align-items:center;justify-content:center;font-size:12px;transition:.15s;flex-shrink:0;color:transparent}
+.opt.on .opt-chk{background:var(--or);border-color:var(--or);color:#fff}
+
+/* MODAL FOOTER */
+.modal-ft{padding:14px 18px;border-top:1px solid var(--bd);display:flex;align-items:center;gap:12px;background:var(--s1);flex-shrink:0}
+.qty-box{display:flex;align-items:center;gap:9px;background:var(--s2);border:1px solid var(--bd2);border-radius:11px;padding:6px 10px}
+.qb{width:28px;height:28px;border:1.5px solid var(--bd2);background:none;color:var(--t1);border-radius:8px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.qb:active{background:var(--orl);border-color:var(--or);color:var(--or)}
+.qn{font-family:'Geologica',sans-serif;font-size:15px;font-weight:900;min-width:18px;text-align:center}
+.add-btn{flex:1;padding:14px;background:var(--or);border:none;border-radius:13px;color:#fff;font-family:'Geologica',sans-serif;font-weight:800;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
+.add-btn:active{background:#df4f00}
+.add-btn-price{font-size:15px;font-weight:900}
+
+/* ORDERS */
+.ord-empty{text-align:center;padding:60px 28px}
+.ord-em{font-size:64px;opacity:.2;display:block;margin-bottom:14px}
+.ord-empty h3{font-family:'Geologica',sans-serif;font-size:16px;font-weight:900;margin-bottom:8px}
+.ord-empty p{font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:22px}
+.cta{background:var(--or);color:#fff;border:none;border-radius:13px;padding:13px 26px;font-family:'Geologica',sans-serif;font-size:13px;font-weight:800;cursor:pointer}
+
+/* PROFILE */
+.prof-top{margin:0 18px 16px;background:var(--s2);border:1px solid var(--bd);border-radius:18px;padding:20px;display:flex;align-items:center;gap:14px}
 .prof-av{width:56px;height:56px;background:var(--orl);border:2.5px solid var(--or);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
-.prof-name{font-family:'Unbounded',sans-serif;font-size:15px;font-weight:900;margin-bottom:2px}
+.prof-name{font-family:'Geologica',sans-serif;font-size:15px;font-weight:900;margin-bottom:2px}
 .prof-city{font-size:11px;color:var(--t2);margin-bottom:6px}
-.prof-badge{display:inline-block;background:var(--orl);color:var(--or);border-radius:6px;padding:2px 9px;font-size:10px;font-weight:800}
-
+.prof-badge{background:var(--orl);color:var(--or);border-radius:6px;padding:2px 9px;font-size:10px;font-weight:800;font-family:'Geologica',sans-serif}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 18px 20px}
 .stat{background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:14px;text-align:center}
-.stat-n{font-family:'Unbounded',sans-serif;font-size:22px;font-weight:900;color:var(--or);margin-bottom:3px}
+.stat-n{font-family:'Geologica',sans-serif;font-size:22px;font-weight:900;color:var(--or);margin-bottom:3px}
 .stat-l{font-size:10px;color:var(--t2);font-weight:700}
+.plist{padding:0 18px}
+.pi{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--bd);cursor:pointer}
+.pi:last-child{border:none}
+.pi-ic{width:38px;height:38px;background:var(--s2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.pi-lbl{flex:1;font-size:13px;font-weight:700}
+.pi-arr{color:var(--t3)}
+.pi.red .pi-lbl{color:#EF4444}
+.pi.red .pi-ic{background:rgba(239,68,68,.1)}
 
-.menu-sec{margin:0 18px}
-.menu-sec-title{font-size:10px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding-left:2px}
-.mi{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--bd);cursor:pointer}
-.mi:last-child{border:none}
-.mi-ic{width:38px;height:38px;background:var(--s2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
-.mi-lbl{flex:1;font-size:13px;font-weight:700}
-.mi-arr{color:var(--t3);font-size:14px}
-.mi.red .mi-lbl{color:#EF4444}
-.mi.red .mi-ic{background:rgba(239,68,68,.1)}
+/* TOAST */
+.toast{position:fixed;bottom:calc(var(--nav)+12px);left:50%;transform:translateX(-50%) translateY(8px);background:var(--s2);border:1px solid var(--bd2);border-radius:11px;padding:10px 18px;font-size:13px;font-weight:700;z-index:999;opacity:0;transition:.2s;pointer-events:none;white-space:nowrap;font-family:'Geologica',sans-serif}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="content" id="content">
+ <div class="scr" id="scr">
 
-    <!-- HOME -->
-    <div class="page active" id="pg-home">
-      <div class="topbar">
-        <div class="logo">BRINGO</div>
-        <div class="city-pill">📍 Білгород-Дністровський</div>
-      </div>
-
-      <div class="search">🔍 &nbsp;Пошук ресторанів та страв…</div>
-
-      <div class="hero">
-        <div class="hero-tag">Доставка їжі</div>
-        <h2>Смачне — вже за 30 хвилин</h2>
-        <div class="hero-btn">Обрати ресторан →</div>
-      </div>
-
-      <div class="promos">
-        <div class="promo a"><div class="promo-ic">🎁</div><h4>−20% перше замовлення</h4><p>Промокод FIRST20</p></div>
-        <div class="promo b"><div class="promo-ic">🛵</div><h4>Безкоштовна доставка</h4><p>Від 500 грн</p></div>
-        <div class="promo c"><div class="promo-ic">⚡</div><h4>В середньому 30 хв</h4><p>Відстеження онлайн</p></div>
-      </div>
-
-      <div class="sec">
-        <div class="sec-hd"><h3>Ресторани</h3><span onclick="goPage('rests')">Всі →</span></div>
-      </div>
-      <div class="rscroll">
-        <div class="rcard" onclick="goPage('rests')">
-          <div class="rcard-img" style="background-image:url('https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=70')">
-            <div class="rcard-img-ov"></div>
-            <div class="rcard-badges"><div class="rbadge">⏱ 25 хв</div><div class="rbadge o">🛵 50 грн</div></div>
-          </div>
-          <div class="rcard-body">
-            <div class="rcard-name">Кафе Маестро</div>
-            <div class="rcard-meta">⭐ 4.8 · Піца, Хачапурі, Салати</div>
-          </div>
-        </div>
-        <div class="rcard" onclick="goPage('rests')">
-          <div class="rcard-img" style="background-image:url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=70')">
-            <div class="rcard-img-ov"></div>
-            <div class="rcard-badges"><div class="rbadge">⏱ 30 хв</div><div class="rbadge o">🛵 50 грн</div></div>
-          </div>
-          <div class="rcard-body">
-            <div class="rcard-name">Кафе Свобода</div>
-            <div class="rcard-meta">⭐ 4.6 · Шашлик, Домашня</div>
-          </div>
-        </div>
-        <div class="rcard" style="background:var(--s3);border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;height:170px">
-          <div style="font-size:28px;margin-bottom:8px">➕</div>
-          <div style="font-family:'Unbounded',sans-serif;font-size:10px;font-weight:700;color:var(--t2);text-align:center;padding:0 14px">Скоро нові ресторани</div>
-        </div>
-      </div>
-
-      <div class="sec" style="margin-top:20px">
-        <div class="sec-hd"><h3>Магазини</h3></div>
-        <a href="https://www.atbmarket.com" target="_blank" class="shop">
-          <div class="shop-ic">🛒</div>
-          <div><div class="shop-nm">АТБ-Маркет</div><div class="shop-sub">Продукти, напої, господарство</div></div>
-          <div class="shop-arr">↗</div>
-        </a>
-        <a href="https://www.tavriav.ua" target="_blank" class="shop">
-          <div class="shop-ic">🏪</div>
-          <div><div class="shop-nm">Таврія В</div><div class="shop-sub">Мережа супермаркетів</div></div>
-          <div class="shop-arr">↗</div>
-        </a>
-      </div>
+  <!-- ════ HOME ════ -->
+  <div class="pg on" id="pg-home">
+   <div class="tb"><div class="logo">BRINGO</div><div class="city">📍 Білгород-Дністровський</div></div>
+   <div class="srch">🔍 &nbsp;Пошук ресторанів та страв…</div>
+   <div class="hero">
+    <div class="hero-tag">Доставка їжі</div>
+    <h2>Смачне —<br>вже за 30 хвилин</h2>
+    <button class="hero-cta" onclick="openRest()">Обрати ресторан →</button>
+   </div>
+   <div class="promos">
+    <div class="promo a"><div class="promo-ic">🎁</div><h4>−20% перше замовлення</h4><p>Промокод FIRST20</p></div>
+    <div class="promo b"><div class="promo-ic">🛵</div><h4>Безкоштовна доставка</h4><p>Від 500 грн</p></div>
+    <div class="promo c"><div class="promo-ic">⚡</div><h4>В середньому 30 хв</h4><p>Live відстеження</p></div>
+   </div>
+   <div class="sh"><h3>Ресторани</h3><a onclick="goPage('rests')">Всі →</a></div>
+   <div class="rrow" style="margin-bottom:22px">
+    <div class="rc" onclick="openRest()">
+     <div class="rc-img" style="background-image:url('https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=70')">
+      <div class="rc-ov"></div>
+      <div class="rc-badges"><div class="rb">⏱ 25 хв</div><div class="rb o">🛵 50 грн</div></div>
+     </div>
+     <div class="rc-body"><div class="rc-name">Кафе Маестро</div><div class="rc-meta">⭐ 4.8 · Піца, Суші, Мангал</div></div>
     </div>
-
-    <!-- RESTAURANTS -->
-    <div class="page" id="pg-rests">
-      <div class="topbar" style="padding-bottom:14px">
-        <div>
-          <div class="logo" style="font-size:17px">Ресторани</div>
-          <div style="font-size:11px;color:var(--t2);margin-top:2px">2 заклади у вашому місті</div>
-        </div>
-      </div>
-
-      <div class="search" style="margin-bottom:14px">🔍 &nbsp;Знайти ресторан…</div>
-
-      <div class="filters">
-        <div class="filter on">Всі</div>
-        <div class="filter">Піца</div>
-        <div class="filter">Шашлик</div>
-        <div class="filter">Домашня кухня</div>
-        <div class="filter">Десерти</div>
-        <div class="filter">Напої</div>
-      </div>
-
-      <div class="rlist">
-        <div class="ritem">
-          <div class="ritem-img" style="background-image:url('https://images.unsplash.com/photo-1513104890138-7c749659a591?w=200&q=70')"></div>
-          <div class="ritem-info">
-            <div class="ritem-name">Кафе Маестро</div>
-            <div class="ritem-meta">⭐ 4.8 · ⏱ 25–30 хв · 🛵 50 грн</div>
-            <div class="tags">
-              <div class="tag">Піца</div><div class="tag">Хачапурі</div><div class="tag">Салати</div><div class="tag">Десерти</div>
-            </div>
-          </div>
-          <div class="ritem-arr">›</div>
-        </div>
-
-        <div class="ritem">
-          <div class="ritem-img" style="background-image:url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=200&q=70')"></div>
-          <div class="ritem-info">
-            <div class="ritem-name">Кафе Свобода</div>
-            <div class="ritem-meta">⭐ 4.6 · ⏱ 25–30 хв · 🛵 50 грн</div>
-            <div class="tags">
-              <div class="tag">Шашлик</div><div class="tag">Домашня</div><div class="tag">Супи</div><div class="tag">Гриль</div>
-            </div>
-          </div>
-          <div class="ritem-arr">›</div>
-        </div>
-
-        <div style="margin-top:10px;background:var(--s2);border:1.5px dashed var(--bd2);border-radius:16px;padding:22px;text-align:center">
-          <div style="font-size:30px;margin-bottom:8px">🏪</div>
-          <div style="font-family:'Unbounded',sans-serif;font-size:12px;font-weight:800;margin-bottom:4px">Хочете додати заклад?</div>
-          <div style="font-size:11px;color:var(--t2)">Зв'яжіться з нами — підключимо</div>
-        </div>
-      </div>
+    <div class="rc" style="background:var(--s3);border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;height:170px;min-width:192px">
+     <div style="font-size:28px;margin-bottom:8px">➕</div>
+     <div style="font-family:'Geologica',sans-serif;font-size:10px;font-weight:700;color:var(--t2);text-align:center;padding:0 14px">Скоро нові<br>ресторани</div>
     </div>
+   </div>
+   <div class="sh"><h3>Магазини</h3></div>
+   <a href="https://www.atbmarket.com" target="_blank" class="shop"><div class="shop-ic">🛒</div><div><div class="shop-nm">АТБ-Маркет</div><div class="shop-sub">Продукти, напої, господарство</div></div><div class="shop-arr">↗</div></a>
+   <a href="https://www.tavriav.ua" target="_blank" class="shop"><div class="shop-ic">🏪</div><div><div class="shop-nm">Таврія В</div><div class="shop-sub">Мережа супермаркетів</div></div><div class="shop-arr">↗</div></a>
+  </div>
 
-    <!-- ORDERS -->
-    <div class="page" id="pg-orders">
-      <div class="topbar" style="padding-bottom:14px">
-        <div>
-          <div class="logo" style="font-size:17px">Замовлення</div>
-          <div style="font-size:11px;color:var(--t2);margin-top:2px">Ваші активні доставки</div>
-        </div>
-      </div>
-      <div class="orders-empty">
-        <span class="big-em">📦</span>
-        <h3>Замовлень поки немає</h3>
-        <p>Оберіть ресторан і зробіть<br>перше замовлення!</p>
-        <button class="cta-btn" onclick="goPage('rests')">Перейти до меню</button>
-      </div>
+  <!-- ════ RESTS ════ -->
+  <div class="pg" id="pg-rests">
+   <div class="tb" style="padding-bottom:14px"><div><div class="logo" style="font-size:18px">Ресторани</div><div style="font-size:11px;color:var(--t2);margin-top:2px">1 заклад у вашому місті</div></div></div>
+   <div class="srch" style="margin-bottom:14px">🔍 &nbsp;Знайти…</div>
+   <div class="filters">
+    <div class="fi on">Всі</div><div class="fi">Піца</div><div class="fi">Суші</div>
+    <div class="fi">Мангал</div><div class="fi">Сніданки</div><div class="fi">Пасти</div>
+   </div>
+   <div class="rlist">
+    <div class="ri" onclick="openRest()">
+     <div class="ri-img" style="background-image:url('https://images.unsplash.com/photo-1513104890138-7c749659a591?w=200&q=70')"></div>
+     <div style="flex:1;min-width:0">
+      <div class="ri-name">Кафе Маестро</div>
+      <div class="ri-meta">⭐ 4.8 · ⏱ 25–30 хв · 🛵 50 грн</div>
+      <div class="tags"><div class="tag">Піца</div><div class="tag">Суші</div><div class="tag">Мангал</div><div class="tag">Пасти</div></div>
+     </div>
+     <div class="ri-arr">›</div>
     </div>
-
-    <!-- PROFILE -->
-    <div class="page" id="pg-profile">
-      <div class="topbar" style="padding-bottom:14px">
-        <div class="logo" style="font-size:17px">Профіль</div>
-      </div>
-
-      <div class="prof-top">
-        <div class="prof-av">👤</div>
-        <div>
-          <div class="prof-name">Мій профіль</div>
-          <div class="prof-city">📍 Білгород-Дністровський</div>
-          <div class="prof-badge">🏅 Новий клієнт</div>
-        </div>
-      </div>
-
-      <div class="stats">
-        <div class="stat"><div class="stat-n">0</div><div class="stat-l">замовлень</div></div>
-        <div class="stat"><div class="stat-n">0</div><div class="stat-l">грн витрат</div></div>
-        <div class="stat"><div class="stat-n">0</div><div class="stat-l">бонусів</div></div>
-      </div>
-
-      <div class="menu-sec">
-        <div class="menu-sec-title">Особисте</div>
-        <div class="mi"><div class="mi-ic">📋</div><div class="mi-lbl">Мої замовлення</div><div class="mi-arr">›</div></div>
-        <div class="mi"><div class="mi-ic">📍</div><div class="mi-lbl">Збережені адреси</div><div class="mi-arr">›</div></div>
-        <div class="mi"><div class="mi-ic">💳</div><div class="mi-lbl">Способи оплати</div><div class="mi-arr">›</div></div>
-      </div>
-
-      <div class="menu-sec" style="margin-top:22px">
-        <div class="menu-sec-title">Інше</div>
-        <div class="mi"><div class="mi-ic">🔔</div><div class="mi-lbl">Сповіщення</div><div class="mi-arr">›</div></div>
-        <div class="mi"><div class="mi-ic">🎁</div><div class="mi-lbl">Промокоди та бонуси</div><div class="mi-arr">›</div></div>
-        <div class="mi"><div class="mi-ic">📞</div><div class="mi-lbl">Підтримка</div><div class="mi-arr">›</div></div>
-        <div class="mi red"><div class="mi-ic">↩</div><div class="mi-lbl">Вийти</div></div>
-      </div>
+    <div style="background:var(--s2);border:1.5px dashed var(--bd2);border-radius:16px;padding:22px;text-align:center">
+     <div style="font-size:30px;margin-bottom:8px">🏪</div>
+     <div style="font-family:'Geologica',sans-serif;font-size:12px;font-weight:800;margin-bottom:4px">Хочете додати заклад?</div>
+     <div style="font-size:11px;color:var(--t2)">Зв'яжіться з нами — підключимо</div>
     </div>
+   </div>
+  </div>
 
-  </div><!-- /content -->
+  <!-- ════ REST PAGE ════ -->
+  <div class="pg" id="pg-rest">
+   <div class="back" onclick="goPage('rests')">← Назад</div>
+   <div class="rest-banner" style="background-image:url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80')">
+    <div class="rest-banner-ov"></div>
+   </div>
+   <div class="rest-hd">
+    <div class="rest-nm">Кафе Маестро</div>
+    <div class="chips">
+     <div class="chip g">⭐ 4.8</div>
+     <div class="chip">⏱ 25–30 хв</div>
+     <div class="chip o">🛵 50 грн</div>
+     <div class="chip">📞 +380-68-52-08-130</div>
+    </div>
+   </div>
+   <div class="cat-tabs" id="catTabs"></div>
+   <div id="menuContent"></div>
+  </div>
 
-  <!-- NAV -->
-  <nav class="nav">
-    <button class="nb on" id="nb-home" onclick="goPage('home')">
-      <div class="ni">🏠</div><div class="nl">Головна</div>
-    </button>
-    <button class="nb" id="nb-rests" onclick="goPage('rests')">
-      <div class="ni">🍴</div><div class="nl">Ресторани</div>
-    </button>
-    <button class="nb" id="nb-orders" onclick="goPage('orders')">
-      <div class="ni">📦</div><div class="nl">Замовлення</div>
-    </button>
-    <button class="nb" id="nb-profile" onclick="goPage('profile')">
-      <div class="ni">👤</div><div class="nl">Профіль</div>
-    </button>
-  </nav>
+  <!-- ════ ORDERS ════ -->
+  <div class="pg" id="pg-orders">
+   <div class="tb" style="padding-bottom:14px"><div><div class="logo" style="font-size:18px">Замовлення</div><div style="font-size:11px;color:var(--t2);margin-top:2px">Активні доставки</div></div></div>
+   <div class="ord-empty">
+    <span class="ord-em">📦</span>
+    <h3>Замовлень поки немає</h3>
+    <p>Оберіть ресторан і зробіть перше замовлення!</p>
+    <button class="cta" onclick="openRest()">Перейти до меню</button>
+   </div>
+  </div>
+
+  <!-- ════ PROFILE ════ -->
+  <div class="pg" id="pg-profile">
+   <div class="tb" style="padding-bottom:14px"><div class="logo" style="font-size:18px">Профіль</div></div>
+   <div class="prof-top">
+    <div class="prof-av">👤</div>
+    <div>
+     <div class="prof-name">Мій профіль</div>
+     <div class="prof-city">📍 Білгород-Дністровський</div>
+     <div class="prof-badge">🏅 Новий клієнт</div>
+    </div>
+   </div>
+   <div class="stats">
+    <div class="stat"><div class="stat-n">0</div><div class="stat-l">замовлень</div></div>
+    <div class="stat"><div class="stat-n">0</div><div class="stat-l">грн витрат</div></div>
+    <div class="stat"><div class="stat-n">0</div><div class="stat-l">бонусів</div></div>
+   </div>
+   <div class="plist">
+    <div class="pi"><div class="pi-ic">📋</div><div class="pi-lbl">Мої замовлення</div><div class="pi-arr">›</div></div>
+    <div class="pi"><div class="pi-ic">📍</div><div class="pi-lbl">Збережені адреси</div><div class="pi-arr">›</div></div>
+    <div class="pi"><div class="pi-ic">💳</div><div class="pi-lbl">Способи оплати</div><div class="pi-arr">›</div></div>
+    <div class="pi"><div class="pi-ic">🔔</div><div class="pi-lbl">Сповіщення</div><div class="pi-arr">›</div></div>
+    <div class="pi"><div class="pi-ic">🎁</div><div class="pi-lbl">Промокоди та бонуси</div><div class="pi-arr">›</div></div>
+    <div class="pi"><div class="pi-ic">📞</div><div class="pi-lbl">Підтримка</div><div class="pi-arr">›</div></div>
+    <div class="pi red"><div class="pi-ic">↩</div><div class="pi-lbl">Вийти</div></div>
+   </div>
+  </div>
+
+ </div><!-- /scr -->
+
+ <!-- NAV -->
+ <nav class="nav">
+  <button class="nb on" id="nb-home" onclick="goPage('home')"><div class="nb-dot"></div><div class="ni">🏠</div><div class="nl">Головна</div></button>
+  <button class="nb" id="nb-rests" onclick="goPage('rests')"><div class="nb-dot"></div><div class="ni">🍴</div><div class="nl">Ресторани</div></button>
+  <button class="nb" id="nb-orders" onclick="goPage('orders')"><div class="nb-dot"></div><div class="ni">📦</div><div class="nl">Замовлення</div></button>
+  <button class="nb" id="nb-profile" onclick="goPage('profile')"><div class="nb-dot"></div><div class="ni">👤</div><div class="nl">Профіль</div></button>
+ </nav>
 </div>
 
+<!-- ════ PRODUCT MODAL ════ -->
+<div class="mov" id="mOv" onclick="if(event.target===this)closeModal()">
+ <div class="modal" id="modal">
+  <div class="modal-drag"></div>
+  <div class="modal-img" id="mImg"></div>
+  <div class="modal-scr">
+   <div class="modal-body">
+    <div class="modal-name" id="mName"></div>
+    <div class="modal-desc" id="mDesc"></div>
+    <div class="modal-sec-lbl" id="mSecLbl" style="padding:0 0 0 0"></div>
+   </div>
+   <div class="opts" id="mOpts"></div>
+  </div>
+  <div class="modal-ft">
+   <div class="qty-box">
+    <button class="qb" onclick="chQty(-1)">−</button>
+    <div class="qn" id="mQtyEl">1</div>
+    <button class="qb" onclick="chQty(1)">+</button>
+   </div>
+   <button class="add-btn" onclick="addCart()">
+    <span>Додати в кошик</span>
+    <span class="add-btn-price" id="mTotal"></span>
+   </button>
+  </div>
+ </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script>
-let cur = 'home';
+/* ─────────────────────────────────────────
+   IMAGE POOL
+───────────────────────────────────────── */
+const I={
+  pizza:'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=70',
+  sushi:'https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=400&q=70',
+  grill:'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&q=70',
+  pasta:'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=400&q=70',
+  soup: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&q=70',
+  salad:'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&q=70',
+  meat: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=400&q=70',
+  fish: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=400&q=70',
+  bfast:'https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=400&q=70',
+  waffle:'https://images.unsplash.com/photo-1562376552-0d160a2f238d?w=400&q=70',
+  pancake:'https://images.unsplash.com/photo-1528207776546-365bb710ee93?w=400&q=70',
+  potato:'https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=400&q=70',
+  snack: 'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=400&q=70',
+  coffee:'https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?w=400&q=70',
+  drink: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400&q=70',
+  water: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=400&q=70',
+  icecream:'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&q=70',
+  pp:   'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400&q=70',
+};
+
+/* ─────────────────────────────────────────
+   MENU DATA — Кафе Маестро (повне)
+───────────────────────────────────────── */
+const MENU = [
+ {cat:'Піца', items:[
+  {n:'Кальцоне',d:'Шинка, копчене куряче філе, гриби, помідори, сулугуні, моцарела',img:I.pizza,
+   opts:[{n:'Мала (25 см)',p:190},{n:'Середня (30 см)',p:230,def:1},{n:'Велика (35 см)',p:280}]},
+  {n:"М'ясне асорті",d:'Бекон, шинка, вершковий соус, сулугуні, моцарела, пармезан',img:I.pizza,
+   opts:[{n:'Мала (25 см)',p:280},{n:'Середня (30 см)',p:340,def:1},{n:'Велика (35 см)',p:420}]},
+  {n:'Alla Carbonara',d:'Бекон, шинка, вершковий соус, сулугуні, моцарела, пармезан',img:I.pizza,
+   opts:[{n:'Мала (25 см)',p:200},{n:'Середня (30 см)',p:240,def:1},{n:'Велика (35 см)',p:290}]},
+  {n:'Ваша Величність',d:'Шинка, копчене куряче філе, ковбаса горіхова, маслини, перець',img:I.pizza,
+   opts:[{n:'Мала (25 см)',p:210},{n:'Середня (30 см)',p:250,def:1},{n:'Велика (35 см)',p:300}]},
+  {n:'Папероні',d:'Папероні, паприка, сулугуні, моцарела, соус томатний',img:I.pizza,
+   opts:[{n:'Мала (25 см)',p:200},{n:'Середня (30 см)',p:240,def:1},{n:'Велика (35 см)',p:285}]},
+  {n:'4 сири',d:'Сулугуні, моцарела, пармезан, голландський сир, вершковий соус',img:I.pizza,
+   opts:[{n:'Мала (25 см)',p:200},{n:'Середня (30 см)',p:240,def:1},{n:'Велика (35 см)',p:285}]},
+  {n:'Діябло',d:'Бекон, папероні, перець гострий, сулугуні, моцарела, соус табаско',img:I.pizza,
+   opts:[{n:'Мала (25 см)',p:195},{n:'Середня (30 см)',p:235,def:1},{n:'Велика (35 см)',p:280}]},
+  {n:'Мисливська',d:'Папероні, мисливські ковбаски, помідори, сулугуні, моцарела',img:I.pizza,
+   opts:[{n:'Мала (25 см)',p:210},{n:'Середня (30 см)',p:250,def:1},{n:'Велика (35 см)',p:295}]},
+ ]},
+ {cat:'Суші', items:[
+  {n:'Філадельфія',d:'Лосось, крем-сир, огірок, авокадо, кунжут',img:I.sushi,
+   opts:[{n:'8 шт',p:270,def:1},{n:'16 шт',p:520}]},
+  {n:'Каліфорнія',d:'Краб, авокадо, огірок, кунжут, рис',img:I.sushi,
+   opts:[{n:'8 шт',p:210,def:1},{n:'16 шт',p:400}]},
+  {n:'Ролл з лососем',d:'Лосось, вершковий сир, огірок, авокадо',img:I.sushi,
+   opts:[{n:'8 шт',p:240,def:1},{n:'16 шт',p:460}]},
+  {n:'Ролл Дракон',d:'Вугор, авокадо, огірок, майонез, унагі соус',img:I.sushi,
+   opts:[{n:'8 шт',p:290,def:1},{n:'16 шт',p:560}]},
+  {n:'Ролл Спайсі',d:'Лосось, спайсі соус, огірок, тобіко, кунжут',img:I.sushi,
+   opts:[{n:'8 шт',p:250,def:1},{n:'16 шт',p:480}]},
+  {n:'Ролл з тунцем',d:'Тунець, авокадо, огірок, кунжут, унагі',img:I.sushi,
+   opts:[{n:'8 шт',p:260,def:1},{n:'16 шт',p:500}]},
+  {n:'Сет Маестро',d:'Асорті ролів — Філадельфія, Каліфорнія, Спайсі',img:I.sushi,
+   opts:[{n:'24 шт',p:620,def:1},{n:'48 шт',p:1180}]},
+  {n:'Сашімі лосось',d:'Свіжий лосось, соєвий соус, васабі, імбир',img:I.sushi,
+   opts:[{n:'5 шт',p:280,def:1},{n:'10 шт',p:530}]},
+ ]},
+ {cat:'Сніданки', items:[
+  {n:'Вареники з картоплею',d:'Подаються зі сметаною (300г)',img:I.bfast,p:110},
+  {n:"Вареники з м'ясом",d:'Подаються зі сметаною (300г)',img:I.bfast,p:160},
+  {n:"Вареники з м'ясом у вершках",d:'З сиром пармезан, чері, вершками та мікрозеленню (300г)',img:I.bfast,p:180},
+  {n:'Деруни по-бесарабськи з грибами',d:'Картопляні деруни, гриби, помідор чері, мікрозелень, кетчуп (250г)',img:I.bfast,p:160},
+  {n:'Каша вівсяна з ягодою',d:'Вівсяна каша з ягодами по сезону (350г)',img:I.pp,p:110},
+  {n:'Омлет з овочами',d:'Омлет, перець болгарський, помідор чері, пармезан, фета, латук (350г)',img:I.bfast,p:240},
+  {n:'Скрамбл з ковбасками та сиром',d:'Скрамбл, гриби, ковбаски мисливські, перець, помідор чері, пармезан (300г)',img:I.bfast,p:270},
+  {n:'Сніданок від Маестро',d:'Перепелині яйця, дерун, лосось, авокадо, крем-сир, помідори, бринза (300г)',img:I.bfast,p:295},
+  {n:'Яйце пашот з авокадо та прошутою',d:'Яйця, прошутто, помідор чері, гриби, перець, крем-сир, латук (350г)',img:I.bfast,p:295},
+  {n:'Сирники домашні',d:'Подаються зі сметаною (200г)',img:I.bfast,p:110},
+  {n:'Кесадилья',d:'Тортилья, куряче філе, перець, цибуля, сир, соус тар-тар, латук (300г)',img:I.bfast,p:160},
+  {n:'Вафлі Бельгійські з яйцем пашот',d:'Бельгійська вафля, яйце пашот, латук, помідори чері (200г)',img:I.waffle,p:130},
+  {n:'Вафлі Бельгійські з бананом',d:'Бельгійська вафля, банан, м\'ята, ягідний соус, шоколад (200г)',img:I.waffle,p:120},
+  {n:'Вафлі Бельгійські з малиною',d:'Бельгійська вафля, малина, м\'ята, шоколад (200г)',img:I.waffle,p:120},
+  {n:'Вафлі Бельгійські з куркою',d:'Бельгійська вафля, куряче філе, помідори чері, латук, соус цезар (200г)',img:I.waffle,p:130},
+  {n:'Вафлі Бельгійські класичні',d:'Бельгійська вафля, топінг карамель, цукрова пудра (100г)',img:I.waffle,p:80},
+  {n:'Панкейк',d:'Подається з карамелізованим яблуком (380г)',img:I.pancake,p:120},
+  {n:'Млинці з лососем',d:'Млинець, лосось, огірок, крем-сир (250г)',img:I.pancake,p:280},
+  {n:'Млинці з куркою та грибами',d:'Млинець, курячий фарш, гриби, листя салату, сметана (250г)',img:I.pancake,p:160},
+  {n:'Млинці дуо з сиром та джемом',d:'Млинець, сир, вишневий наповнювач (250г)',img:I.pancake,p:120},
+ ]},
+ {cat:'ПП меню', items:[
+  {n:'ПП №1',d:'Вівсяна каша, яйце, ковбаска куряча, чері, огірок, перець, сир фета, мікс зелені (550г)',img:I.pp,p:280},
+  {n:'ПП №2',d:'Скрамбл, лосось, пармезан, авокадо, чері, перець, мікс зелені (550г)',img:I.pp,p:320},
+  {n:'ПП №3',d:'Паста твердих сортів, яловичина відварна, буряк, гранат, кедровий горіх, бринза (450г)',img:I.pp,p:280},
+  {n:'ПП №4',d:'Вівсяний блин, крем сир, чері, авокадо, запечена курка, листя салату (580г)',img:I.pp,p:280},
+  {n:'ПП №5',d:'Картопляне пюре, яловичина відварна, огірок, перець, кедровий горіх, сир (480г)',img:I.pp,p:320},
+  {n:'ПП №6',d:'Бурий рис, лосось запечений, крем сир, огірок, маслини, перець, лимон (480г)',img:I.pp,p:320},
+  {n:'ПП №7',d:'Кус-кус, тигрова креветка, авокадо, мікс зелені, чері, перець, кунжут (520г)',img:I.pp,p:320},
+  {n:'ПП №8',d:'Гречана каша, рублена курка, томати, огірок, сир, яблука, грецький горіх (500г)',img:I.pp,p:280},
+ ]},
+ {cat:'Холодні закуски', items:[
+  {n:"М'ясна тарілка",d:'Папероні, бекон, шинка, кедровий горіх, латук, гірчиця в зернах (260г)',img:I.snack,p:280},
+  {n:'Рибна тарілка',d:'Оселедець, скумбрія, лосось, маслини, лимон, цибуля (400г)',img:I.fish,p:420},
+  {n:'Скумбрія солена з картоплею',d:'Скумбрія, картопля, мікс зелені, лимон, цибуля маринована (300г)',img:I.fish,p:280},
+  {n:'Соління',d:'Огірки, томати, цибуля, печериці, латук, маслини (400г)',img:I.snack,p:250},
+  {n:'Тартар з лосося',d:'Лосось, авокадо, крем-сир, цибуля, лимон, рукола, тостовий хліб (250г)',img:I.fish,p:420},
+  {n:'Грінки з курячим паштетом',d:'Курячий паштет, огірки, рогалик, чері, мікрозелень (250г)',img:I.snack,p:130},
+  {n:'Помідори по-одеськи',d:'Помідори, майонез, бринза, часник, мікс зелені (300г)',img:I.snack,p:180},
+  {n:'Сало по-козацьки',d:'З гірчицею, часником, тостовим хлібом та латуком (250г)',img:I.snack,p:150},
+  {n:'Гуакамоле',d:'Авокадо, помідор, лаваш, цибуля, петрушка (350г)',img:I.snack,p:280},
+  {n:'Рулети з кабачків',d:'Кабачок, помідор, часник, крем-сир, чері, мікрозелень (300г)',img:I.snack,p:160},
+  {n:'Пивна дошка',d:"Кабаноси, м'ясні чіпси, сулугуні копчений, сир фрі, арахіс (200г)",img:I.snack,p:200},
+  {n:'Овочева тарілка',d:'Огірки, перець болгарський, помідор, петрушка, кріп (300г)',img:I.salad,p:180},
+ ]},
+ {cat:'Гарячі закуски', items:[
+  {n:'Мідії у вершковому соусі',d:'250г',img:I.snack,p:360},
+  {n:'Кільця кальмара в темпурі',d:'250г',img:I.snack,p:200},
+  {n:'Сир фрі',d:'200г',img:I.snack,p:150},
+  {n:'Нагетси курячі',d:'200г',img:I.snack,p:150},
+  {n:'Креветка смажена',d:'200г',img:I.snack,p:420},
+  {n:'Дошка рибака',d:'350г',img:I.fish,p:270},
+  {n:'Стріпси курячі',d:'220г',img:I.snack,p:150},
+  {n:'Цаца',d:'300г',img:I.fish,p:150},
+ ]},
+ {cat:'Перші страви', items:[
+  {n:'Борщ з салом та бринзою',d:'350г',img:I.soup,p:150},
+  {n:'Бульйон з куркою та локшиною',d:'410г',img:I.soup,p:120},
+  {n:'Крем-Суп грибний',d:'300г',img:I.soup,p:160},
+  {n:'Крем-Суп сирний',d:'300г',img:I.soup,p:180},
+  {n:"Солянка м'ясна",d:'300г',img:I.soup,p:180},
+  {n:'Суп з морепродуктами',d:'250г',img:I.soup,p:260},
+  {n:'Юшка по-Бесарабськи',d:'400г',img:I.soup,p:260},
+  {n:'Шурпа',d:'400г',img:I.soup,p:290},
+  {n:'Окрошка',d:'420г',img:I.soup,p:120},
+ ]},
+ {cat:"М'ясні страви", items:[
+  {n:'Бита картопля з реберцями',d:'Реберця, картопля, помідор чері, сулугуні, огірки мариновані (550г)',img:I.meat,p:390},
+  {n:'Пательня з яловичиною',d:'Яловичина, гриби, перець, помідор чері, картопля, вершки (280г)',img:I.meat,p:320},
+  {n:'Пательня зі свининою',d:'Свинина, кабачок, болгарський перець, картопля, помідор чері, вершки (270г)',img:I.meat,p:290},
+  {n:'Мамалига з токаною',d:'Свинина, кукурудзяна крупа, помідор чері, бринза, сметана (350г)',img:I.meat,p:220},
+  {n:'Роли з курки та бекону',d:'Куряче філе, бекон, помідор чері, гриби, карамелізоване яблуко, латук (300г)',img:I.meat,p:280},
+  {n:'Рулет з грибами у вершках',d:'300г',img:I.meat,p:290},
+ ]},
+ {cat:'Рибні страви', items:[
+  {n:'Лосось з соусом від шефа',d:'300г',img:I.fish,p:420},
+  {n:'Судак з овочами',d:'300г',img:I.fish,p:380},
+  {n:'Рибна пательня',d:'Лосось, короп, судак, картопля, баклажан, помідор, гриби, вершки (350г)',img:I.fish,p:420},
+  {n:'Скумбрія у вершковому соусі',d:'Скумбрія, пармезан, вершки, маслини, лимон, помідор чері (300г)',img:I.fish,p:380},
+  {n:'Дорадо',d:'Дорадо, перець болгарський, помідор чері, мікс зелені, маслини (350г)',img:I.fish,p:380},
+  {n:'Скумбрія гриль',d:'Скумбрія, маслини, лимон, соус тар-тар, мікс зелені, кунжут (400г)',img:I.fish,p:350},
+ ]},
+ {cat:'Мангал', items:[
+  {n:'Шашлик зі свинини',d:'Свиняча шия, маринована цибуля, спеції, лаваш (400г)',img:I.grill,p:380},
+  {n:'Шашлик курячий',d:'Куряче стегно на мангалі (420г)',img:I.grill,p:350},
+  {n:'Реберця зі свинини',d:'Соковиті реберця (400г)',img:I.grill,p:390},
+  {n:'Кебаб зі свинини та яловичини',d:'Рублений фарш, спеції, лаваш (300г)',img:I.grill,p:320},
+  {n:'Купати зі свинини та яловичини',d:'Домашні ковбаски на мангалі (300г)',img:I.grill,p:250},
+  {n:'Курячі крильця',d:'Крила у маринаді (350г)',img:I.grill,p:260},
+  {n:'Овочі гриль',d:'Кабачок, перець, баклажан, помідор, шампіньйони (350г)',img:I.grill,p:350},
+  {n:'Лосось гриль',d:'Філе лосося на мангалі, лимон, зелень (250г)',img:I.fish,p:420},
+  {n:'Ковбаски з сиром гриль',d:'300г',img:I.grill,p:380},
+  {n:'Лаваш з яловичиною',d:'200г',img:I.grill,p:280},
+  {n:'Лаваш з сиром та томатами',d:'220г',img:I.grill,p:210},
+  {n:'Ковбаски Баварські',d:'110 грн/100г',img:I.grill,
+   opts:[{n:'200 г',p:220,def:1},{n:'300 г',p:330},{n:'400 г',p:440}]},
+  {n:'Ковбаски гриль з журавлиною',d:'110 грн/100г',img:I.grill,
+   opts:[{n:'200 г',p:220,def:1},{n:'300 г',p:330},{n:'400 г',p:440}]},
+  {n:'Ковбаски гриль з моцарелою',d:'110 грн/100г',img:I.grill,
+   opts:[{n:'200 г',p:220,def:1},{n:'300 г',p:330},{n:'400 г',p:440}]},
+  {n:'Ковбаски гриль з паприкою',d:'110 грн/100г',img:I.grill,
+   opts:[{n:'200 г',p:220,def:1},{n:'300 г',p:330},{n:'400 г',p:440}]},
+ ]},
+ {cat:'Пасти', items:[
+  {n:'Паста Карбонара',d:'Спагеті, бекон, перепелине яйце, пармезан, вершки (300г)',img:I.pasta,p:230},
+  {n:'Паста з куркою та грибами',d:'Фетучіні, куряче філе, помідор чері, гриби, пармезан (300г)',img:I.pasta,p:240},
+  {n:'Паста з морепродуктами',d:'Фетучіні, кальмар, креветки, мідії, помідор чері, вершки (300г)',img:I.pasta,p:360},
+  {n:'Різотто з морепродуктами',d:'Рис, кальмар, креветки, мідії, помідор чері, пармезан, вершки (400г)',img:I.pasta,p:320},
+  {n:'Паста з лососем та шпинатом',d:'Фетучіні, лосось, шпинат, вершковий соус, пармезан',img:I.pasta,p:320},
+ ]},
+ {cat:'Пістні страви', items:[
+  {n:'Пательня овочева пістна',d:'Кабачки, болгарський перець, помідор чері, баклажан, картопля, гриби (550г)',img:I.salad,p:280},
+  {n:'Млинці з яблуком до посту',d:'Млинець пісний, яблуко, топінг (200г)',img:I.pancake,p:160},
+  {n:'Борщ пісний',d:'400г',img:I.soup,p:85},
+  {n:'Овочевий бульйон з вермішеллю',d:'Кабачки, гриби, морква, цибуля, вермішель (180г)',img:I.soup,p:80},
+  {n:'Лаваш з сиром фета та помідором',d:'Лаваш, сир фета, кріп, помідор, петрушка (280г)',img:I.snack,p:180},
+  {n:'Рататуй',d:'300г',img:I.salad,p:280},
+ ]},
+ {cat:'Салати', items:[
+  {n:'Салат з морепродуктами',d:'Кальмар, креветки, мідії, огірок, салат, помідор, соус (300г)',img:I.salad,p:430},
+  {n:'Салат Цезар з куркою',d:'Куряче філе гриль, листовий салат, пармезан, сухарики, соус цезар',img:I.salad,p:220},
+  {n:'Грецький салат',d:'Помідори, огірки, перець, маслини, фета',img:I.salad,p:180},
+ ]},
+ {cat:'Гарніри', items:[
+  {n:'Пюре картопляне',d:'200г',img:I.potato,p:90},
+  {n:'Картопля смажена як у селі',d:'Подається з кетчупом (250г)',img:I.potato,p:90},
+  {n:'Картопля фрі',d:'Подається з кетчупом (250г)',img:I.potato,p:90},
+  {n:'Картопля фрі з сирним соусом та беконом',d:'Картопля фрі, бекон, сулугуні (400г)',img:I.potato,p:220},
+  {n:'Картопля Діпи',d:'Подається з кетчупом (200г)',img:I.potato,p:90},
+  {n:'Картопля Італійська',d:'Картопля, свинина, гриби, помідор чері, сулугуні, вершки (260г)',img:I.potato,p:360},
+  {n:'Рис з овочами',d:'Рис, помідор, гриби, перець, кукурудза, соус соєвий (200г)',img:I.potato,p:120},
+ ]},
+ {cat:'Морозиво', items:[
+  {n:'Морозиво кульки',d:'На вибір: ванільне, шоколадне, полунична',img:I.icecream,
+   opts:[{n:'1 куля',p:60,def:1},{n:'2 кулі',p:110},{n:'3 кулі',p:155}]},
+  {n:'Морозиво з топінгом',d:'Ванільне морозиво з карамельним або шоколадним топінгом',img:I.icecream,p:85},
+ ]},
+ {cat:'Холодні напої (пляшки)', items:[
+  {n:'Кока-Кола 0.33',d:'Скло',img:I.drink,p:60},
+  {n:'Кока-Кола 0.5',d:'ПЕТ',img:I.drink,p:55},
+  {n:'Pepsi 0.33',d:'Скло',img:I.drink,p:55},
+  {n:'Sprite 0.33',d:'Скло',img:I.drink,p:55},
+  {n:'Fanta 0.33',d:'Скло',img:I.drink,p:55},
+  {n:'Вода Моршинська 0.5',d:'Без газу / з газом',img:I.water,p:40},
+  {n:'Red Bull 0.25',d:'Енергетик',img:I.drink,p:90},
+  {n:'Сік Sandora 0.5',d:'Асорті на вибір',img:I.drink,p:60},
+ ]},
+ {cat:'Алкоголь', items:[
+  {n:'Пиво Stella Artois 0.5',d:'Пляшка',img:I.drink,p:90},
+  {n:'Пиво Corona 0.33',d:'Пляшка',img:I.drink,p:95},
+  {n:'Вино червоне сухе 0.75',d:'Пляшка',img:I.drink,p:380},
+  {n:'Вино біле сухе 0.75',d:'Пляшка',img:I.drink,p:380},
+  {n:'Шампанське брют 0.75',d:'Пляшка',img:I.drink,p:420},
+ ]},
+];
+
+/* ─────────────────────────────────────────
+   NAV
+───────────────────────────────────────── */
+let curPage = 'home';
+let curCat = MENU[0].cat;
+let mItem = null, mQty = 1, mOpt = 0;
+
 function goPage(id) {
-  document.getElementById('pg-' + cur).classList.remove('active');
-  document.getElementById('nb-' + cur).classList.remove('on');
-  cur = id;
-  document.getElementById('pg-' + id).classList.add('active');
-  document.getElementById('nb-' + id).classList.add('on');
-  document.getElementById('content').scrollTop = 0;
+  document.getElementById('pg-' + curPage).classList.remove('on');
+  document.getElementById('nb-' + curPage)?.classList.remove('on');
+  curPage = id;
+  document.getElementById('pg-' + id).classList.add('on');
+  document.getElementById('nb-' + id)?.classList.add('on');
+  document.getElementById('scr').scrollTop = 0;
 }
 
-// filter clicks
-document.querySelectorAll('.filter').forEach(f => {
+function openRest() {
+  goPage('rest');
+  buildCatTabs();
+  renderCat(curCat);
+}
+
+/* ─────────────────────────────────────────
+   REST PAGE
+───────────────────────────────────────── */
+function buildCatTabs() {
+  document.getElementById('catTabs').innerHTML = MENU.map(({cat}) =>
+    `<div class="ct ${cat===curCat?'on':''}" onclick="switchCat('${cat.replace(/'/g,"\\'")}')">${cat}</div>`
+  ).join('');
+}
+
+function switchCat(cat) {
+  curCat = cat;
+  document.querySelectorAll('.ct').forEach(t => t.classList.toggle('on', t.textContent === cat));
+  renderCat(cat);
+  document.getElementById('scr').scrollTop = 0;
+}
+
+function renderCat(cat) {
+  const section = MENU.find(s => s.cat === cat);
+  const el = document.getElementById('menuContent');
+  el.innerHTML = `<div class="msec-title">${cat}</div>
+    <div class="mgrid">${section.items.map((item,i) => {
+      const baseP = item.opts ? (item.opts.find(o=>o.def)||item.opts[0]).p : item.p;
+      const label = item.opts ? 'від ' + baseP : baseP;
+      const iStr = JSON.stringify(item).replace(/`/g,'&#96;');
+      return `<div class="mc" onclick='openModal(${iStr})'>
+        <div class="mc-img" style="background-image:url('${item.img}')"></div>
+        <div class="mc-body">
+          <div class="mc-name">${item.n}</div>
+          <div class="mc-desc">${item.d||''}</div>
+          <div class="mc-foot">
+            <div class="mc-price">${label} грн</div>
+            <button class="mc-add" onclick='event.stopPropagation();openModal(${iStr})'>+</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('')}</div>`;
+}
+
+/* ─────────────────────────────────────────
+   MODAL
+───────────────────────────────────────── */
+function openModal(item) {
+  mItem = item; mQty = 1;
+  mOpt = item.opts ? (item.opts.findIndex(o=>o.def) >= 0 ? item.opts.findIndex(o=>o.def) : 0) : 0;
+
+  document.getElementById('mImg').style.backgroundImage = `url('${item.img}')`;
+  document.getElementById('mName').textContent = item.n;
+  document.getElementById('mDesc').textContent = item.d || '';
+
+  const secLbl = document.getElementById('mSecLbl');
+  const optsEl = document.getElementById('mOpts');
+
+  if (item.opts) {
+    secLbl.style.display = 'block';
+    secLbl.textContent = 'Оберіть варіант';
+    secLbl.style.padding = '0 18px';
+    optsEl.innerHTML = item.opts.map((o,i) => `
+      <div class="opt ${i===mOpt?'on':''}" onclick="selOpt(${i})">
+        <div><div class="opt-name">${o.n}</div></div>
+        <div class="opt-r">
+          <div class="opt-price">${o.p} грн</div>
+          <div class="opt-chk">${i===mOpt?'✓':''}</div>
+        </div>
+      </div>`).join('');
+  } else {
+    secLbl.style.display = 'none';
+    optsEl.innerHTML = '';
+  }
+
+  document.getElementById('mQtyEl').textContent = 1;
+  updTotal();
+  document.getElementById('mOv').classList.add('on');
+}
+
+function selOpt(i) {
+  mOpt = i;
+  document.querySelectorAll('.opt').forEach((el,idx) => {
+    el.classList.toggle('on', idx === i);
+    el.querySelector('.opt-chk').textContent = idx === i ? '✓' : '';
+  });
+  updTotal();
+}
+
+function chQty(d) {
+  mQty = Math.max(1, mQty + d);
+  document.getElementById('mQtyEl').textContent = mQty;
+  updTotal();
+}
+
+function updTotal() {
+  const p = mItem.opts ? mItem.opts[mOpt].p : mItem.p;
+  document.getElementById('mTotal').textContent = (p * mQty) + ' грн';
+}
+
+function addCart() {
+  const optName = mItem.opts ? ' · ' + mItem.opts[mOpt].n : '';
+  closeModal();
+  showToast('✅ ' + mItem.n + optName);
+}
+
+function closeModal() {
+  document.getElementById('mOv').classList.remove('on');
+}
+
+/* ─────────────────────────────────────────
+   UTILS
+───────────────────────────────────────── */
+let tT;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('on');
+  clearTimeout(tT); tT = setTimeout(() => t.classList.remove('on'), 2200);
+}
+
+document.querySelectorAll('.fi').forEach(f => {
   f.addEventListener('click', () => {
-    document.querySelectorAll('.filter').forEach(x => x.classList.remove('on'));
+    document.querySelectorAll('.fi').forEach(x => x.classList.remove('on'));
     f.classList.add('on');
   });
 });
