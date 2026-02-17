@@ -2,1506 +2,354 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bringo — Доставка</title>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Bringo</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800;900&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --or:#FF5C00;--or2:#FF7530;--orl:rgba(255,92,0,.13);--orb:rgba(255,92,0,.3);
-  --dark:#0C0C14;--s1:#12121C;--s2:#191926;--s3:#202030;--s4:#282840;
-  --bd:rgba(255,255,255,.07);--bd2:rgba(255,255,255,.13);
-  --t1:#EEEEFF;--t2:#8888AA;--t3:#444468;
-  --g:#22C55E;--gl:rgba(34,197,94,.14);
-  --r:#EF4444;--rl:rgba(239,68,68,.14);
-  --y:#F59E0B;--yl:rgba(245,158,11,.14);
-  --bl:#60A5FA;--bll:rgba(96,165,250,.14);
-  --sw:260px;
+  --or:#FF5C00;--or2:#FF7A30;--orl:rgba(255,92,0,.12);
+  --bg:#0A0A12;--s1:#111119;--s2:#18181F;--s3:#1F1F28;
+  --bd:rgba(255,255,255,.06);--bd2:rgba(255,255,255,.11);
+  --t1:#F0F0FF;--t2:#7A7A99;--t3:#3A3A55;
+  --g:#22C55E;--gl:rgba(34,197,94,.13);
+  --nav:62px;
 }
-html,body{height:100%;overflow:hidden}
-body{font-family:'Nunito',sans-serif;background:var(--dark);color:var(--t1);display:flex}
+html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(--t1);overflow:hidden}
 
-/* LOADING */
-#loadingScreen{position:fixed;inset:0;background:var(--dark);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px}
-#loadingScreen .logo{font-family:'Unbounded',sans-serif;font-size:28px;font-weight:800;color:var(--or)}
-#loadingScreen .spinner{width:36px;height:36px;border:3px solid var(--bd2);border-top-color:var(--or);border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+.app{max-width:430px;height:100dvh;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;position:relative;overflow:hidden}
 
-/* AUTH */
-#authScreen{position:fixed;inset:0;background:var(--dark);z-index:998;display:none;align-items:center;justify-content:center}
-.aw{width:380px;background:var(--s1);border:1px solid var(--bd2);border-radius:20px;padding:32px;position:relative;overflow:hidden}
-.aw::before{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;background:radial-gradient(circle,rgba(255,92,0,.22),transparent 70%);border-radius:50%}
-.aw-logo{font-family:'Unbounded',sans-serif;font-size:22px;font-weight:800;margin-bottom:3px;color:var(--or)}
-.aw-sub{font-size:12px;color:var(--t2);margin-bottom:24px}
-.af{margin-bottom:13px}
-.af label{display:block;font-size:11px;font-weight:700;color:var(--t2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.8px}
-.af input{width:100%;padding:11px 13px;background:var(--s2);border:1.5px solid var(--bd2);border-radius:10px;color:var(--t1);font-size:13px;font-family:'Nunito',sans-serif;outline:none;transition:.18s}
-.af input:focus{border-color:var(--or)}
-.af input::placeholder{color:var(--t3)}
-.a-btn{width:100%;padding:12px;background:var(--or);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;font-family:'Unbounded',sans-serif;transition:.18s;margin-top:4px}
-.a-btn:hover{background:var(--or2);transform:translateY(-1px)}
-.a-err{font-size:12px;color:var(--r);text-align:center;margin-top:9px;min-height:14px}
-.a-hint{font-size:11px;color:var(--t3);margin-top:12px;background:var(--s2);border-radius:8px;padding:10px 12px;line-height:1.8}
-.a-hint b{color:var(--t2)}
+/* SCROLL */
+.content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.content::-webkit-scrollbar{display:none}
 
-#appWrap{display:flex;height:100vh;width:100%}
-.sb{width:var(--sw);background:var(--s1);border-right:1px solid var(--bd);display:flex;flex-direction:column;padding:20px 13px;flex-shrink:0;height:100vh;overflow-y:auto}
-.sb-logo{font-family:'Unbounded',sans-serif;font-size:18px;font-weight:800;color:var(--or);padding:2px 9px 24px}
-.sb-logo small{display:block;font-size:9px;font-weight:500;color:var(--t3);margin-top:1px;letter-spacing:1.2px;text-transform:uppercase;font-family:'Nunito',sans-serif}
-.ng{margin-bottom:16px}
-.ng-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:var(--t3);font-weight:700;padding:0 9px;margin-bottom:5px}
-.nl{display:flex;align-items:center;gap:10px;padding:9px 9px;border-radius:10px;cursor:pointer;color:var(--t2);font-size:13px;font-weight:600;transition:.13s;margin-bottom:1px;border:none;background:none;width:100%;text-align:left;font-family:'Nunito',sans-serif}
-.nl:hover{background:var(--bd);color:var(--t1)}
-.nl.on{background:var(--orl);color:var(--or);font-weight:700}
-.nl .ic{font-size:15px;width:19px;text-align:center;flex-shrink:0}
-.nl .bdg{margin-left:auto;background:var(--or);color:#fff;font-size:10px;font-weight:900;padding:1px 6px;border-radius:20px;min-width:18px;text-align:center;display:none}
-.nl .bdg.show{display:inline-block}
-.nl .bdg.green{background:var(--g)}
-.sb-bot{margin-top:auto;padding-top:12px}
-.sb-user{padding:11px;background:var(--s2);border:1px solid var(--bd);border-radius:11px;display:flex;align-items:center;gap:9px;margin-bottom:7px}
-.sb-av{width:32px;height:32px;background:var(--orl);border:2px solid var(--or);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.sb-inf{flex:1;min-width:0}
-.sb-nm{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sb-rl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px}
-.lo-btn{width:100%;padding:8px;background:none;border:1.5px solid var(--bd2);border-radius:9px;color:var(--t2);font-size:12px;font-weight:600;cursor:pointer;font-family:'Nunito',sans-serif;transition:.13s}
-.lo-btn:hover{border-color:var(--r);color:var(--r)}
+/* PAGES */
+.page{display:none;padding-bottom:calc(var(--nav) + 16px)}
+.page.active{display:block;animation:up .22s ease}
+@keyframes up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-.main{flex:1;overflow-y:auto;display:flex;flex-direction:column;height:100vh}
-.topbar{padding:13px 28px;background:var(--s1);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:40;flex-shrink:0}
-.srch{flex:1;max-width:420px;background:var(--s2);border:1.5px solid var(--bd);border-radius:10px;padding:9px 13px;display:flex;align-items:center;gap:8px;transition:.17s;position:relative}
-.srch:focus-within{border-color:var(--orb)}
-.srch input{background:none;border:none;color:var(--t1);font-size:13px;outline:none;width:100%;font-family:'Nunito',sans-serif}
-.srch input::placeholder{color:var(--t3)}
-.srch-drop{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--s1);border:1px solid var(--bd2);border-radius:12px;overflow:hidden;z-index:200;display:none;box-shadow:0 8px 32px rgba(0,0,0,.5)}
-.srch-drop.show{display:block}
-.srch-item{display:flex;align-items:center;gap:11px;padding:10px 14px;cursor:pointer;transition:.13s}
-.srch-item:hover{background:var(--s2)}
-.srch-item .si-ic{width:36px;height:36px;border-radius:9px;background-size:cover;background-position:center;flex-shrink:0;background-color:var(--s3);display:flex;align-items:center;justify-content:center;font-size:16px}
-.srch-item .si-info h4{font-size:13px;font-weight:700;margin-bottom:1px}
-.srch-item .si-info p{font-size:11px;color:var(--t2)}
-.srch-item .si-type{margin-left:auto;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;white-space:nowrap}
-.srch-item .si-type.rest{background:var(--orl);color:var(--or)}
-.srch-item .si-type.shop{background:var(--bll);color:var(--bl)}
-.srch-sep{padding:6px 14px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--t3);background:var(--s2)}
-.city{display:flex;align-items:center;gap:5px;padding:7px 12px;background:var(--s2);border:1px solid var(--bd);border-radius:9px;font-size:12px;font-weight:600;color:var(--t2);flex-shrink:0}
+/* NAV */
+.nav{height:var(--nav);background:var(--s1);border-top:1px solid var(--bd);display:flex;align-items:stretch;flex-shrink:0;padding-bottom:env(safe-area-inset-bottom)}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;color:var(--t3);cursor:pointer;transition:.15s;position:relative}
+.nb.on{color:var(--or)}
+.nb .ni{font-size:22px;transition:.2s}
+.nb.on .ni{transform:scale(1.1)}
+.nb .nl{font-size:9.5px;font-weight:700;letter-spacing:.3px}
+.nb::after{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:2px;background:var(--or);border-radius:0 0 3px 3px;transition:.2s}
+.nb.on::after{width:28px}
 
-.cart-btn{display:flex;align-items:center;gap:0;border:none;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s cubic-bezier(.4,0,.2,1);border-radius:12px;overflow:hidden;flex-shrink:0}
-.cart-btn.empty{background:var(--s2);border:1.5px solid var(--bd2);padding:9px 14px;color:var(--t2);font-size:13px;font-weight:700;gap:7px}
-.cart-btn.empty:hover{border-color:var(--orb);color:var(--t1)}
-.cart-btn.filled{background:var(--or);padding:0;box-shadow:0 4px 16px rgba(255,92,0,.35)}
-.cart-btn.filled:hover{background:var(--or2);transform:translateY(-1px)}
-.cart-btn.filled .cart-icon-wrap{padding:10px 13px;font-size:16px;border-right:1px solid rgba(255,255,255,.2)}
-.cart-btn.filled .cart-label{padding:10px 14px;font-size:13px;font-weight:800;color:#fff;font-family:'Unbounded',sans-serif;white-space:nowrap}
-.cart-btn.filled .cart-cnt-wrap{background:rgba(0,0,0,.2);padding:10px 12px 10px 0;display:flex;align-items:center}
-.cart-cnt{background:rgba(255,255,255,.25);color:#fff;font-size:11px;font-weight:900;border-radius:6px;min-width:22px;height:22px;display:flex;align-items:center;justify-content:center;padding:0 5px;font-family:'Unbounded',sans-serif}
-@keyframes cartBump{0%{transform:scale(1)}40%{transform:scale(1.12)}70%{transform:scale(.96)}100%{transform:scale(1)}}
-.cart-btn.bump{animation:cartBump .3s ease}
+/* ─── HOME ─── */
+.topbar{padding:18px 18px 10px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Unbounded',sans-serif;font-size:20px;font-weight:900;color:var(--or);letter-spacing:-1px}
+.city-pill{display:flex;align-items:center;gap:5px;background:var(--s2);border:1px solid var(--bd2);border-radius:20px;padding:6px 11px;font-size:11px;font-weight:700;color:var(--t2)}
 
-.pg{display:none;animation:fi .18s ease}
-.pg.on{display:block}
-@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
-.w{padding:22px 28px 100px}
-.sh{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
-.sh h2{font-family:'Unbounded',sans-serif;font-size:15px;font-weight:700}
+.search{margin:0 18px 18px;background:var(--s2);border:1.5px solid var(--bd2);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:9px;color:var(--t2);font-size:13px;font-weight:600}
 
-.hero{background:linear-gradient(130deg,#FF5C00 0%,#C83400 100%);border-radius:16px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;overflow:hidden;position:relative;margin-bottom:22px}
-.hero::after{content:'';position:absolute;right:-20px;top:-20px;width:200px;height:200px;background:rgba(255,255,255,.06);border-radius:50%}
-.ht{position:relative;z-index:1}
-.ht h1{font-family:'Unbounded',sans-serif;font-size:20px;font-weight:800;line-height:1.3;margin-bottom:8px}
-.ht p{font-size:13px;opacity:.85;margin-bottom:16px}
-.hcta{background:#fff;color:var(--or);border:none;border-radius:9px;padding:10px 18px;font-family:'Unbounded',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:.17s}
-.hcta:hover{transform:scale(1.04)}
-.hem{font-size:54px;position:relative;z-index:1;line-height:1}
-.promo-row{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:22px}
-.pm{border-radius:13px;padding:15px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:.15s}
-.pm:hover{transform:scale(1.02)}
-.pm.p1{background:linear-gradient(135deg,#FF5C00,#FF8830)}
-.pm.p2{background:linear-gradient(135deg,#6C3FFF,#9B67FF)}
-.pm.p3{background:linear-gradient(135deg,#0EA5E9,#38BDF8)}
-.pm h4{font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700;margin-bottom:2px}
-.pm p{font-size:11px;opacity:.82}
-.pm .em{font-size:28px}
+.hero{margin:0 18px 18px;border-radius:20px;background:linear-gradient(135deg,#FF5C00,#C83000);padding:24px 22px;position:relative;overflow:hidden;min-height:138px;display:flex;flex-direction:column;justify-content:flex-end}
+.hero::before{content:'🛵';position:absolute;right:-12px;top:-16px;font-size:100px;opacity:.15;transform:rotate(-8deg);line-height:1}
+.hero-tag{font-size:10px;font-weight:800;letter-spacing:1px;opacity:.75;text-transform:uppercase;margin-bottom:6px}
+.hero h2{font-family:'Unbounded',sans-serif;font-size:17px;font-weight:900;line-height:1.25;margin-bottom:10px}
+.hero-btn{display:inline-flex;align-items:center;gap:5px;background:#fff;color:var(--or);border-radius:10px;padding:8px 14px;font-family:'Unbounded',sans-serif;font-size:11px;font-weight:800;width:fit-content}
 
-.rest-card{background:var(--s2);border-radius:14px;overflow:hidden;border:1px solid var(--bd);transition:.19s;cursor:pointer;display:flex;flex-direction:column}
-.rest-card:hover{border-color:var(--orb);transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,.3)}
-.rc-img-wrap{position:relative;height:140px}
-.rc-img{height:100%;width:100%;background-size:cover;background-position:center}
-.rc-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 55%)}
-.rc-time-badge{position:absolute;bottom:9px;left:9px;display:flex;gap:6px;align-items:center}
-.rc-tb{background:rgba(0,0,0,.65);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);border-radius:7px;padding:4px 9px;font-size:11px;font-weight:700;color:#fff;display:flex;align-items:center;gap:4px}
-.rc-tb.orange{background:rgba(255,92,0,.8);border-color:rgba(255,92,0,.5)}
-.rc-body{padding:13px}
-.rc-name{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;margin-bottom:5px}
-.rc-meta{font-size:11px;color:var(--t2);margin-bottom:11px}
-.rc-btn{width:100%;padding:9px;background:var(--or);border:none;color:#fff;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:.15s}
-.rc-btn:hover{background:var(--or2)}
+.sec{padding:0 18px;margin-bottom:20px}
+.sec-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}
+.sec-hd h3{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800}
+.sec-hd span{font-size:11px;color:var(--or);font-weight:700}
 
-.shop-link{display:flex;align-items:center;gap:14px;padding:16px 18px;background:var(--s2);border:1px solid var(--bd);border-radius:13px;text-decoration:none;color:var(--t1);transition:.15s;margin-bottom:10px}
-.shop-link:hover{border-color:var(--orb);transform:translateX(3px)}
-.sl-ic{width:44px;height:44px;border-radius:11px;background:var(--orl);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.sl-info h4{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;margin-bottom:2px}
-.sl-info p{font-size:11px;color:var(--t2)}
-.sl-arr{margin-left:auto;color:var(--t3);font-size:16px}
+/* PROMO */
+.promos{display:flex;gap:10px;overflow-x:auto;padding:0 18px 2px;margin-bottom:20px;scrollbar-width:none}
+.promos::-webkit-scrollbar{display:none}
+.promo{flex-shrink:0;border-radius:15px;padding:13px 14px;width:155px;display:flex;flex-direction:column;gap:6px}
+.promo.a{background:linear-gradient(135deg,#FF5C00,#FF8C30)}
+.promo.b{background:linear-gradient(135deg,#5B21B6,#8B5CF6)}
+.promo.c{background:linear-gradient(135deg,#0369A1,#38BDF8)}
+.promo-ic{font-size:24px}
+.promo h4{font-family:'Unbounded',sans-serif;font-size:11px;font-weight:800;line-height:1.3}
+.promo p{font-size:10px;opacity:.82}
 
-.rest-pg-hd{background:var(--s2);border-radius:14px;overflow:hidden;border:1px solid var(--bd);margin-bottom:20px}
-.rest-pg-banner{height:200px;background-size:cover;background-position:center;position:relative}
-.rest-pg-banner-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,20,.9) 0%,transparent 55%)}
-.rest-pg-info{padding:18px 20px}
-.rest-pg-name{font-family:'Unbounded',sans-serif;font-size:18px;font-weight:800;margin-bottom:8px}
-.rest-pg-meta{display:flex;gap:8px;flex-wrap:wrap}
-.rest-pg-chip{display:flex;align-items:center;gap:5px;background:var(--s3);border:1px solid var(--bd);border-radius:8px;padding:5px 11px;font-size:12px;font-weight:600;color:var(--t2)}
-.rest-pg-chip.or{background:var(--orl);border-color:var(--orb);color:var(--or)}
-.rest-pg-chip.g{background:var(--gl);border-color:rgba(34,197,94,.3);color:var(--g)}
-.back-btn{display:flex;align-items:center;gap:7px;padding:8px 14px;background:var(--s2);border:1px solid var(--bd);border-radius:9px;color:var(--t2);font-size:12px;font-weight:700;cursor:pointer;margin-bottom:16px;transition:.13s;font-family:'Nunito',sans-serif}
-.back-btn:hover{border-color:var(--orb);color:var(--t1)}
-.cat-tabs{display:flex;gap:8px;overflow-x:auto;padding:0 0 12px;margin-bottom:20px;scrollbar-width:none}
-.cat-tabs::-webkit-scrollbar{display:none}
-.cat-tab{padding:7px 15px;background:var(--s2);border:1.5px solid var(--bd);border-radius:20px;font-size:12px;font-weight:700;color:var(--t2);cursor:pointer;white-space:nowrap;transition:.15s;flex-shrink:0}
-.cat-tab:hover{border-color:var(--orb);color:var(--t1)}
-.cat-tab.on{background:var(--orl);border-color:var(--or);color:var(--or)}
-.cat-section-hd{font-family:'Unbounded',sans-serif;font-size:11px;font-weight:700;color:var(--t2);margin:20px 0 12px;text-transform:uppercase;letter-spacing:.8px}
-.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:8px}
-.mg-card{background:var(--s2);border:1px solid var(--bd);border-radius:12px;overflow:hidden;transition:.16s}
-.mg-card:hover{border-color:var(--orb);transform:translateY(-2px)}
-.mg-img{height:120px;background-size:cover;background-position:center;background-color:var(--s3)}
-.mg-body{padding:11px 12px}
-.mg-name{font-size:13px;font-weight:700;margin-bottom:3px}
-.mg-desc{font-size:11px;color:var(--t2);line-height:1.35;margin-bottom:9px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.mg-foot{display:flex;align-items:center;justify-content:space-between}
-.mg-price{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800;color:var(--or)}
-.mg-add-wrap{display:flex;align-items:center;gap:6px}
-.mg-cnt{font-family:'Unbounded',sans-serif;font-size:11px;font-weight:800;color:var(--g);background:var(--gl);border-radius:5px;padding:2px 7px;display:none}
-.mg-cnt.show{display:block}
-.mg-add{width:28px;height:28px;background:var(--or);border:none;border-radius:8px;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.13s;flex-shrink:0}
-.mg-add:hover{transform:scale(1.15);background:var(--or2)}
+/* REST CARDS scroll */
+.rscroll{display:flex;gap:12px;overflow-x:auto;padding:0 18px 4px;scrollbar-width:none}
+.rscroll::-webkit-scrollbar{display:none}
+.rcard{flex-shrink:0;width:195px;background:var(--s2);border:1px solid var(--bd);border-radius:16px;overflow:hidden;cursor:pointer;transition:.18s;active:transform:scale(.97)}
+.rcard:active{transform:scale(.97)}
+.rcard-img{height:108px;background-size:cover;background-position:center;position:relative}
+.rcard-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.65),transparent 55%)}
+.rcard-badges{position:absolute;bottom:7px;left:8px;display:flex;gap:5px}
+.rbadge{background:rgba(0,0,0,.7);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:3px 7px;font-size:10px;font-weight:700}
+.rbadge.o{background:rgba(255,92,0,.85);border-color:transparent}
+.rcard-body{padding:10px 11px}
+.rcard-name{font-family:'Unbounded',sans-serif;font-size:11.5px;font-weight:800;margin-bottom:3px}
+.rcard-meta{font-size:10px;color:var(--t2)}
 
-.cart-ov{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(5px);z-index:350;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.22s}
-.cart-ov.show{opacity:1;pointer-events:all}
-.cart-modal{width:560px;max-height:85vh;background:var(--s1);border:1px solid var(--bd2);border-radius:20px;display:flex;flex-direction:column;transform:scale(.95) translateY(10px);transition:.26s cubic-bezier(.4,0,.2,1);overflow:hidden}
-.cart-ov.show .cart-modal{transform:scale(1) translateY(0)}
-.cm-hd{padding:18px 22px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.cm-hd h3{font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800}
-.cm-hd-r{display:flex;align-items:center;gap:10px}
-.cm-cnt-chip{background:var(--orl);color:var(--or);border:1px solid var(--orb);border-radius:20px;padding:3px 11px;font-size:12px;font-weight:800;font-family:'Unbounded',sans-serif}
-.cm-close{width:30px;height:30px;background:var(--s2);border:none;color:var(--t2);border-radius:50%;cursor:pointer;font-size:14px;transition:.13s}
-.cm-close:hover{background:var(--r);color:#fff}
-.cm-body{flex:1;overflow-y:auto;padding:14px 22px}
-.cm-empty{text-align:center;padding:40px;color:var(--t2)}
-.cm-empty span{font-size:48px;display:block;margin-bottom:12px;opacity:.3}
-.ci{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--bd)}
-.ci-img{width:52px;height:52px;border-radius:9px;background-size:cover;background-position:center;flex-shrink:0;background-color:var(--s3)}
-.ci-info{flex:1;min-width:0}
-.ci-name{font-size:13px;font-weight:700;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ci-sub{font-size:11px;color:var(--t2)}
-.ci-price{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:800;color:var(--or);white-space:nowrap}
-.qty{display:flex;align-items:center;gap:7px}
-.qb{width:26px;height:26px;border-radius:8px;border:1.5px solid var(--bd2);background:none;color:var(--t1);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.12s;line-height:1}
-.qb:hover{border-color:var(--or);background:var(--orl);color:var(--or)}
-.qn{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;min-width:18px;text-align:center}
-.cm-ft{padding:16px 22px;border-top:1px solid var(--bd);flex-shrink:0}
-.cm-ft-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:14px}
-.cm-field label{display:block;font-size:10px;font-weight:800;color:var(--t2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.8px}
-.cm-field input,.cm-field select{width:100%;padding:10px 12px;background:var(--s2);border:1.5px solid var(--bd);border-radius:9px;color:var(--t1);font-size:13px;font-family:'Nunito',sans-serif;outline:none;transition:.15s}
-.cm-field input:focus,.cm-field select:focus{border-color:var(--or)}
-.cm-field select option{background:var(--s2)}
-.cm-field.full{grid-column:span 2}
-.cm-tot{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.cm-tot span:first-child{font-size:14px;color:var(--t2);font-weight:600}
-.cm-tot span:last-child{font-family:'Unbounded',sans-serif;font-size:20px;font-weight:900;color:var(--or)}
-.obtn{width:100%;padding:14px;background:var(--or);border:none;border-radius:12px;color:#fff;font-family:'Unbounded',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:.17s}
-.obtn:hover{background:var(--or2)}
+/* SHOPS */
+.shop{display:flex;align-items:center;gap:12px;padding:13px;background:var(--s2);border:1px solid var(--bd);border-radius:14px;margin-bottom:9px;text-decoration:none;color:var(--t1);cursor:pointer;transition:.15s;active:transform:translateX(3px)}
+.shop:active{transform:translateX(3px)}
+.shop-ic{width:44px;height:44px;background:var(--orl);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.shop-nm{font-family:'Unbounded',sans-serif;font-size:12px;font-weight:800;margin-bottom:2px}
+.shop-sub{font-size:10px;color:var(--t2)}
+.shop-arr{margin-left:auto;color:var(--t3);font-size:18px}
 
-.status-card{background:var(--s2);border:1px solid var(--bd);border-radius:13px;padding:16px 18px;margin-bottom:10px}
-.sc-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.sc-id{font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700}
-.bdg{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px}
-.bdg.wait{background:var(--yl);color:var(--y)}
-.bdg.acc{background:var(--orl);color:var(--or)}
-.bdg.cook{background:var(--bll);color:var(--bl)}
-.bdg.pickup{background:rgba(168,85,247,.15);color:#C084FC}
-.bdg.ondel{background:var(--orl);color:var(--or)}
-.bdg.done{background:var(--gl);color:var(--g)}
-.sc-steps{display:flex;margin-bottom:12px}
-.sst{flex:1;text-align:center;font-size:10px;color:var(--t3);position:relative}
-.sst:not(:last-child)::after{content:'';position:absolute;top:9px;left:50%;right:-50%;height:2px;background:var(--bd);z-index:0}
-.sst .dot{width:20px;height:20px;border-radius:50%;background:var(--s3);border:2px solid var(--bd);margin:0 auto 4px;position:relative;z-index:1;display:flex;align-items:center;justify-content:center;font-size:9px;transition:.25s}
-.sst.done .dot{background:var(--g);border-color:var(--g);color:#000}
-.sst.active .dot{background:var(--or);border-color:var(--or);box-shadow:0 0 10px rgba(255,92,0,.5)}
-.sst.done::after{background:var(--g)}
-.sc-info{font-size:12px;color:var(--t2);line-height:1.7}
-.sc-info b{color:var(--t1);font-family:'Unbounded',sans-serif;font-size:11px}
-.sc-acts{margin-top:11px;display:flex;gap:8px;flex-wrap:wrap}
+/* ─── RESTAURANTS PAGE ─── */
+.filters{display:flex;gap:8px;overflow-x:auto;padding:0 18px 2px;margin-bottom:16px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.filter{flex-shrink:0;padding:7px 14px;background:var(--s2);border:1.5px solid var(--bd);border-radius:20px;font-size:11.5px;font-weight:700;color:var(--t2);cursor:pointer;transition:.15s;white-space:nowrap}
+.filter.on{background:var(--orl);border-color:var(--or);color:var(--or)}
 
-.chat-box{background:var(--s2);border:1px solid var(--bd);border-radius:12px;margin-top:10px;overflow:hidden}
-.chat-hd{padding:10px 14px;border-bottom:1px solid var(--bd);font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px}
-.chat-msgs{height:180px;overflow-y:auto;padding:10px 14px;display:flex;flex-direction:column;gap:7px}
-.msg{max-width:74%;padding:7px 11px;border-radius:11px;font-size:12px;line-height:1.45;font-weight:600}
-.msg.me{background:var(--or);color:#fff;align-self:flex-end;border-bottom-right-radius:3px}
-.msg.them{background:var(--s3);color:var(--t1);align-self:flex-start;border-bottom-left-radius:3px}
-.msg .mwho{font-size:10px;opacity:.7;margin-bottom:2px;font-weight:700}
-.chat-in{display:flex;padding:9px 12px;border-top:1px solid var(--bd);gap:7px}
-.chat-in input{flex:1;background:var(--s3);border:1px solid var(--bd);border-radius:8px;padding:8px 11px;color:var(--t1);font-size:12px;outline:none;font-family:'Nunito',sans-serif;transition:.13s}
-.chat-in input:focus{border-color:var(--orb)}
-.chat-in button{padding:8px 13px;background:var(--or);border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif}
+.rlist{padding:0 18px}
+.ritem{display:flex;gap:12px;background:var(--s2);border:1px solid var(--bd);border-radius:15px;padding:12px;margin-bottom:10px;cursor:pointer;transition:.15s}
+.ritem:active{transform:scale(.99);border-color:var(--or)}
+.ritem-img{width:64px;height:64px;border-radius:11px;background-size:cover;background-position:center;flex-shrink:0}
+.ritem-info{flex:1;min-width:0}
+.ritem-name{font-family:'Unbounded',sans-serif;font-size:12px;font-weight:800;margin-bottom:3px}
+.ritem-meta{font-size:10px;color:var(--t2);margin-bottom:6px}
+.tags{display:flex;gap:5px;flex-wrap:wrap}
+.tag{background:var(--s3);border-radius:5px;padding:2px 7px;font-size:9px;font-weight:700;color:var(--t2)}
+.ritem-arr{color:var(--t3);font-size:16px;align-self:center;flex-shrink:0}
 
-.oc{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin-bottom:9px;transition:.14s}
-.oc:hover{border-color:var(--orb)}
-.oc-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
-.oc-id{font-family:'Unbounded',sans-serif;font-size:12px;font-weight:700}
-.oc-info{font-size:12px;color:var(--t2);margin-bottom:10px;line-height:1.7}
-.oc-info b{color:var(--t1)}
-.oc-acts{display:flex;gap:7px;flex-wrap:wrap}
+/* ─── ORDERS PAGE ─── */
+.orders-empty{text-align:center;padding:60px 28px 30px}
+.orders-empty .big-em{font-size:64px;margin-bottom:16px;opacity:.25;display:block}
+.orders-empty h3{font-family:'Unbounded',sans-serif;font-size:15px;font-weight:800;margin-bottom:8px}
+.orders-empty p{font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:22px}
+.cta-btn{display:inline-block;background:var(--or);color:#fff;border-radius:12px;padding:12px 24px;font-family:'Unbounded',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:.15s;border:none}
+.cta-btn:active{transform:scale(.97)}
 
-.btn{padding:8px 14px;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:.14s}
-.btn.g{background:var(--gl);color:var(--g);border:1.5px solid var(--g)}.btn.g:hover{background:var(--g);color:#000}
-.btn.o{background:var(--orl);color:var(--or);border:1.5px solid var(--or)}.btn.o:hover{background:var(--or);color:#fff}
-.btn.r{background:var(--rl);color:var(--r);border:1.5px solid var(--r)}.btn.r:hover{background:var(--r);color:#fff}
-.btn.b{background:var(--bll);color:var(--bl);border:1.5px solid var(--bl)}.btn.b:hover{background:var(--bl);color:#000}
-.btn.y{background:var(--yl);color:var(--y);border:1.5px solid var(--y)}.btn.y:hover{background:var(--y);color:#000}
-.btn.p{background:rgba(168,85,247,.12);color:#C084FC;border:1.5px solid #C084FC}.btn.p:hover{background:#C084FC;color:#000}
-.btn.sm{padding:5px 9px;font-size:11px}
-.btn.or{background:var(--orl);color:var(--or);border:1.5px solid var(--or)}.btn.or:hover{background:var(--or);color:#fff}
-.btn.bl{background:var(--bll);color:var(--bl);border:1.5px solid var(--bl)}.btn.bl:hover{background:var(--bl);color:#000}
+/* ─── PROFILE PAGE ─── */
+.prof-top{margin:0 18px 18px;background:var(--s2);border:1px solid var(--bd);border-radius:18px;padding:20px;display:flex;align-items:center;gap:14px}
+.prof-av{width:56px;height:56px;background:var(--orl);border:2.5px solid var(--or);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.prof-name{font-family:'Unbounded',sans-serif;font-size:15px;font-weight:900;margin-bottom:2px}
+.prof-city{font-size:11px;color:var(--t2);margin-bottom:6px}
+.prof-badge{display:inline-block;background:var(--orl);color:var(--or);border-radius:6px;padding:2px 9px;font-size:10px;font-weight:800}
 
-.shift-card{background:var(--s2);border:1px solid var(--bd);border-radius:13px;padding:20px;max-width:360px;text-align:center;margin-bottom:16px}
-.shift-card .em{font-size:44px;margin-bottom:12px}
-.shift-card h3{font-family:'Unbounded',sans-serif;font-size:14px;font-weight:700;margin-bottom:7px}
-.shift-card p{font-size:12px;color:var(--t2);margin-bottom:18px}
-
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:14px}
-.stat-c{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:15px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 18px 20px}
+.stat{background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:14px;text-align:center}
 .stat-n{font-family:'Unbounded',sans-serif;font-size:22px;font-weight:900;color:var(--or);margin-bottom:3px}
-.stat-l{font-size:11px;color:var(--t2)}
+.stat-l{font-size:10px;color:var(--t2);font-weight:700}
 
-.prof-hd{background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:20px;display:flex;align-items:center;gap:14px;margin-bottom:14px}
-.prof-av{width:56px;height:56px;background:var(--orl);border:3px solid var(--or);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
-.prof-nm{font-family:'Unbounded',sans-serif;font-size:16px;font-weight:800;margin-bottom:2px}
-.prof-rl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px}
-
-.hist-item{background:var(--s2);border:1px solid var(--bd);border-radius:12px;margin-bottom:8px;overflow:hidden}
-.hist-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 15px;cursor:pointer;transition:.13s}
-.hist-hd:hover{background:var(--s3)}
-.hist-hd-l{display:flex;align-items:center;gap:10px}
-.hist-hd-icon{font-size:20px}
-.hist-hd-id{font-family:'Unbounded',sans-serif;font-size:11px;font-weight:700;margin-bottom:2px}
-.hist-hd-date{color:var(--t2);font-size:11px}
-.hist-hd-r{display:flex;align-items:center;gap:10px}
-.hist-arrow{color:var(--t2);font-size:12px;transition:.2s}
-.hist-arrow.open{transform:rotate(180deg)}
-.hist-body{display:none;padding:12px 15px;border-top:1px solid var(--bd)}
-.hist-body.open{display:block}
-
-.menu-cat-hd{font-family:'Unbounded',sans-serif;font-size:11px;font-weight:700;color:var(--or);margin:15px 0 8px;text-transform:uppercase;letter-spacing:.8px}
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:11px}
-.ff label{display:block;font-size:10px;font-weight:800;color:var(--t2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.7px}
-.ff input{width:100%;padding:10px 12px;background:var(--s3);border:1.5px solid var(--bd);border-radius:9px;color:var(--t1);font-size:13px;outline:none;transition:.14s;font-family:'Nunito',sans-serif}
-.ff input:focus{border-color:var(--or)}
-.sv-btn{padding:9px 20px;background:var(--or);border:none;border-radius:9px;color:#fff;font-family:'Unbounded',sans-serif;font-weight:700;font-size:12px;cursor:pointer}
-
-.atab{width:100%;border-collapse:collapse;font-size:12px}
-.atab th{text-align:left;padding:9px 11px;border-bottom:1px solid var(--bd);font-size:10px;font-weight:800;color:var(--t2);text-transform:uppercase;letter-spacing:.7px}
-.atab td{padding:10px 11px;border-bottom:1px solid var(--bd)}
-.atab tr:hover td{background:var(--s2)}
-
-.adm-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-.adm-stat{background:var(--s2);border:1px solid var(--bd);border-radius:13px;padding:18px;position:relative;overflow:hidden}
-.adm-stat::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;opacity:.07}
-.adm-stat.or::before{background:var(--or)}
-.adm-stat.g::before{background:var(--g)}
-.adm-stat.bl::before{background:var(--bl)}
-.adm-stat.y::before{background:var(--y)}
-.adm-stat-n{font-family:'Unbounded',sans-serif;font-size:26px;font-weight:900;margin-bottom:4px}
-.adm-stat.or .adm-stat-n{color:var(--or)}
-.adm-stat.g .adm-stat-n{color:var(--g)}
-.adm-stat.bl .adm-stat-n{color:var(--bl)}
-.adm-stat.y .adm-stat-n{color:var(--y)}
-.adm-stat-l{font-size:11px;color:var(--t2);font-weight:600}
-.cur-online-bar{background:var(--s2);border:1px solid var(--bd);border-radius:13px;padding:16px 18px;margin-bottom:16px}
-.cur-online-bar h4{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;margin-bottom:14px}
-.cur-online-list{display:flex;flex-direction:column;gap:8px}
-.cur-online-item{display:flex;align-items:center;gap:11px;padding:10px 13px;background:var(--s3);border-radius:10px;border:1px solid var(--bd)}
-.cur-status-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.cur-status-dot.online{background:var(--g);box-shadow:0 0 6px var(--g)}
-.cur-status-dot.offline{background:var(--t3)}
-.cur-online-name{font-size:13px;font-weight:700;flex:1}
-.cur-online-info{font-size:11px;color:var(--t2)}
-
-.me-item{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--bd)}
-.me-img{width:50px;height:50px;border-radius:8px;background-size:cover;background-position:center;flex-shrink:0;background-color:var(--s3)}
-.me-info{flex:1}
-.me-nm{font-size:13px;font-weight:700}
-.me-pr{font-size:11px;color:var(--or);font-weight:700;margin-top:1px}
-.me-del{background:var(--rl);color:var(--r);border:1.5px solid var(--r);padding:4px 9px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:.13s}
-.me-del:hover{background:var(--r);color:#fff}
-.add-form{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:15px;margin-top:14px}
-.add-form h4{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;margin-bottom:13px}
-
-.empty{text-align:center;padding:44px 24px;color:var(--t2)}
-.empty .em{font-size:44px;display:block;margin-bottom:10px;opacity:.4}
-.empty h3{font-family:'Unbounded',sans-serif;font-size:14px;font-weight:700;margin-bottom:5px;color:var(--t1)}
-.empty p{font-size:12px}
-
-.live-dot{width:7px;height:7px;border-radius:50%;background:var(--g);display:inline-block;animation:pulse 1.5s infinite;margin-right:5px}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--s2);border:1px solid var(--bd2);color:var(--t1);border-radius:10px;padding:10px 18px;font-size:13px;font-weight:700;z-index:9999;opacity:0;transition:.22s;pointer-events:none;white-space:nowrap}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:10px}
+.menu-sec{margin:0 18px}
+.menu-sec-title{font-size:10px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding-left:2px}
+.mi{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--bd);cursor:pointer}
+.mi:last-child{border:none}
+.mi-ic{width:38px;height:38px;background:var(--s2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.mi-lbl{flex:1;font-size:13px;font-weight:700}
+.mi-arr{color:var(--t3);font-size:14px}
+.mi.red .mi-lbl{color:#EF4444}
+.mi.red .mi-ic{background:rgba(239,68,68,.1)}
 </style>
 </head>
 <body>
+<div class="app">
+  <div class="content" id="content">
 
-<!-- LOADING -->
-<div id="loadingScreen">
-  <div class="logo">BRINGO</div>
-  <div class="spinner"></div>
-</div>
-
-<!-- AUTH -->
-<div id="authScreen">
-  <div class="aw">
-    <div class="aw-logo">BRINGO</div>
-    <div class="aw-sub">Доставка — Білгород-Дністровський</div>
-    <div class="af"><label>Логін</label><input type="text" id="aLogin" placeholder="Введіть логін" autocomplete="off"></div>
-    <div class="af"><label>Пароль</label><input type="password" id="aPass" placeholder="••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
-    <button class="a-btn" onclick="doLogin()">Увійти</button>
-    <div class="a-err" id="aErr"></div>
-    <div class="a-hint">
-      <b>Клієнт:</b> 1 / 11 &nbsp;·&nbsp; <b>Кур'єр:</b> 2 / 22<br>
-      <b>Кафе Маестро:</b> 3 / 33 &nbsp;·&nbsp; <b>Дир. Маестро:</b> 5 / 55<br>
-      <b>Кафе Свобода:</b> 33 / 333 &nbsp;·&nbsp; <b>Дир. Свобода:</b> 55 / 555<br>
-      <b>Адмін:</b> 4 / 44
-    </div>
-  </div>
-</div>
-
-<div id="appWrap" style="display:none">
-  <div class="sb" id="sb"></div>
-  <div class="main" id="mainArea"></div>
-</div>
-
-<!-- CART MODAL -->
-<div class="cart-ov" id="cartOv" onclick="if(event.target===this)closeCart()">
-  <div class="cart-modal">
-    <div class="cm-hd">
-      <h3>🛒 Кошик</h3>
-      <div class="cm-hd-r">
-        <span class="cm-cnt-chip" id="cartCntChip">0 товарів</span>
-        <button class="cm-close" onclick="closeCart()">✕</button>
+    <!-- HOME -->
+    <div class="page active" id="pg-home">
+      <div class="topbar">
+        <div class="logo">BRINGO</div>
+        <div class="city-pill">📍 Білгород-Дністровський</div>
       </div>
-    </div>
-    <div class="cm-body" id="cartBody"></div>
-    <div class="cm-ft" id="cartFt" style="display:none">
-      <div class="cm-ft-grid">
-        <div class="cm-field full">
-          <label>Адреса доставки</label>
-          <input type="text" id="addrIn" placeholder="вул. Перемоги, 5, кв. 12">
-        </div>
-        <div class="cm-field">
-          <label>Спосіб оплати</label>
-          <select id="payIn">
-            <option value="Готівка">Готівка при отриманні</option>
-            <option value="Картка">Картка кур'єру</option>
-            <option value="Онлайн">Онлайн оплата</option>
-          </select>
-        </div>
-        <div class="cm-field" style="display:flex;flex-direction:column;justify-content:flex-end">
-          <div class="cm-tot"><span>Разом:</span><span id="cartTotVal">0 грн</span></div>
-        </div>
+
+      <div class="search">🔍 &nbsp;Пошук ресторанів та страв…</div>
+
+      <div class="hero">
+        <div class="hero-tag">Доставка їжі</div>
+        <h2>Смачне — вже за 30 хвилин</h2>
+        <div class="hero-btn">Обрати ресторан →</div>
       </div>
-      <button class="obtn" onclick="placeOrder()">Оформити замовлення →</button>
-    </div>
-  </div>
-</div>
 
-<div class="toast" id="toast"></div>
-
-<!-- Firebase SDK -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, get, push, update, remove, onValue, off } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-/* ================================================================
-   FIREBASE CONFIG
-================================================================ */
-const firebaseConfig = {
-  apiKey: "AIzaSyCcwGEMEegu3KTDJi7sx4KO_GPHRpPkz5k",
-  authDomain: "bringo-b66c2.firebaseapp.com",
-  projectId: "bringo-b66c2",
-  storageBucket: "bringo-b66c2.firebasestorage.app",
-  messagingSenderId: "1015048005239",
-  appId: "1:1015048005239:web:1223e81179e30a044ac872",
-  measurementId: "G-SY3W7Y8EMY",
-  databaseURL: "https://bringo-b66c2-default-rtdb.firebaseio.com"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-/* ================================================================
-   RESTAURANTS CONFIG
-================================================================ */
-const RESTAURANTS = {
-  rest1: {id:'rest1',name:'Кафе Маестро',addr:'вул. Перемоги, 1Р',phone:'0983471820',rating:'4.8',tags:'Піца, Хачапурі, Салати',time:'25–30',delivery:50,img:'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=70',banner:'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&q=80'},
-  rest2: {id:'rest2',name:'Кафе Свобода',addr:'вул. Сонячна',phone:'0987654321',rating:'4.6',tags:'Домашня кухня, Шашлик, Салати',time:'25–30',delivery:50,img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=70',banner:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80'}
-};
-
-const ACC = {
-  '1': {pass:'11',role:'client',  restId:null,  name:'Клієнт',       av:'👤'},
-  '2': {pass:'22',role:'courier', restId:null,  name:"Кур'єр Олексій",av:'🛵'},
-  '3': {pass:'33',role:'cafe',    restId:'rest1',name:'Кафе Маестро', av:'🍕'},
-  '4': {pass:'44',role:'admin',   restId:null,  name:'Адмін',        av:'⚙️'},
-  '5': {pass:'55',role:'director',restId:'rest1',name:'Дир. Маестро',av:'👔'},
-  '33':{pass:'333',role:'cafe',   restId:'rest2',name:'Кафе Свобода',av:'🏠'},
-  '55':{pass:'555',role:'director',restId:'rest2',name:'Дир. Свобода',av:'👔'},
-};
-const COURIERS = {'2':{name:"Кур'єр Олексій",av:'🛵'}};
-
-const SHOPS = [
-  {id:'s_atb',name:'АТБ-Маркет',desc:'Великий супермаркет — доставка продуктів',ic:'🛒',url:'https://www.atbmarket.com'},
-  {id:'s_tav',name:'Таврія В',  desc:'Мережа супермаркетів — замовлення онлайн',ic:'🏪',url:'https://www.tavriav.ua'},
-];
-
-const DEFAULT_MENU_REST1 = {
-  'Піца':[
-    {id:'p1',n:'Кальцоне',d:'Шинка, копчене куряче філе, гриби, помідори, сулугуні, моцарела',p:210,img:'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=300&q=70'},
-    {id:'p2',n:"М'ясне асорті",d:'Бекон, шинка, вершковий соус, сулугуні, моцарела, пармезан',p:350,img:'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=300&q=70'},
-    {id:'p3',n:'Alla Carbonara',d:'Бекон, шинка, вершковий соус, сулугуні, моцарела, пармезан',p:220,img:'https://images.unsplash.com/photo-1594007654729-407eedc4be65?w=300&q=70'},
-    {id:'p4',n:'Ваша Величність',d:'Шинка, куряче копчене філе, ковбаса горіхова, маслини, перець',p:230,img:'https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=300&q=70'},
-    {id:'p7',n:'Папероні',d:'Папероні, паприка, сулугуні, моцарела, соус томатний',p:230,img:'https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=300&q=70'},
-    {id:'p12',n:'4 сири',d:'Сулугуні, моцарела, пармезан, голандський сир, вершковий соус',p:220,img:'https://images.unsplash.com/photo-1548369937-47519962c11a?w=300&q=70'},
-  ],
-  'Салати':[
-    {id:'s1',n:'Салат Цезар',d:'Курятина гриль, листовий салат, пармезан, сухарики, соус цезар',p:130,img:'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=300&q=70'},
-    {id:'s2',n:'Грецький салат',d:'Помідори, огірки, перець, маслини, фета',p:110,img:'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=300&q=70'},
-  ],
-  'Хачапурі':[
-    {id:'h1',n:'Хачапурі аджарське',d:'Тісто, сир, яйце, вершкове масло',p:145,img:'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=300&q=70'},
-    {id:'h2',n:'Хачапурі мегрельське',d:'Тісто та сир з усіх боків',p:135,img:'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&q=70'},
-  ],
-  'Напої':[
-    {id:'n1',n:'Кока-Кола 0.5',d:'Класична',p:55,img:'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&q=70'},
-    {id:'n4',n:'Кава американо',d:'200мл',p:55,img:'https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?w=300&q=70'},
-    {id:'n3',n:'Вода Моршинська 0.5',d:'Без газу / з газом',p:35,img:'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=300&q=70'},
-  ],
-};
-
-const DEFAULT_MENU_REST2 = {
-  'Шашлик та гриль':[
-    {id:'sv_sh1',n:'Шашлик зі свинини',d:'Свиняча шия на углях, 300г',p:280,img:'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=300&q=70'},
-    {id:'sv_sh2',n:'Шашлик з курятини',d:'Куряче стегно на углях, 300г',p:220,img:'https://images.unsplash.com/photo-1598103442097-8b74394b95c3?w=300&q=70'},
-    {id:'sv_sh4',n:'Люля-кебаб',d:'Рублений фарш зі свинини та яловичини, 250г',p:240,img:'https://images.unsplash.com/photo-1529042410759-befb1204b468?w=300&q=70'},
-  ],
-  'Гарячі страви':[
-    {id:'sv_g1',n:'Курятина по-домашньому',d:'Куряча гомілка тушкована з картоплею',p:175,img:'https://images.unsplash.com/photo-1598103442097-8b74394b95c3?w=300&q=70'},
-    {id:'sv_g5',n:'Вареники з картоплею',d:'10 шт., зі шкварками та сметаною',p:120,img:'https://images.unsplash.com/photo-1564834724105-918b73d1b9d0?w=300&q=70'},
-  ],
-  'Супи':[
-    {id:'sv_sp1',n:'Борщ по-українськи',d:'Класичний борщ з пампушками та сметаною',p:85,img:'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=300&q=70'},
-    {id:'sv_sp2',n:'Юшка курячо-рисова',d:'Наваристий курячий бульйон з рисом',p:75,img:'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?w=300&q=70'},
-  ],
-  'Напої':[
-    {id:'sv_n1',n:'Кока-Кола 0.5',d:'',p:55,img:'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&q=70'},
-    {id:'sv_n4',n:'Вода мінеральна 0.5',d:'Моршинська',p:35,img:'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=300&q=70'},
-    {id:'sv_n6',n:'Компот домашній',d:'300мл',p:40,img:'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=300&q=70'},
-  ],
-};
-
-/* ================================================================
-   STATE
-================================================================ */
-let CU = null;
-let cart = [];
-let cartRestId = null;
-let listeners = []; // Firebase listeners to detach on logout
-
-/* ================================================================
-   FIREBASE HELPERS
-================================================================ */
-async function fbGet(path) {
-  const snap = await get(ref(db, path));
-  return snap.exists() ? snap.val() : null;
-}
-async function fbSet(path, data) {
-  await set(ref(db, path), data);
-}
-async function fbUpdate(path, data) {
-  await update(ref(db, path), data);
-}
-async function fbPush(path, data) {
-  const r = await push(ref(db, path), data);
-  return r.key;
-}
-function fbListen(path, cb) {
-  const r = ref(db, path);
-  onValue(r, snap => cb(snap.exists() ? snap.val() : null));
-  listeners.push(r);
-}
-function detachListeners() {
-  listeners.forEach(r => off(r));
-  listeners = [];
-}
-
-async function getMenu(restId) {
-  const m = await fbGet('menus/' + restId);
-  if (m) return m;
-  // First time — save defaults
-  const def = restId === 'rest1' ? DEFAULT_MENU_REST1 : DEFAULT_MENU_REST2;
-  await fbSet('menus/' + restId, def);
-  return def;
-}
-async function setMenu(restId, menu) {
-  await fbSet('menus/' + restId, menu);
-}
-
-async function getOrders() {
-  const o = await fbGet('orders');
-  if (!o) return [];
-  return Object.entries(o).map(([k, v]) => ({...v, _key: k})).sort((a,b) => b.ts - a.ts);
-}
-
-async function getCourierShift() {
-  const v = await fbGet('shift/courier2');
-  return !!v;
-}
-async function setCourierShift(val) {
-  await fbSet('shift/courier2', val);
-}
-
-/* ================================================================
-   AUTH
-================================================================ */
-async function doLogin() {
-  const l = document.getElementById('aLogin').value.trim();
-  const p = document.getElementById('aPass').value;
-  const e = document.getElementById('aErr'); e.textContent = '';
-  const a = ACC[l];
-  if (!a || a.pass !== p) { e.textContent = 'Невірний логін або пароль'; return; }
-  CU = l;
-  document.getElementById('authScreen').style.display = 'none';
-  document.getElementById('appWrap').style.display = 'flex';
-  buildUI();
-}
-function logout() {
-  detachListeners();
-  CU = null; cart = []; cartRestId = null;
-  document.getElementById('appWrap').style.display = 'none';
-  document.getElementById('authScreen').style.display = 'flex';
-  document.getElementById('aLogin').value = '';
-  document.getElementById('aPass').value = '';
-}
-window.logout = logout;
-
-/* ================================================================
-   UI BUILD
-================================================================ */
-function buildUI() {
-  const r = ACC[CU].role;
-  buildSB();
-  if (r === 'client')   buildClient();
-  if (r === 'cafe')     buildCafe();
-  if (r === 'courier')  buildCourier();
-  if (r === 'admin')    buildAdmin();
-  if (r === 'director') buildDirector();
-}
-
-function buildSB() {
-  const acc = ACC[CU], r = acc.role;
-  const rl = {client:'Клієнт',courier:"Кур'єр",cafe:'Кафе',admin:'Адмін',director:'Директор'}[r];
-  let nav = '';
-  if (r === 'client') nav = `
-    <div class="ng"><div class="ng-lbl">Каталог</div>
-      <button class="nl on" id="nl-home" onclick="nav('home',this)"><span class="ic">🏠</span>Головна</button>
-      <button class="nl" id="nl-rests" onclick="nav('rests',this)"><span class="ic">🍴</span>Ресторани</button>
-      <button class="nl" id="nl-shops" onclick="nav('shops',this)"><span class="ic">🛒</span>Магазини</button>
-    </div>
-    <div class="ng"><div class="ng-lbl">Особисте</div>
-      <button class="nl" id="nl-orders" onclick="nav('orders',this)"><span class="ic">📋</span>Мої замовлення<span class="bdg" id="bdg-orders"></span></button>
-      <button class="nl" id="nl-profile" onclick="nav('profile',this)"><span class="ic">👤</span>Профіль</button>
-    </div>`;
-  if (r === 'cafe') nav = `
-    <div class="ng"><div class="ng-lbl">${acc.name}</div>
-      <button class="nl on" onclick="nav('cafe-orders',this)"><span class="ic">📋</span>Замовлення<span class="bdg" id="bdg-cafe"></span></button>
-      <button class="nl" onclick="nav('cafe-menu',this)"><span class="ic">🍕</span>Меню</button>
-    </div>`;
-  if (r === 'courier') nav = `
-    <div class="ng"><div class="ng-lbl">Кур'єр</div>
-      <button class="nl on" onclick="nav('cur-list',this)"><span class="ic">📦</span>Замовлення<span class="bdg" id="bdg-cur"></span></button>
-      <button class="nl" onclick="nav('cur-active',this)"><span class="ic">🛵</span>Активне<span class="bdg green" id="bdg-cur-act"></span></button>
-      <button class="nl" onclick="nav('profile',this)"><span class="ic">👤</span>Профіль</button>
-    </div>`;
-  if (r === 'admin') nav = `
-    <div class="ng"><div class="ng-lbl">📊 Адмін</div>
-      <button class="nl on" onclick="nav('adm-stats',this)"><span class="ic">📊</span>Статистика</button>
-      <button class="nl" onclick="nav('adm-orders',this)"><span class="ic">📋</span>Всі замовлення</button>
-      <button class="nl" onclick="nav('adm-users',this)"><span class="ic">👥</span>Акаунти</button>
-    </div>
-    <div class="ng"><div class="ng-lbl">🏠 Як клієнт</div>
-      <button class="nl" onclick="nav('home',this)"><span class="ic">🏠</span>Головна</button>
-      <button class="nl" onclick="nav('rests',this)"><span class="ic">🍴</span>Ресторани</button>
-      <button class="nl" onclick="nav('orders',this)"><span class="ic">📋</span>Замовлення</button>
-    </div>
-    <div class="ng"><div class="ng-lbl">☕ Як кафе</div>
-      <button class="nl" onclick="nav('cafe-orders',this)"><span class="ic">📋</span>Замовлення кафе</button>
-      <button class="nl" onclick="nav('cafe-menu',this)"><span class="ic">🍕</span>Меню кафе</button>
-    </div>
-    <div class="ng"><div class="ng-lbl">🛵 Як кур'єр</div>
-      <button class="nl" onclick="nav('cur-list',this)"><span class="ic">📦</span>Список зам.</button>
-      <button class="nl" onclick="nav('cur-active',this)"><span class="ic">🛵</span>Активний зам.</button>
-    </div>
-    <div class="ng"><div class="ng-lbl">👔 Як директор</div>
-      <button class="nl" onclick="nav('dir-menu',this)"><span class="ic">✏️</span>Редагувати меню</button>
-      <button class="nl" onclick="nav('dir-stats',this)"><span class="ic">📊</span>Статистика</button>
-    </div>`;
-  if (r === 'director') nav = `
-    <div class="ng"><div class="ng-lbl">Директор</div>
-      <button class="nl on" onclick="nav('dir-menu',this)"><span class="ic">🍕</span>Редагувати меню</button>
-      <button class="nl" onclick="nav('dir-stats',this)"><span class="ic">📊</span>Статистика</button>
-    </div>`;
-  document.getElementById('sb').innerHTML = `
-    <div class="sb-logo">BRINGO<small>${rl}</small></div>
-    ${nav}
-    <div class="sb-bot">
-      <div class="sb-user">
-        <div class="sb-av">${acc.av}</div>
-        <div class="sb-inf"><div class="sb-nm">${acc.name}</div><div class="sb-rl">${rl}</div></div>
+      <div class="promos">
+        <div class="promo a"><div class="promo-ic">🎁</div><h4>−20% перше замовлення</h4><p>Промокод FIRST20</p></div>
+        <div class="promo b"><div class="promo-ic">🛵</div><h4>Безкоштовна доставка</h4><p>Від 500 грн</p></div>
+        <div class="promo c"><div class="promo-ic">⚡</div><h4>В середньому 30 хв</h4><p>Відстеження онлайн</p></div>
       </div>
-      <button class="lo-btn" onclick="logout()">↩ Вийти</button>
-    </div>`;
-}
 
-window.nav = function(page, btn) {
-  document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
-  const el = document.getElementById('pg-' + page);
-  if (el) el.classList.add('on');
-  document.querySelectorAll('.nl').forEach(l => l.classList.remove('on'));
-  if (btn) btn.classList.add('on');
-  if (page === 'orders')       renderOrders();
-  if (page === 'cafe-orders')  renderCafeOrders();
-  if (page === 'cafe-menu')    renderCafeMenuView();
-  if (page === 'cur-list')     renderCurList();
-  if (page === 'cur-active')   renderCurActive();
-  if (page === 'adm-stats')    renderAdmStats();
-  if (page === 'adm-orders')   renderAdmOrders();
-  if (page === 'dir-menu')     renderDirMenu();
-  if (page === 'dir-stats')    renderDirStats();
-  if (page === 'profile')      renderProfile();
-  if (page === 'home' || page === 'rests') renderRestCards();
-  if (page === 'shops')        renderShops();
-};
-
-/* ================================================================
-   CLIENT
-================================================================ */
-function buildClient() {
-  document.getElementById('mainArea').innerHTML = `
-    <div class="topbar">
-      <div class="srch">
-        <span style="color:var(--t3)">🔍</span>
-        <input type="text" id="srchIn" placeholder="Пошук ресторанів…" oninput="doSearch(this.value)" onfocus="doSearch(this.value)" onblur="setTimeout(()=>hideDrop(),150)">
-        <div class="srch-drop" id="srchDrop"></div>
+      <div class="sec">
+        <div class="sec-hd"><h3>Ресторани</h3><span onclick="goPage('rests')">Всі →</span></div>
       </div>
-      <div class="city">📍 Білгород-Дністровський</div>
-      <button class="cart-btn empty" id="cartBarBtn" onclick="openCart()">
-        <span style="font-size:16px">🛒</span>
-        <span style="font-size:13px;font-weight:700">Кошик</span>
-        <span class="cart-cnt-wrap"><span class="cart-cnt">0</span></span>
-      </button>
-    </div>
-    <div id="pagesArea">
-      <div class="pg on" id="pg-home"><div class="w">
-        <div class="hero"><div class="ht"><h1>Доставка в Білгород-Дністровський</h1><p>Ресторани та магазини — прямо до вашого порогу</p><button class="hcta" onclick="nav('rests',document.getElementById('nl-rests'))">Обрати ресторан →</button></div><div class="hem">🛵</div></div>
-        <div class="promo-row">
-          <div class="pm p1"><div><h4>−20% перший заказ</h4><p>Промокод: FIRST20</p></div><div class="em">🎁</div></div>
-          <div class="pm p2"><div><h4>Безкоштовна доставка</h4><p>Від 500 грн</p></div><div class="em">🛵</div></div>
-          <div class="pm p3"><div><h4>В середньому 30 хв</h4><p>Відстеження онлайн</p></div><div class="em">⚡</div></div>
-        </div>
-        <div class="sh"><h2>Ресторани</h2></div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px" id="home-grid"></div>
-        <div class="sh" style="margin-top:22px"><h2>Магазини</h2></div>
-        <div id="home-shops"></div>
-      </div></div>
-      <div class="pg" id="pg-rests"><div class="w">
-        <div class="sh"><h2>Ресторани</h2></div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px" id="rests-grid"></div>
-      </div></div>
-      <div class="pg" id="pg-shops"><div class="w">
-        <div class="sh"><h2>Магазини</h2></div>
-        <div id="shops-list"></div>
-      </div></div>
-      <div class="pg" id="pg-rest-page"><div class="w" id="rest-page-body"></div></div>
-      <div class="pg" id="pg-orders"><div class="w"><div class="sh"><h2>Мої замовлення</h2></div><div id="orders-list"></div></div></div>
-      <div class="pg" id="pg-profile"><div class="w">
-        <div class="sh"><h2>Профіль</h2></div>
-        <div class="prof-hd"><div class="prof-av">👤</div><div><div class="prof-nm">Клієнт</div><div class="prof-rl">Клієнт · Логін: 1</div></div></div>
-        <div class="stats-row">
-          <div class="stat-c"><div class="stat-n" id="cl-ord">0</div><div class="stat-l">замовлень</div></div>
-          <div class="stat-c"><div class="stat-n" id="cl-sp">0</div><div class="stat-l">грн витрачено</div></div>
-          <div class="stat-c"><div class="stat-n">0</div><div class="stat-l">грн бонуси</div></div>
-        </div>
-        <div class="sh" style="margin-top:20px"><h2>Історія замовлень</h2></div>
-        <div id="client-history"></div>
-      </div></div>
-    </div>`;
-  renderRestCards();
-  renderShops();
-  startOrdersListener();
-}
-
-/* ================================================================
-   ADMIN BUILD
-================================================================ */
-function buildAdmin() {
-  document.getElementById('mainArea').innerHTML = `
-    <div class="topbar">
-      <div class="srch">
-        <span style="color:var(--t3)">🔍</span>
-        <input type="text" id="srchIn" placeholder="Пошук…" oninput="doSearch(this.value)" onfocus="doSearch(this.value)" onblur="setTimeout(()=>hideDrop(),150)">
-        <div class="srch-drop" id="srchDrop"></div>
-      </div>
-      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--g);font-weight:700;margin-left:8px">
-        <span class="live-dot"></span>Live
-      </div>
-      <div class="city" style="margin-left:auto">⚙️ Адмін</div>
-      <button class="cart-btn empty" id="cartBarBtn" onclick="openCart()">
-        <span style="font-size:16px">🛒</span>
-        <span style="font-size:13px;font-weight:700">Кошик</span>
-      </button>
-    </div>
-    <div id="pagesArea">
-      <div class="pg on" id="pg-adm-stats"><div class="w"><div class="sh"><h2>📊 Статистика</h2></div><div id="adm-stats-body"></div></div></div>
-      <div class="pg" id="pg-adm-orders"><div class="w"><div class="sh"><h2>Всі замовлення</h2></div><div id="adm-orders-body"></div></div></div>
-      <div class="pg" id="pg-adm-users"><div class="w">
-        <div class="sh"><h2>Акаунти</h2></div>
-        <table class="atab"><thead><tr><th>Логін</th><th>Пароль</th><th>Роль</th><th>Ім'я</th><th>Ресторан</th></tr></thead>
-        <tbody>${Object.entries(ACC).map(([l,a])=>`<tr><td><b>${l}</b></td><td>${a.pass}</td><td>${a.role}</td><td>${a.name}</td><td>${a.restId?RESTAURANTS[a.restId]?.name:'—'}</td></tr>`).join('')}</tbody></table>
-      </div></div>
-      <div class="pg" id="pg-home"><div class="w"><div class="sh"><h2>Головна</h2></div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px" id="home-grid"></div>
-      </div></div>
-      <div class="pg" id="pg-rests"><div class="w"><div class="sh"><h2>Ресторани</h2></div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px" id="rests-grid"></div>
-      </div></div>
-      <div class="pg" id="pg-rest-page"><div class="w" id="rest-page-body"></div></div>
-      <div class="pg" id="pg-orders"><div class="w"><div class="sh"><h2>Замовлення клієнта</h2></div><div id="orders-list"></div></div></div>
-      <div class="pg" id="pg-cafe-orders"><div class="w">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-          <div class="sh" style="margin-bottom:0"><h2>Замовлення кафе</h2></div>
-          <select id="admCafeRestSel" style="padding:6px 10px;background:var(--s2);border:1px solid var(--bd2);border-radius:8px;color:var(--t1);font-size:12px" onchange="renderCafeOrders()">
-            ${Object.values(RESTAURANTS).map(r=>`<option value="${r.id}">${r.name}</option>`).join('')}
-          </select>
-        </div>
-        <div id="cafe-list"></div>
-      </div></div>
-      <div class="pg" id="pg-cafe-menu"><div class="w">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-          <div class="sh" style="margin-bottom:0"><h2>Меню кафе</h2></div>
-          <select id="admCafeMenuRestSel" style="padding:6px 10px;background:var(--s2);border:1px solid var(--bd2);border-radius:8px;color:var(--t1);font-size:12px" onchange="renderCafeMenuView()">
-            ${Object.values(RESTAURANTS).map(r=>`<option value="${r.id}">${r.name}</option>`).join('')}
-          </select>
-        </div>
-        <div id="cafe-menu-view"></div>
-      </div></div>
-      <div class="pg" id="pg-cur-list"><div class="w"><div class="sh"><h2>Список замовлень (кур'єр)</h2></div><div id="cur-list-body"></div></div></div>
-      <div class="pg" id="pg-cur-active"><div class="w"><div class="sh"><h2>Активне замовлення</h2></div><div id="cur-active-body"></div></div></div>
-      <div class="pg" id="pg-dir-menu"><div class="w">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-          <div class="sh" style="margin-bottom:0"><h2>Редагування меню</h2></div>
-          <select id="admDirRestSel" style="padding:6px 10px;background:var(--s2);border:1px solid var(--bd2);border-radius:8px;color:var(--t1);font-size:12px" onchange="renderDirMenu()">
-            ${Object.values(RESTAURANTS).map(r=>`<option value="${r.id}">${r.name}</option>`).join('')}
-          </select>
-        </div>
-        <div id="dir-menu-body"></div>
-        <div class="add-form" id="dir-add-form"></div>
-      </div></div>
-      <div class="pg" id="pg-dir-stats"><div class="w"><div class="sh"><h2>Статистика</h2></div><div id="dir-stats-body"></div></div></div>
-    </div>`;
-  renderAdmStats();
-  renderRestCards();
-  startOrdersListener();
-}
-
-/* ================================================================
-   REST CARDS + SEARCH
-================================================================ */
-function renderRestCards() {
-  const cards = Object.values(RESTAURANTS).map(r => restCardHTML(r)).join('');
-  ['home-grid','rests-grid'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = cards; });
-}
-function restCardHTML(r) {
-  return `<div class="rest-card" onclick="openRestPage('${r.id}')">
-    <div class="rc-img-wrap">
-      <div class="rc-img" style="background-image:url('${r.img}')"></div>
-      <div class="rc-overlay"></div>
-      <div class="rc-time-badge">
-        <div class="rc-tb">⏱ ${r.time} хв</div>
-        <div class="rc-tb orange">🛵 ${r.delivery} грн</div>
-      </div>
-    </div>
-    <div class="rc-body">
-      <div class="rc-name">${r.name}</div>
-      <div class="rc-meta">⭐ ${r.rating} &nbsp;·&nbsp; ${r.tags}</div>
-      <button class="rc-btn">Відкрити меню →</button>
-    </div>
-  </div>`;
-}
-function renderShops() {
-  const html = SHOPS.map(sh => `<a href="${sh.url}" target="_blank" class="shop-link"><div class="sl-ic">${sh.ic}</div><div class="sl-info"><h4>${sh.name}</h4><p>${sh.desc}</p></div><div class="sl-arr">↗</div></a>`).join('');
-  ['home-shops','shops-list'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = html; });
-}
-window.renderShops = renderShops;
-
-window.doSearch = function(q) {
-  const drop = document.getElementById('srchDrop'); if (!drop) return;
-  q = q.toLowerCase().trim();
-  if (!q) { drop.classList.remove('show'); return; }
-  const rests = Object.values(RESTAURANTS).filter(r => r.name.toLowerCase().includes(q) || r.tags.toLowerCase().includes(q));
-  let h = '';
-  if (rests.length) {
-    h += '<div class="srch-sep">Ресторани</div>';
-    h += rests.map(r => `<div class="srch-item" onclick="openRestPage('${r.id}')">
-      <div class="si-ic" style="background-image:url('${r.img}');background-size:cover"></div>
-      <div class="si-info"><h4>${r.name}</h4><p>${r.tags}</p></div>
-      <span class="si-type rest">Ресторан</span></div>`).join('');
-  }
-  if (!h) h = '<div style="padding:14px 16px;font-size:12px;color:var(--t2)">Нічого не знайдено</div>';
-  drop.innerHTML = h; drop.classList.add('show');
-};
-window.hideDrop = function() { const d = document.getElementById('srchDrop'); if (d) d.classList.remove('show'); };
-
-/* RESTAURANT PAGE */
-let curRestPageId = null;
-window.openRestPage = async function(restId) {
-  hideDrop();
-  const r = RESTAURANTS[restId]; if (!r) return;
-  curRestPageId = restId;
-  const menu = await getMenu(restId);
-  const cats = Object.keys(menu);
-  const body = document.getElementById('rest-page-body'); if (!body) return;
-  body.innerHTML = `
-    <button class="back-btn" onclick="nav('rests',document.getElementById('nl-rests'))">← Назад до ресторанів</button>
-    <div class="rest-pg-hd">
-      <div class="rest-pg-banner" style="background-image:url('${r.banner}')"><div class="rest-pg-banner-ov"></div></div>
-      <div class="rest-pg-info">
-        <div class="rest-pg-name">${r.name}</div>
-        <div class="rest-pg-meta">
-          <div class="rest-pg-chip g">⭐ ${r.rating}</div>
-          <div class="rest-pg-chip">⏱ ${r.time} хв</div>
-          <div class="rest-pg-chip or">🛵 Доставка ${r.delivery} грн</div>
-          <div class="rest-pg-chip">📍 ${r.addr}</div>
-          <div class="rest-pg-chip">📞 ${r.phone}</div>
-        </div>
-      </div>
-    </div>
-    <div class="cat-tabs" id="restCatTabs">
-      ${cats.map((c,i) => `<div class="cat-tab ${i===0?'on':''}" onclick="switchRestCat('${c}',this)">${c}</div>`).join('')}
-    </div>
-    <div id="restMenuContent"></div>`;
-  renderRestMenuCat(menu, cats[0]);
-  document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
-  document.getElementById('pg-rest-page').classList.add('on');
-  document.querySelectorAll('.nl').forEach(l => l.classList.remove('on'));
-};
-
-window.switchRestCat = async function(cat, btn) {
-  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('on'));
-  btn.classList.add('on');
-  const menu = await getMenu(curRestPageId);
-  renderRestMenuCat(menu, cat);
-};
-
-function renderRestMenuCat(menu, cat) {
-  const items = menu[cat] || [];
-  const el = document.getElementById('restMenuContent'); if (!el) return;
-  el.innerHTML = `<div class="cat-section-hd">${cat}</div>
-    <div class="menu-grid">${items.map(item => {
-      const inCart = cart.find(x => x.id === item.id);
-      const cnt = inCart ? inCart.qty : 0;
-      return `<div class="mg-card">
-        <div class="mg-img" style="background-image:url('${item.img}')"></div>
-        <div class="mg-body">
-          <div class="mg-name">${item.n}</div>
-          <div class="mg-desc">${item.d || ''}</div>
-          <div class="mg-foot">
-            <div class="mg-price">${item.p} грн</div>
-            <div class="mg-add-wrap">
-              <div class="mg-cnt ${cnt>0?'show':''}" id="mgcnt-${item.id}">×${cnt}</div>
-              <button class="mg-add" data-id="${item.id}" data-name="${item.n.replace(/"/g,'&quot;')}" data-price="${item.p}" data-img="${item.img}" data-rest="${curRestPageId}" onclick="addCartFromBtn(this)">+</button>
-            </div>
+      <div class="rscroll">
+        <div class="rcard" onclick="goPage('rests')">
+          <div class="rcard-img" style="background-image:url('https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=70')">
+            <div class="rcard-img-ov"></div>
+            <div class="rcard-badges"><div class="rbadge">⏱ 25 хв</div><div class="rbadge o">🛵 50 грн</div></div>
+          </div>
+          <div class="rcard-body">
+            <div class="rcard-name">Кафе Маестро</div>
+            <div class="rcard-meta">⭐ 4.8 · Піца, Хачапурі, Салати</div>
           </div>
         </div>
-      </div>`;
-    }).join('')}</div>`;
-}
-
-/* ================================================================
-   CART
-================================================================ */
-window.addCartFromBtn = function(btn) {
-  const {id, name, price, img, rest} = btn.dataset;
-  if (cartRestId && cartRestId !== rest && cart.length > 0) {
-    if (!confirm('Кошик містить товари з іншого ресторану. Очистити кошик?')) return;
-    cart = []; cartRestId = null;
-  }
-  cartRestId = rest;
-  addCart({id, name, price: parseInt(price), img});
-};
-
-function addCart(item) {
-  const ex = cart.find(x => x.id === item.id);
-  if (ex) ex.qty++; else cart.push({...item, qty: 1});
-  const inCart = cart.find(x => x.id === item.id);
-  const cntEl = document.getElementById('mgcnt-' + item.id);
-  if (cntEl) { cntEl.textContent = '×' + inCart.qty; cntEl.classList.add('show'); }
-  updateCartUI(true);
-  showToast('✅ ' + item.name + ' додано');
-}
-
-function updateCartUI(bump) {
-  const total = cart.reduce((s,x) => s + x.price * x.qty, 0);
-  const cnt = cart.reduce((s,x) => s + x.qty, 0);
-  const btn = document.getElementById('cartBarBtn');
-  const totEl = document.getElementById('cartTotVal');
-  const ftEl = document.getElementById('cartFt');
-  const chip = document.getElementById('cartCntChip');
-  if (totEl) totEl.textContent = total + ' грн';
-  if (ftEl) ftEl.style.display = cnt > 0 ? 'block' : 'none';
-  if (chip) chip.textContent = cnt + ' ' + (cnt===1?'товар':cnt<5?'товари':'товарів');
-  if (btn) {
-    if (cnt > 0) {
-      btn.className = 'cart-btn filled' + (bump ? ' bump' : '');
-      btn.innerHTML = `<span class="cart-icon-wrap">🛒</span><span class="cart-label">${total} грн</span><span class="cart-cnt-wrap"><span class="cart-cnt">${cnt}</span></span>`;
-      if (bump) btn.addEventListener('animationend', () => btn.classList.remove('bump'), {once:true});
-    } else {
-      btn.className = 'cart-btn empty';
-      btn.innerHTML = `<span style="font-size:16px">🛒</span><span style="font-size:13px;font-weight:700">Кошик</span>`;
-    }
-    btn.onclick = openCart;
-  }
-}
-
-function renderCartBody() {
-  const b = document.getElementById('cartBody'); if (!b) return;
-  if (!cart.length) { b.innerHTML = '<div class="cm-empty"><span>🛒</span><p>Кошик порожній</p></div>'; return; }
-  const restName = cartRestId ? RESTAURANTS[cartRestId]?.name : '';
-  b.innerHTML = (restName ? `<div style="font-size:11px;color:var(--t2);margin-bottom:10px">🍴 ${restName}</div>` : '') +
-    cart.map(x => `<div class="ci">
-      <div class="ci-img" style="background-image:url('${x.img}')"></div>
-      <div class="ci-info"><div class="ci-name">${x.name}</div><div class="ci-sub">${x.price} грн × ${x.qty}</div></div>
-      <div class="qty">
-        <button class="qb" onclick="qtyChg('${x.id}',-1)">−</button>
-        <span class="qn">${x.qty}</span>
-        <button class="qb" onclick="qtyChg('${x.id}',1)">+</button>
+        <div class="rcard" onclick="goPage('rests')">
+          <div class="rcard-img" style="background-image:url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=70')">
+            <div class="rcard-img-ov"></div>
+            <div class="rcard-badges"><div class="rbadge">⏱ 30 хв</div><div class="rbadge o">🛵 50 грн</div></div>
+          </div>
+          <div class="rcard-body">
+            <div class="rcard-name">Кафе Свобода</div>
+            <div class="rcard-meta">⭐ 4.6 · Шашлик, Домашня</div>
+          </div>
+        </div>
+        <div class="rcard" style="background:var(--s3);border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;height:170px">
+          <div style="font-size:28px;margin-bottom:8px">➕</div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:10px;font-weight:700;color:var(--t2);text-align:center;padding:0 14px">Скоро нові ресторани</div>
+        </div>
       </div>
-      <div class="ci-price">${x.price * x.qty} грн</div>
-    </div>`).join('');
-}
 
-window.qtyChg = function(id, d) {
-  const i = cart.findIndex(x => x.id === id); if (i < 0) return;
-  cart[i].qty += d;
-  if (cart[i].qty <= 0) cart.splice(i, 1);
-  if (!cart.length) cartRestId = null;
-  updateCartUI(false); renderCartBody();
-  const el = document.getElementById('mgcnt-' + id);
-  if (el) { const inCart = cart.find(x => x.id === id); if (inCart) { el.textContent = '×'+inCart.qty; el.classList.add('show'); } else el.classList.remove('show'); }
-};
-
-window.openCart = function() { document.getElementById('cartOv').classList.add('show'); renderCartBody(); };
-window.closeCart = function() { document.getElementById('cartOv').classList.remove('show'); };
-
-window.placeOrder = async function() {
-  const addr = document.getElementById('addrIn')?.value?.trim();
-  const pay = document.getElementById('payIn')?.value;
-  if (!addr) { showToast('⚠️ Вкажіть адресу'); return; }
-  if (!cart.length) return;
-  const total = cart.reduce((a,x) => a + x.price * x.qty, 0);
-  const rInfo = RESTAURANTS[cartRestId || 'rest1'];
-  const ord = {
-    clientId: CU,
-    restId: cartRestId || 'rest1',
-    restName: rInfo?.name || '',
-    items: cart.map(x => ({id:x.id, n:x.name, p:x.price, q:x.qty})),
-    total, addr, pay,
-    status: 'wait',
-    courierId: null,
-    ts: Date.now()
-  };
-  showToast('⏳ Оформлюємо…');
-  await fbPush('orders', ord);
-  cart = []; cartRestId = null;
-  updateCartUI(false); renderCartBody(); closeCart();
-  showToast('🎉 Замовлення оформлено!');
-  nav('orders', document.getElementById('nl-orders'));
-};
-
-/* ================================================================
-   REALTIME LISTENER — замовлення
-================================================================ */
-function startOrdersListener() {
-  fbListen('orders', (data) => {
-    // rebuild orders array
-    window._orders = data ? Object.entries(data).map(([k,v]) => ({...v, _key:k})).sort((a,b) => b.ts - a.ts) : [];
-    updateBadges();
-    // auto-refresh active pages
-    const r = ACC[CU].role;
-    if (document.getElementById('pg-orders')?.classList.contains('on')) renderOrders();
-    if (document.getElementById('pg-cafe-orders')?.classList.contains('on')) renderCafeOrders();
-    if (document.getElementById('pg-cur-list')?.classList.contains('on')) renderCurList();
-    if (document.getElementById('pg-cur-active')?.classList.contains('on')) renderCurActive();
-    if (document.getElementById('pg-adm-stats')?.classList.contains('on')) renderAdmStats();
-    if (document.getElementById('pg-adm-orders')?.classList.contains('on')) renderAdmOrders();
-  });
-}
-
-function getOrders() { return window._orders || []; }
-
-/* ================================================================
-   ORDERS — CLIENT
-================================================================ */
-function renderOrders() {
-  const el = document.getElementById('orders-list'); if (!el) return;
-  const all = getOrders();
-  const mine = all.filter(o => o.clientId === CU);
-  const active = mine.filter(o => o.status !== 'done');
-
-  const el2 = document.getElementById('cl-ord'); if (el2) el2.textContent = mine.length;
-  const el3 = document.getElementById('cl-sp'); if (el3) el3.textContent = mine.filter(o=>o.status==='done').reduce((a,o)=>a+o.total,0);
-
-  if (!active.length) { el.innerHTML = '<div class="empty"><span class="em">📋</span><h3>Активних замовлень немає</h3></div>'; renderClientHistory(); return; }
-
-  const labels = {wait:'Очікує',acc:'Прийнято',cook:'Готується',pickup:'Готово',ondel:'В дорозі',done:'Доставлено'};
-  const steps = ['Очікує','Прийнято','Готується','Готово','В дорозі','Доставлено'];
-  const skeys = ['wait','acc','cook','pickup','ondel','done'];
-  el.innerHTML = active.map(o => {
-    const si = skeys.indexOf(o.status);
-    const stepsH = steps.map((st,i) => `<div class="sst ${i<si?'done':i===si?'active':''}"><div class="dot">${i<si?'✓':''}</div><div>${st}</div></div>`).join('');
-    const chatH = o.courierId ? `<div class="chat-box">
-      <div class="chat-hd">💬 Чат з кур'єром</div>
-      <div class="chat-msgs" id="cm-${o._key}">${renderMsgs(o._key)}</div>
-      <div class="chat-in">
-        <input type="text" id="ci-${o._key}" placeholder="Написати…" onkeydown="if(event.key==='Enter')sendMsg('${o._key}','client')">
-        <button onclick="sendMsg('${o._key}','client')">→</button>
+      <div class="sec" style="margin-top:20px">
+        <div class="sec-hd"><h3>Магазини</h3></div>
+        <a href="https://www.atbmarket.com" target="_blank" class="shop">
+          <div class="shop-ic">🛒</div>
+          <div><div class="shop-nm">АТБ-Маркет</div><div class="shop-sub">Продукти, напої, господарство</div></div>
+          <div class="shop-arr">↗</div>
+        </a>
+        <a href="https://www.tavriav.ua" target="_blank" class="shop">
+          <div class="shop-ic">🏪</div>
+          <div><div class="shop-nm">Таврія В</div><div class="shop-sub">Мережа супермаркетів</div></div>
+          <div class="shop-arr">↗</div>
+        </a>
       </div>
-    </div>` : '';
-    return `<div class="status-card">
-      <div class="sc-hd"><div class="sc-id">#${o._key?.slice(-4)} · ${o.restName}</div><span class="bdg ${o.status}">${labels[o.status]||o.status}</span></div>
-      <div class="sc-steps">${stepsH}</div>
-      <div class="sc-info"><b>Страви:</b> ${o.items.map(i=>i.n+'×'+i.q).join(', ')}<br><b>Адреса:</b> ${o.addr} · <b>Сума:</b> ${o.total} грн</div>
-      ${chatH}
-    </div>`;
-  }).join('');
-  renderClientHistory();
-}
-
-function renderClientHistory() {
-  const el = document.getElementById('client-history'); if (!el) return;
-  const done = getOrders().filter(o => o.clientId === CU && o.status === 'done');
-  if (!done.length) { el.innerHTML = '<div class="empty"><span class="em">📋</span><h3>Виконаних замовлень немає</h3></div>'; return; }
-  el.innerHTML = done.map(o => {
-    const d = new Date(o.ts);
-    const ds = d.toLocaleDateString('uk',{day:'2-digit',month:'2-digit',year:'2-digit'}) + ' ' + d.toLocaleTimeString('uk',{hour:'2-digit',minute:'2-digit'});
-    return `<div class="hist-item">
-      <div class="hist-hd" onclick="toggleHist('ch-${o._key}',this)">
-        <div class="hist-hd-l"><div class="hist-hd-icon">🧾</div><div><div class="hist-hd-id">#${o._key?.slice(-4)} · ${o.total} грн · ${o.restName}</div><div class="hist-hd-date">${ds}</div></div></div>
-        <div class="hist-hd-r"><span class="bdg done">Доставлено</span><span class="hist-arrow">▼</span></div>
-      </div>
-      <div class="hist-body" id="ch-${o._key}">
-        <div style="font-size:12px;color:var(--t2)"><b style="color:var(--t1)">Страви:</b> ${o.items.map(i=>i.n+'×'+i.q).join(', ')}</div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-/* ================================================================
-   CAFE
-================================================================ */
-function buildCafe() {
-  const acc = ACC[CU];
-  const restName = RESTAURANTS[acc.restId]?.name || 'Кафе';
-  document.getElementById('mainArea').innerHTML = `
-    <div class="topbar"><div class="city" style="margin-left:0">☕ ${restName} — Панель</div></div>
-    <div id="pagesArea">
-      <div class="pg on" id="pg-cafe-orders"><div class="w"><div class="sh"><h2>Замовлення</h2></div><div id="cafe-list"></div></div></div>
-      <div class="pg" id="pg-cafe-menu"><div class="w"><div class="sh"><h2>Поточне меню</h2></div><div id="cafe-menu-view"></div></div></div>
-    </div>`;
-  startOrdersListener();
-  renderCafeMenuView();
-}
-
-function getCafeRestId() {
-  const sel = document.getElementById('admCafeRestSel');
-  if (sel) return sel.value;
-  return ACC[CU]?.restId || 'rest1';
-}
-function getCafeMenuRestId() {
-  const sel = document.getElementById('admCafeMenuRestSel');
-  if (sel) return sel.value;
-  return ACC[CU]?.restId || 'rest1';
-}
-
-function renderCafeOrders() {
-  const el = document.getElementById('cafe-list'); if (!el) return;
-  const restId = getCafeRestId();
-  const orders = getOrders().filter(o => o.restId === restId && ['wait','acc','cook'].includes(o.status));
-  setBdg('bdg-cafe', orders.length);
-  if (!orders.length) { el.innerHTML = '<div class="empty"><span class="em">📭</span><h3>Нових замовлень немає</h3></div>'; return; }
-  const lbl = {wait:'Очікує',acc:'Прийнято',cook:'Готується'};
-  el.innerHTML = orders.map(o => `<div class="oc">
-    <div class="oc-hd"><div class="oc-id">#${o._key?.slice(-4)}</div><span class="bdg ${o.status}">${lbl[o.status]}</span></div>
-    <div class="oc-info"><b>Страви:</b> ${o.items.map(i=>i.n+'×'+i.q).join(', ')}<br><b>Адреса:</b> ${o.addr} · <b>Сума:</b> ${o.total} грн · <b>Оплата:</b> ${o.pay}</div>
-    <div class="oc-acts">
-      ${o.status==='wait'?`<button class="btn g" onclick="cafeAct('${o._key}','acc')">✓ Прийнято</button><button class="btn r" onclick="cafeAct('${o._key}','reject')">✕ Відхилити</button>`:''}
-      ${o.status==='acc'?`<button class="btn b" onclick="cafeAct('${o._key}','cook')">🍳 Готується</button>`:''}
-      ${o.status==='cook'?`<button class="btn g" onclick="cafeAct('${o._key}','pickup')">✅ Готово</button>`:''}
     </div>
-  </div>`).join('');
-}
 
-window.cafeAct = async function(key, st) {
-  if (st === 'reject') {
-    if (!confirm('Відхилити?')) return;
-    await remove(ref(db, 'orders/' + key));
-  } else {
-    await fbUpdate('orders/' + key, {status: st});
-  }
-  showToast('✅ Оновлено');
-};
-
-async function renderCafeMenuView() {
-  const el = document.getElementById('cafe-menu-view'); if (!el) return;
-  const restId = getCafeMenuRestId();
-  const menu = await getMenu(restId);
-  let h = '';
-  Object.entries(menu).forEach(([cat, items]) => {
-    h += `<div class="menu-cat-hd">${cat} (${items.length})</div>`;
-    h += items.map(i => `<div class="me-item"><div class="me-img" style="background-image:url('${i.img}')"></div><div class="me-info"><div class="me-nm">${i.n}</div><div class="me-pr">${i.p} грн</div></div></div>`).join('');
-  });
-  el.innerHTML = h || '<p style="color:var(--t2)">Меню порожнє</p>';
-}
-
-/* ================================================================
-   COURIER
-================================================================ */
-function buildCourier() {
-  document.getElementById('mainArea').innerHTML = `
-    <div class="topbar"><div class="city" style="margin-left:0">🛵 Панель кур'єра</div></div>
-    <div id="pagesArea">
-      <div class="pg on" id="pg-cur-list"><div class="w"><div class="sh"><h2>Доступні замовлення</h2></div><div id="cur-list-body"></div></div></div>
-      <div class="pg" id="pg-cur-active"><div class="w"><div class="sh"><h2>Мій активний заказ</h2></div><div id="cur-active-body"></div></div></div>
-      <div class="pg" id="pg-profile"><div class="w">
-        <div class="sh"><h2>Профіль кур'єра</h2></div>
-        <div id="shift-card-wrap"></div>
-        <div id="cur-stats"></div>
-        <div class="sh" style="margin-top:20px"><h2>Історія</h2></div>
-        <div id="cur-history"></div>
-      </div></div>
-    </div>`;
-  startOrdersListener();
-  renderCourierProfile();
-}
-
-function renderCurList() {
-  const el = document.getElementById('cur-list-body'); if (!el) return;
-  const onShift = window._onShift;
-  if (!onShift) { el.innerHTML = '<div class="empty"><span class="em">🔴</span><h3>Зміна не розпочата</h3><p>Перейдіть до Профілю та натисніть "Почати зміну"</p></div>'; setBdg('bdg-cur',0); return; }
-  const myActive = getOrders().find(o => o.courierId === CU && ['cook','ondel'].includes(o.status));
-  if (myActive) { el.innerHTML = '<div class="empty"><span class="em">🛵</span><h3>У вас є активний заказ</h3></div>'; return; }
-  const avail = getOrders().filter(o => !o.courierId && ['cook','pickup'].includes(o.status));
-  setBdg('bdg-cur', avail.length);
-  if (!avail.length) { el.innerHTML = '<div class="empty"><span class="em">⏳</span><h3>Вільних замовлень немає</h3></div>'; return; }
-  el.innerHTML = avail.map(o => {
-    const r = RESTAURANTS[o.restId] || {};
-    const isCook = o.status === 'cook';
-    return `<div class="oc">
-      <div class="oc-hd"><div class="oc-id">#${o._key?.slice(-4)} · ${o.restName}</div><span class="bdg ${o.status}">${isCook?'Готується':'Готово'}</span></div>
-      <div class="oc-info">📍 <b>Ресторан:</b> ${r.addr||''}<br>🍕 <b>Страви:</b> ${o.items.map(i=>i.n).join(', ')}<br>🏠 <b>Клієнт:</b> ${o.addr}<br>💰 <b>Сума:</b> ${o.total} грн</div>
-      <div class="oc-acts">
-        <button class="btn ${isCook?'y':'g'}" onclick="curReserve('${o._key}')">🛵 ${isCook?'Прийняти (їду до кафе)':'Прийняти заказ'}</button>
+    <!-- RESTAURANTS -->
+    <div class="page" id="pg-rests">
+      <div class="topbar" style="padding-bottom:14px">
+        <div>
+          <div class="logo" style="font-size:17px">Ресторани</div>
+          <div style="font-size:11px;color:var(--t2);margin-top:2px">2 заклади у вашому місті</div>
+        </div>
       </div>
-    </div>`;
-  }).join('');
-}
 
-window.curReserve = async function(key) {
-  await fbUpdate('orders/' + key, {courierId: CU});
-  showToast('✅ Заказ прийнято!');
-  setBdg('bdg-cur-act', 1, true);
-};
+      <div class="search" style="margin-bottom:14px">🔍 &nbsp;Знайти ресторан…</div>
 
-function renderCurActive() {
-  const el = document.getElementById('cur-active-body'); if (!el) return;
-  const o = getOrders().find(x => x.courierId === CU && ['cook','pickup','ondel'].includes(x.status));
-  if (!o) { el.innerHTML = '<div class="empty"><span class="em">📭</span><h3>Активного замовлення немає</h3></div>'; setBdg('bdg-cur-act',0,true); return; }
-  setBdg('bdg-cur-act', 1, true);
-  const r = RESTAURANTS[o.restId] || {};
-  let statusBlock = '';
-  if (o.status === 'cook') statusBlock = `<div style="background:var(--yl);border:1px solid var(--y);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:12px;font-weight:700;color:var(--y)">⏳ Кафе ще готує — зачекайте</div>`;
-  if (o.status === 'pickup') statusBlock = `<div style="background:var(--gl);border:1px solid var(--g);border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:12px;font-weight:700;color:var(--g)">✅ Замовлення готове! Натисніть "Забрав"</div>`;
-  el.innerHTML = `<div class="oc">
-    <div class="oc-hd"><div class="oc-id">#${o._key?.slice(-4)} · ${o.restName}</div><span class="bdg ${o.status}">${{cook:'Готується',pickup:'Готово',ondel:'В дорозі'}[o.status]}</span></div>
-    ${statusBlock}
-    <div class="oc-info">📍 <b>Ресторан:</b> ${r.addr||''}<br>🏠 <b>Клієнт:</b> ${o.addr}<br>🍕 <b>Страви:</b> ${o.items.map(i=>i.n+'×'+i.q).join(', ')}<br>💰 <b>Сума:</b> ${o.total} грн · <b>Оплата:</b> ${o.pay}</div>
-    <div class="oc-acts" style="margin-bottom:12px">
-      ${o.status==='pickup'?`<button class="btn g" onclick="curGrab('${o._key}')">📦 Забрав заказ</button>`:''}
-      ${o.status==='ondel'?`<button class="btn g" onclick="curDeliver('${o._key}')">✅ Доставлено</button>`:''}
+      <div class="filters">
+        <div class="filter on">Всі</div>
+        <div class="filter">Піца</div>
+        <div class="filter">Шашлик</div>
+        <div class="filter">Домашня кухня</div>
+        <div class="filter">Десерти</div>
+        <div class="filter">Напої</div>
+      </div>
+
+      <div class="rlist">
+        <div class="ritem">
+          <div class="ritem-img" style="background-image:url('https://images.unsplash.com/photo-1513104890138-7c749659a591?w=200&q=70')"></div>
+          <div class="ritem-info">
+            <div class="ritem-name">Кафе Маестро</div>
+            <div class="ritem-meta">⭐ 4.8 · ⏱ 25–30 хв · 🛵 50 грн</div>
+            <div class="tags">
+              <div class="tag">Піца</div><div class="tag">Хачапурі</div><div class="tag">Салати</div><div class="tag">Десерти</div>
+            </div>
+          </div>
+          <div class="ritem-arr">›</div>
+        </div>
+
+        <div class="ritem">
+          <div class="ritem-img" style="background-image:url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=200&q=70')"></div>
+          <div class="ritem-info">
+            <div class="ritem-name">Кафе Свобода</div>
+            <div class="ritem-meta">⭐ 4.6 · ⏱ 25–30 хв · 🛵 50 грн</div>
+            <div class="tags">
+              <div class="tag">Шашлик</div><div class="tag">Домашня</div><div class="tag">Супи</div><div class="tag">Гриль</div>
+            </div>
+          </div>
+          <div class="ritem-arr">›</div>
+        </div>
+
+        <div style="margin-top:10px;background:var(--s2);border:1.5px dashed var(--bd2);border-radius:16px;padding:22px;text-align:center">
+          <div style="font-size:30px;margin-bottom:8px">🏪</div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:12px;font-weight:800;margin-bottom:4px">Хочете додати заклад?</div>
+          <div style="font-size:11px;color:var(--t2)">Зв'яжіться з нами — підключимо</div>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="chat-box">
-    <div class="chat-hd">💬 Чат з клієнтом</div>
-    <div class="chat-msgs" id="cm-${o._key}">${renderMsgs(o._key)}</div>
-    <div class="chat-in">
-      <input type="text" id="ci-${o._key}" placeholder="Написати клієнту…" onkeydown="if(event.key==='Enter')sendMsg('${o._key}','courier')">
-      <button onclick="sendMsg('${o._key}','courier')">→</button>
+
+    <!-- ORDERS -->
+    <div class="page" id="pg-orders">
+      <div class="topbar" style="padding-bottom:14px">
+        <div>
+          <div class="logo" style="font-size:17px">Замовлення</div>
+          <div style="font-size:11px;color:var(--t2);margin-top:2px">Ваші активні доставки</div>
+        </div>
+      </div>
+      <div class="orders-empty">
+        <span class="big-em">📦</span>
+        <h3>Замовлень поки немає</h3>
+        <p>Оберіть ресторан і зробіть<br>перше замовлення!</p>
+        <button class="cta-btn" onclick="goPage('rests')">Перейти до меню</button>
+      </div>
     </div>
-  </div>`;
-}
 
-window.curGrab = async function(key) {
-  await fbUpdate('orders/' + key, {status: 'ondel'});
-  showToast('🛵 Їдете до клієнта!');
-};
-window.curDeliver = async function(key) {
-  await fbUpdate('orders/' + key, {status: 'done'});
-  showToast('🎉 Доставлено!');
-  setBdg('bdg-cur-act', 0, true);
-};
+    <!-- PROFILE -->
+    <div class="page" id="pg-profile">
+      <div class="topbar" style="padding-bottom:14px">
+        <div class="logo" style="font-size:17px">Профіль</div>
+      </div>
 
-async function renderCourierProfile() {
-  window._onShift = await getCourierShift();
-  const onShift = window._onShift;
-  const sc = document.getElementById('shift-card-wrap');
-  if (sc) sc.innerHTML = `<div class="shift-card"><div class="em">${onShift?'🟢':'🔴'}</div><h3>${onShift?'Зміна активна':'Зміна не розпочата'}</h3><p>${onShift?'Ви можете приймати замовлення':'Натисніть щоб почати роботу'}</p><button class="btn ${onShift?'r':'g'}" onclick="toggleShift()">${onShift?'Завершити зміну':'Почати зміну'}</button></div>`;
-  const done = getOrders().filter(o => o.courierId === CU && o.status === 'done');
-  const cs = document.getElementById('cur-stats');
-  if (cs) cs.innerHTML = `<div class="stats-row"><div class="stat-c"><div class="stat-n">${done.length}</div><div class="stat-l">доставок</div></div><div class="stat-c"><div class="stat-n">${done.reduce((a,o)=>a+o.total,0)}</div><div class="stat-l">грн доставлено</div></div><div class="stat-c"><div class="stat-n">${onShift?'✅':'❌'}</div><div class="stat-l">статус</div></div></div>`;
-}
+      <div class="prof-top">
+        <div class="prof-av">👤</div>
+        <div>
+          <div class="prof-name">Мій профіль</div>
+          <div class="prof-city">📍 Білгород-Дністровський</div>
+          <div class="prof-badge">🏅 Новий клієнт</div>
+        </div>
+      </div>
 
-window.toggleShift = async function() {
-  const cur = await getCourierShift();
-  await setCourierShift(!cur);
-  window._onShift = !cur;
-  showToast(!cur ? '✅ Зміну розпочато!' : '👋 Зміну завершено');
-  renderCourierProfile();
-  renderCurList();
-  updateBadges();
-};
+      <div class="stats">
+        <div class="stat"><div class="stat-n">0</div><div class="stat-l">замовлень</div></div>
+        <div class="stat"><div class="stat-n">0</div><div class="stat-l">грн витрат</div></div>
+        <div class="stat"><div class="stat-n">0</div><div class="stat-l">бонусів</div></div>
+      </div>
 
-/* ================================================================
-   CHAT — Firebase
-================================================================ */
-function renderMsgs(ordKey) {
-  const o = getOrders().find(x => x._key === ordKey);
-  const msgs = o?.chats ? Object.values(o.chats) : [];
-  if (!msgs.length) return '<p style="font-size:11px;color:var(--t3);text-align:center;margin:auto">Немає повідомлень</p>';
-  return msgs.sort((a,b) => a.ts - b.ts).map(m => `<div class="msg ${m.from===CU?'me':'them'}"><div class="mwho">${m.fromName}</div>${m.text}</div>`).join('');
-}
+      <div class="menu-sec">
+        <div class="menu-sec-title">Особисте</div>
+        <div class="mi"><div class="mi-ic">📋</div><div class="mi-lbl">Мої замовлення</div><div class="mi-arr">›</div></div>
+        <div class="mi"><div class="mi-ic">📍</div><div class="mi-lbl">Збережені адреси</div><div class="mi-arr">›</div></div>
+        <div class="mi"><div class="mi-ic">💳</div><div class="mi-lbl">Способи оплати</div><div class="mi-arr">›</div></div>
+      </div>
 
-window.sendMsg = async function(ordKey, role) {
-  const inp = document.getElementById('ci-' + ordKey); if (!inp) return;
-  const text = inp.value.trim(); if (!text) return;
-  inp.value = '';
-  await fbPush('orders/' + ordKey + '/chats', {from: CU, fromName: ACC[CU].name, text, ts: Date.now()});
-};
-
-/* ================================================================
-   ADMIN STATS
-================================================================ */
-function renderAdmStats() {
-  const el = document.getElementById('adm-stats-body'); if (!el) return;
-  const all = getOrders();
-  const total = all.length;
-  const done = all.filter(o => o.status === 'done').length;
-  const active = all.filter(o => o.status !== 'done').length;
-  const revenue = all.filter(o => o.status === 'done').reduce((a,o) => a + o.total, 0);
-  el.innerHTML = `
-    <div class="adm-stat-grid">
-      <div class="adm-stat or"><div class="adm-stat-n">${total}</div><div class="adm-stat-l">Всього замовлень</div></div>
-      <div class="adm-stat g"><div class="adm-stat-n">${done}</div><div class="adm-stat-l">Виконано</div></div>
-      <div class="adm-stat bl"><div class="adm-stat-n">${active}</div><div class="adm-stat-l">Активних</div></div>
-      <div class="adm-stat y"><div class="adm-stat-n">${revenue}</div><div class="adm-stat-l">грн Виручка</div></div>
+      <div class="menu-sec" style="margin-top:22px">
+        <div class="menu-sec-title">Інше</div>
+        <div class="mi"><div class="mi-ic">🔔</div><div class="mi-lbl">Сповіщення</div><div class="mi-arr">›</div></div>
+        <div class="mi"><div class="mi-ic">🎁</div><div class="mi-lbl">Промокоди та бонуси</div><div class="mi-arr">›</div></div>
+        <div class="mi"><div class="mi-ic">📞</div><div class="mi-lbl">Підтримка</div><div class="mi-arr">›</div></div>
+        <div class="mi red"><div class="mi-ic">↩</div><div class="mi-lbl">Вийти</div></div>
+      </div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px">
-      ${['wait','acc','cook','pickup','ondel','done'].map(st => {
-        const lbl = {wait:'Очікує',acc:'Прийнято',cook:'Готується',pickup:'Готово',ondel:'В дорозі',done:'Доставлено'};
-        const cnt = all.filter(o => o.status === st).length;
-        return `<div style="background:var(--s2);border:1px solid var(--bd);border-radius:11px;padding:13px;text-align:center">
-          <div style="font-family:'Unbounded',sans-serif;font-size:20px;font-weight:900;margin-bottom:6px">${cnt}</div>
-          <span class="bdg ${st}">${lbl[st]}</span></div>`;
-      }).join('')}
-    </div>`;
+
+  </div><!-- /content -->
+
+  <!-- NAV -->
+  <nav class="nav">
+    <button class="nb on" id="nb-home" onclick="goPage('home')">
+      <div class="ni">🏠</div><div class="nl">Головна</div>
+    </button>
+    <button class="nb" id="nb-rests" onclick="goPage('rests')">
+      <div class="ni">🍴</div><div class="nl">Ресторани</div>
+    </button>
+    <button class="nb" id="nb-orders" onclick="goPage('orders')">
+      <div class="ni">📦</div><div class="nl">Замовлення</div>
+    </button>
+    <button class="nb" id="nb-profile" onclick="goPage('profile')">
+      <div class="ni">👤</div><div class="nl">Профіль</div>
+    </button>
+  </nav>
+</div>
+
+<script>
+let cur = 'home';
+function goPage(id) {
+  document.getElementById('pg-' + cur).classList.remove('active');
+  document.getElementById('nb-' + cur).classList.remove('on');
+  cur = id;
+  document.getElementById('pg-' + id).classList.add('active');
+  document.getElementById('nb-' + id).classList.add('on');
+  document.getElementById('content').scrollTop = 0;
 }
 
-function renderAdmOrders() {
-  const el = document.getElementById('adm-orders-body'); if (!el) return;
-  const all = getOrders();
-  if (!all.length) { el.innerHTML = '<div class="empty"><span class="em">📭</span><h3>Замовлень немає</h3></div>'; return; }
-  const lbl = {wait:'Очікує',acc:'Прийнято',cook:'Готується',pickup:'Готово',ondel:'В дорозі',done:'Доставлено'};
-  el.innerHTML = `<table class="atab"><thead><tr><th>#</th><th>Ресторан</th><th>Адреса</th><th>Сума</th><th>Статус</th><th>Кур'єр</th></tr></thead><tbody>
-    ${all.map(o => `<tr><td><b>${o._key?.slice(-4)}</b></td><td>${o.restName||''}</td><td>${o.addr}</td><td>${o.total} грн</td><td><span class="bdg ${o.status}">${lbl[o.status]||o.status}</span></td><td>${o.courierId?ACC[o.courierId]?.name:'—'}</td></tr>`).join('')}
-  </tbody></table>`;
-}
-
-/* ================================================================
-   DIRECTOR
-================================================================ */
-function buildDirector() {
-  const acc = ACC[CU];
-  const restName = RESTAURANTS[acc.restId]?.name || 'Ресторан';
-  document.getElementById('mainArea').innerHTML = `
-    <div class="topbar"><div class="city" style="margin-left:0">👔 Директор — ${restName}</div></div>
-    <div id="pagesArea">
-      <div class="pg on" id="pg-dir-menu"><div class="w">
-        <div class="sh"><h2>Меню ресторану</h2></div>
-        <div id="dir-menu-body"></div>
-        <div class="add-form" id="dir-add-form"></div>
-      </div></div>
-      <div class="pg" id="pg-dir-stats"><div class="w"><div class="sh"><h2>Статистика</h2></div><div id="dir-stats-body"></div></div></div>
-    </div>`;
-  startOrdersListener();
-  renderDirMenu();
-  renderDirStats();
-}
-
-function getDirRestId() {
-  const sel = document.getElementById('admDirRestSel');
-  if (sel) return sel.value;
-  return ACC[CU]?.restId || 'rest1';
-}
-
-async function renderDirMenu() {
-  const el = document.getElementById('dir-menu-body'); if (!el) return;
-  const restId = getDirRestId();
-  const menu = await getMenu(restId);
-  let h = '';
-  Object.entries(menu).forEach(([cat, items]) => {
-    h += `<div class="menu-cat-hd">${cat} · ${items.length}</div>`;
-    h += items.map(i => `<div class="me-item"><div class="me-img" style="background-image:url('${i.img}')"></div><div class="me-info"><div class="me-nm">${i.n}</div><div class="me-pr">${i.p} грн</div></div><button class="me-del" onclick="delItem('${restId}','${cat}','${i.id}')">✕</button></div>`).join('');
+// filter clicks
+document.querySelectorAll('.filter').forEach(f => {
+  f.addEventListener('click', () => {
+    document.querySelectorAll('.filter').forEach(x => x.classList.remove('on'));
+    f.classList.add('on');
   });
-  el.innerHTML = h;
-  const af = document.getElementById('dir-add-form');
-  if (af) af.innerHTML = `<h4>➕ Додати позицію</h4>
-    <div class="frow"><div class="ff"><label>Категорія</label><input id="nc" placeholder="Піца / Салати…"></div><div class="ff"><label>Назва</label><input id="nn" placeholder="Назва страви"></div></div>
-    <div class="frow"><div class="ff"><label>Опис</label><input id="nd" placeholder="Склад…"></div><div class="ff"><label>Ціна (грн)</label><input id="np" type="number" placeholder="150"></div></div>
-    <div class="frow"><div class="ff" style="grid-column:span 2"><label>URL зображення</label><input id="ni" placeholder="https://…"></div></div>
-    <button class="sv-btn" onclick="addItem('${restId}')">Додати</button>`;
-}
-
-window.delItem = async function(restId, cat, id) {
-  if (!confirm('Видалити?')) return;
-  const menu = await getMenu(restId);
-  if (menu[cat]) { menu[cat] = menu[cat].filter(x => x.id !== id); if (!menu[cat].length) delete menu[cat]; }
-  await setMenu(restId, menu);
-  renderDirMenu();
-  showToast('🗑️ Видалено');
-};
-
-window.addItem = async function(restId) {
-  const cat = document.getElementById('nc')?.value?.trim();
-  const n = document.getElementById('nn')?.value?.trim();
-  const d = document.getElementById('nd')?.value?.trim();
-  const p = parseInt(document.getElementById('np')?.value);
-  const img = document.getElementById('ni')?.value?.trim() || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&q=70';
-  if (!cat || !n || !p) { showToast('⚠️ Заповніть всі поля'); return; }
-  const menu = await getMenu(restId);
-  if (!menu[cat]) menu[cat] = [];
-  menu[cat].push({id: 'x' + Date.now(), n, d, p, img});
-  await setMenu(restId, menu);
-  ['nc','nn','nd','np','ni'].forEach(id => { const e = document.getElementById(id); if (e) e.value = ''; });
-  renderDirMenu();
-  showToast('✅ Додано');
-};
-
-async function renderDirStats() {
-  const el = document.getElementById('dir-stats-body'); if (!el) return;
-  const all = getOrders();
-  const isAdmin = ACC[CU].role === 'admin';
-  const rids = isAdmin ? Object.keys(RESTAURANTS) : [ACC[CU].restId];
-  let h = '';
-  rids.forEach(rid => {
-    const r = RESTAURANTS[rid];
-    const mine = all.filter(o => o.restId === rid);
-    const done = mine.filter(o => o.status === 'done');
-    h += `<div class="sh" style="margin-top:18px"><h2>${r.name}</h2></div>
-      <div class="stats-row">
-        <div class="stat-c"><div class="stat-n">${mine.length}</div><div class="stat-l">всього</div></div>
-        <div class="stat-c"><div class="stat-n">${done.length}</div><div class="stat-l">виконано</div></div>
-        <div class="stat-c"><div class="stat-n">${done.reduce((a,o)=>a+o.total,0)}</div><div class="stat-l">грн виручка</div></div>
-      </div>`;
-  });
-  el.innerHTML = h || '<p style="color:var(--t2)">Немає даних</p>';
-}
-
-/* ================================================================
-   UTILS
-================================================================ */
-function updateBadges() {
-  const r = ACC[CU].role;
-  const all = getOrders();
-  if (r === 'client' || r === 'admin') setBdg('bdg-orders', all.filter(o => o.clientId===CU && o.status!=='done').length);
-  if (r === 'cafe') setBdg('bdg-cafe', all.filter(o => o.restId===ACC[CU].restId && ['wait','acc','cook'].includes(o.status)).length);
-  if (r === 'courier') {
-    setBdg('bdg-cur', all.filter(o => !o.courierId && ['cook','pickup'].includes(o.status)).length);
-    const act = all.find(o => o.courierId===CU && ['cook','pickup','ondel'].includes(o.status));
-    setBdg('bdg-cur-act', act ? 1 : 0, true);
-  }
-}
-
-function setBdg(id, cnt, isGreen) {
-  const el = document.getElementById(id); if (!el) return;
-  if (cnt > 0) { el.textContent = cnt; el.classList.add('show'); if (isGreen) el.classList.add('green'); }
-  else el.classList.remove('show');
-}
-
-window.toggleHist = function(id, hd) {
-  const body = document.getElementById(id);
-  const arrow = hd.querySelector('.hist-arrow');
-  if (body) { body.classList.toggle('open'); if (arrow) arrow.classList.toggle('open'); }
-};
-
-function renderProfile() {
-  const r = ACC[CU].role;
-  if (r === 'courier') renderCourierProfile();
-  if (r === 'client') renderClientHistory();
-}
-
-let toastT;
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2200);
-}
-window.showToast = showToast;
-
-// Expose render functions globally for nav()
-window.renderOrders = renderOrders;
-window.renderCafeOrders = renderCafeOrders;
-window.renderCafeMenuView = renderCafeMenuView;
-window.renderCurList = renderCurList;
-window.renderCurActive = renderCurActive;
-window.renderAdmStats = renderAdmStats;
-window.renderAdmOrders = renderAdmOrders;
-window.renderDirMenu = renderDirMenu;
-window.renderDirStats = renderDirStats;
-window.renderProfile = renderProfile;
-window.renderRestCards = renderRestCards;
-
-// init
-window._orders = [];
-window._onShift = false;
-
-// Init shift state from Firebase on load
-async function initShift() {
-  window._onShift = await getCourierShift();
-}
-initShift();
-
-// Hide loading, show auth
-document.getElementById('loadingScreen').style.display = 'none';
-document.getElementById('authScreen').style.display = 'flex';
-
-window.doLogin = doLogin;
+});
 </script>
 </body>
 </html>
