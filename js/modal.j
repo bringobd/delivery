@@ -7,7 +7,7 @@ let mItem = null;
 let mQty  = 1;
 let mSel  = {};
 
-/* ── Відкрити модалку товару ── */
+/* ── Відкрити модалку товару ── */ 
 function openModal(item) {
   mItem = item;
   mQty  = 1;
