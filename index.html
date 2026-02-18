@@ -1061,99 +1061,20 @@ function DB(label) {
 }
 
 /* ========================================
-   БЛОК 11 — TOAST
+   БЛОК 12 — ВХІД ТА РОЛІ
 ======================================== */
-let _tt;
-function showToast(msg) {
-  const el = document.getElementById('toast');
-  if (!el) return;
-  el.textContent = msg; el.classList.add('on');
-  clearTimeout(_tt); _tt = setTimeout(() => el.classList.remove('on'), 2800);
-}
-
-/* ========================================
-   БЛОК 12 — ФІЛЬТРИ + СТАРТ + РЕНДЕРИ ГОЛОВНИХ
-======================================== */
-document.querySelectorAll('.fi').forEach(f => {
-  f.addEventListener('click', () => {
-    document.querySelectorAll('.fi').forEach(x => x.classList.remove('on'));
-    f.classList.add('on');
-  });
-});
-
-// ── ГОЛОВНА КУРЄРА ──
-function renderCourierHome() {
-  const active = isShiftActive();
-  const badge = document.getElementById('shiftBadge');
-  if (badge) {
-    badge.textContent = active ? '🟢 На зміні' : '🔴 Не на зміні';
-    badge.style.background = active ? 'rgba(34,197,94,.15)' : 'rgba(239,68,68,.15)';
-    badge.style.color = active ? '#22C55E' : '#EF4444';
-  }
-
-  const history = getHistory();
-  const todayEarnings = history.reduce((s, o) => s + (o.total || 0), 0);
-  const shiftMinutes = active ? Math.floor((Date.now() - parseInt(localStorage.getItem('bringoShiftTime') || Date.now())) / 60000) : 0;
-
-  if (document.getElementById('courierEarnings')) document.getElementById('courierEarnings').textContent = todayEarnings;
-  if (document.getElementById('courierDeliveries')) document.getElementById('courierDeliveries').textContent = history.length;
-  if (document.getElementById('courierShiftTime')) document.getElementById('courierShiftTime').textContent = shiftMinutes;
-
-  const block = document.getElementById('courierShiftBlock');
-  if (block) {
-    block.innerHTML = `<button id="shiftBtn" onclick="toggleShift()" style="width:100%;padding:15px;background:${active ? '#EF4444' : 'var(--or)'};border:none;border-radius:14px;color:#fff;font-family:'Geologica',sans-serif;font-size:14px;font-weight:900;cursor:pointer;margin-bottom:14px">${active ? '🔴 Завершити зміну' : '🟢 Почати робочу зміну'}</button>`;
-  }
-}
-
-// ── ГОЛОВНА РЕСТОРАНУ ──
-function renderRestaurantHome() {
-  const online = (typeof couriersOnline === 'function') ? couriersOnline() : 0;
-  const el = document.getElementById('couriersOnlineCount');
-  if (el) el.textContent = online > 0 ? online : '—';
-
-  const history = getHistory();
-  if (document.getElementById('restTodayOrders')) document.getElementById('restTodayOrders').textContent = history.length;
-  if (document.getElementById('restTodayRevenue')) document.getElementById('restTodayRevenue').textContent = history.reduce((s, o) => s + (o.total || 0), 0);
-
-  const order = (typeof getOrder === 'function') ? getOrder() : null;
-  const alert = document.getElementById('restNewOrderAlert');
-  if (alert && order && order.status === 'new') {
-    alert.innerHTML = `<div style="background:var(--orl);border:1.5px solid var(--orb);border-radius:14px;padding:16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between"><div><div style="font-family:'Geologica',sans-serif;font-size:13px;font-weight:900;color:var(--or)">🔔 Нове замовлення!</div><div style="font-size:11px;color:var(--t2);margin-top:3px">Замовлення #${String(order.id).slice(-4)} · ${order.total} грн</div></div><button onclick="goPage('orders')" style="background:var(--or);border:none;border-radius:10px;color:#fff;padding:8px 14px;font-family:'Geologica',sans-serif;font-size:12px;font-weight:800;cursor:pointer">Переглянути</button></div>`;
-  } else if (alert) { alert.innerHTML = ''; }
-}
-
-// ── РЕНДЕР СТОРІНКИ ІСТОРІЇ ──
-function renderHistory() {
-  const el = document.getElementById('historyBody');
-  if (!el) return;
-  const history = getHistory();
-  if (!history.length) {
-    el.innerHTML = `<div class="ord-empty"><span>📋</span><h3>Історія порожня</h3><p>Тут зʼявляться виконані замовлення</p></div>`;
-    return;
-  }
-  el.innerHTML = history.map(o => `<div style="background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:10px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="font-family:'Geologica',sans-serif;font-size:13px;font-weight:800">Замовлення #${String(o.id).slice(-4)}</div><div style="font-size:10px;color:var(--t2)">${o.finishedAt || o.time}</div></div><div style="font-size:11px;color:var(--t2);margin-bottom:8px">${o.items.map(i => i.name + ' ×' + i.qty).join(', ')}</div><div style="font-size:11px;color:var(--t2);margin-bottom:8px">👤 ${o.client} · 📍 ${o.address}</div><div style="display:flex;justify-content:space-between;align-items:center"><div style="background:var(--gl);color:var(--g);border-radius:6px;padding:3px 10px;font-size:10px;font-weight:800">🎉 Доставлено</div><div style="font-family:'Geologica',sans-serif;font-size:14px;font-weight:900;color:var(--or)">${o.total} грн</div></div></div>`).join('');
-}
-
-/* ========================================
-   СТАРТ И ЛОГИКА ВХОДА
-======================================== */
-let user = localStorage.getItem('bringo_user') ? JSON.parse(localStorage.getItem('bringo_user')) : null;
-let cur = 'home';
-
 function initApp() {
   if (user) {
     document.getElementById('onb').style.display = 'none';
-    document.getElementById('scr').style.display = 'block';
-    if (document.getElementById('profName')) document.getElementById('profName').innerText = user.name;
-    // Вызываем твои функции обновления
-    if (typeof updateProfile === 'function') updateProfile();
-    if (typeof applyRoleUI === 'function') applyRoleUI();
+    if (user.name === '1') goPage('home-courier');
+    else if (user.name === '2') goPage('home-restaurant');
+    else goPage('home');
   }
 }
 
-// Слушатели для экрана Onboarding
-const inpName = document.getElementById('inpName');
+// Кнопка входу
 const onbBtn = document.getElementById('onbBtn');
+const inpName = document.getElementById('inpName');
 
 if (inpName) {
   inpName.addEventListener('input', () => {
@@ -1164,18 +1085,50 @@ if (inpName) {
 if (onbBtn) {
   onbBtn.addEventListener('click', () => {
     const name = inpName.value.trim();
-    user = { name: name, role: 'client' };
-    localStorage.setItem('bringo_user', JSON.stringify(user));
-    initApp();
-    showToast(`Вітаємо, ${name}!`);
+    const surname = document.getElementById('inpSurname').value.trim();
+    const phone = document.getElementById('inpPhone').value.trim();
+    user = { name, surname, phone };
+    localStorage.setItem('bringoUser', JSON.stringify(user));
+    document.getElementById('onb').style.opacity = '0';
+    setTimeout(() => {
+      document.getElementById('onb').remove();
+      updateProfile();
+      applyRoleUI();
+    }, 300);
   });
 }
 
-// Твой интервал обновления
+function logout() {
+  if (confirm('Вийти з акаунту?')) {
+    localStorage.removeItem('bringoUser');
+    location.reload();
+  }
+}
+
+/* ========================================
+   РЕНДЕРИ (КУР'ЄР / ІСТОРІЯ)
+======================================== */
+function renderHistory() {
+  const el = document.getElementById('historyBody');
+  if (!el) return;
+  const history = getHistory();
+  if (!history.length) {
+    el.innerHTML = `<div class="ord-empty"><span>📋</span><h3>Історія порожня</h3><p>Ви ще не робили замовлень</p></div>`;
+    return;
+  }
+  el.innerHTML = history.map(o => `<div style="background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:10px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="font-family:'Geologica',sans-serif;font-size:13px;font-weight:800">Замовлення #${String(o.id).slice(-4)}</div><div style="font-size:10px;color:var(--t2)">${o.finishedAt || o.time}</div></div><div style="font-size:11px;color:var(--t2);margin-bottom:8px">${o.items.map(i => i.name + ' ×' + i.qty).join(', ')}</div><div style="display:flex;justify-content:space-between;align-items:center"><div style="background:var(--gl);color:var(--g);border-radius:6px;padding:3px 10px;font-size:10px;font-weight:800">🎉 Доставлено</div><div style="font-family:'Geologica',sans-serif;font-size:14px;font-weight:900;color:var(--or)">${o.total} грн</div></div></div>`).join('');
+}
+
+// Запуск при завантаженні
+if (!user) {
+  document.getElementById('onb').style.display = 'flex';
+} else {
+  document.getElementById('onb').remove();
+  updateProfile();
+  applyRoleUI();
+}
+
 setInterval(() => {
   if (cur === 'home-courier') renderCourierHome();
   if (cur === 'home-restaurant') renderRestaurantHome();
 }, 2000);
-
-// Запуск проверки при загрузке
-initApp();  
