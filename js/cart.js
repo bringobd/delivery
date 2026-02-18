@@ -8,7 +8,7 @@ let cart = [];
 /* ── Оновити лічильник на іконці кошика ── */
 function updateCartBadge() {
   const total = cart.reduce((s, c) => s + c.qty, 0);
-  const badge = document.getElementById('cartBadge');
+  const badge = document.getElementById('cartBadge'); 
   badge.textContent = total || '';
   badge.classList.toggle('on', total > 0);
 }
