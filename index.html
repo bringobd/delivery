@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fire Fusion — Аккерман</title>
+    <title>Fire Fusion — Premium Delivery</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
@@ -12,9 +12,10 @@
             --primary: linear-gradient(135deg, #FF0000 0%, #FF8C00 100%);
             --red: #FF0000;
             --orange: #FF8C00;
+            /* Твой градиентный фон */
             --bg-grad: linear-gradient(180deg, #050505 0%, #1a0202 50%, #201005 100%);
-            --card: rgba(255, 255, 255, 0.06);
-            --border: rgba(255, 255, 255, 0.1);
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
         }
 
         * {
@@ -30,19 +31,20 @@
             background-attachment: fixed;
             color: #fff;
             min-height: 100vh;
-            padding-bottom: 110px;
+            padding-bottom: 130px;
+            overflow-x: hidden;
         }
 
-        /* Логика страниц */
+        /* Анимации страниц */
         .page { display: none; animation: fadeIn 0.4s ease; }
         .page.active { display: block; }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        header { padding: 30px 20px 10px; }
+        header { padding: 40px 20px 10px; }
 
         .location {
             font-size: 13px;
@@ -56,30 +58,39 @@
         }
 
         .search-box {
-            background: var(--card);
-            border: 1px solid var(--border);
-            padding: 15px;
-            border-radius: 20px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 16px;
+            border-radius: 22px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            backdrop-filter: blur(10px);
         }
         .search-box input { background: none; border: none; color: #fff; width: 100%; outline: none; }
 
         /* Banner */
         .banner {
             margin: 20px;
-            padding: 40px 25px;
-            border-radius: 30px;
+            padding: 45px 25px;
+            border-radius: 35px;
             background: var(--primary);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+            box-shadow: 0 15px 35px rgba(255, 0, 0, 0.25);
         }
-        .banner h1 { font-size: 22px; font-weight: 900; line-height: 1.2; position: relative; z-index: 2; }
-        .banner-icon { position: absolute; right: -15px; bottom: -15px; font-size: 130px; opacity: 0.15; transform: rotate(-10deg); }
+        .banner h1 { font-size: 24px; font-weight: 900; line-height: 1.2; position: relative; z-index: 2; }
+        .banner-icon { position: absolute; right: -15px; bottom: -15px; font-size: 140px; opacity: 0.15; transform: rotate(-10deg); }
 
-        /* Horizontal Scroll */
+        /* ЭФФЕКТ ПЛАВНОГО ИСЧЕЗНОВЕНИЯ У КРАЯ (Horizontal Scroll) */
+        .h-scroll-wrapper {
+            position: relative;
+            width: 100%;
+            /* Маска, которая делает правую часть (там где зеленая линия) прозрачной */
+            -webkit-mask-image: linear-gradient(to right, black 80%, transparent 98%);
+            mask-image: linear-gradient(to right, black 80%, transparent 98%);
+        }
+
         .h-scroll {
             display: flex;
             overflow-x: auto;
@@ -91,75 +102,70 @@
 
         .res-card-h {
             min-width: 280px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 28px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
             overflow: hidden;
+            backdrop-filter: blur(5px);
         }
         .res-img { height: 160px; background-size: cover; background-position: center; position: relative; }
         .rating-tag {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(0,0,0,0.7);
-            padding: 4px 10px;
-            border-radius: 10px;
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.6);
+            padding: 5px 12px;
+            border-radius: 12px;
             font-size: 12px;
-            font-weight: 700;
+            font-weight: 800;
             color: #FFD700;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
         }
-        .res-info { padding: 18px; }
+        .res-info { padding: 20px; }
         .res-info h3 { font-size: 18px; font-weight: 800; margin-bottom: 5px; }
-        .res-info p { font-size: 12px; color: #aaa; font-weight: 500; }
-        .res-meta { display: flex; gap: 10px; margin-top: 10px; font-size: 11px; color: var(--orange); font-weight: 700; }
+        .res-info p { font-size: 12px; color: #aaa; }
 
-        .section-title { padding: 0 20px; font-size: 20px; font-weight: 900; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .section-title span { font-size: 12px; color: var(--orange); font-weight: 600; }
+        .section-title { padding: 0 20px; font-size: 20px; font-weight: 900; margin-top: 15px; }
 
         /* В разработке */
         .dev-block {
             margin: 20px;
-            padding: 40px;
-            background: rgba(255,255,255,0.02);
-            border: 2px dashed rgba(255,255,255,0.05);
-            border-radius: 30px;
+            padding: 50px;
+            background: rgba(255,255,255,0.03);
+            border: 2px dashed rgba(255,255,255,0.08);
+            border-radius: 35px;
             text-align: center;
-            color: #444;
-            font-weight: 800;
+            color: #333;
+            font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
         }
 
-        /* Вкладка Кафе (Вертикальный список) */
+        /* Вкладка Кафе */
         .v-list { padding: 20px; }
         .res-card-v {
-            background: var(--card);
-            border: 1px solid var(--border);
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
             border-radius: 25px;
             overflow: hidden;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             display: flex;
             align-items: center;
         }
         .res-card-v .res-img-v { width: 100px; height: 100px; background-size: cover; background-position: center; }
         .res-card-v .res-info-v { padding: 15px; flex: 1; }
 
-        /* Вкладка Заказы */
-        .empty-orders { text-align: center; padding: 120px 40px; }
-        .empty-orders i { font-size: 80px; color: #1a1a1a; margin-bottom: 20px; }
-
         /* Вкладка Профиль */
         .profile-box { padding: 30px 20px; }
-        .user-card { background: var(--primary); padding: 25px; border-radius: 30px; display: flex; align-items: center; gap: 20px; margin-bottom: 30px; }
-        .user-avatar { width: 60px; height: 60px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--red); font-size: 24px; }
-        .menu-link { background: var(--card); padding: 20px; border-radius: 20px; display: flex; justify-content: space-between; margin-bottom: 12px; font-weight: 600; }
+        .user-card { background: var(--primary); padding: 30px; border-radius: 35px; display: flex; align-items: center; gap: 20px; margin-bottom: 30px; }
+        .user-avatar { width: 65px; height: 65px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--red); font-size: 26px; }
+        .menu-link { background: var(--glass); border: 1px solid var(--glass-border); padding: 22px; border-radius: 25px; display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: 700; }
 
-        /* Корзина */
+        /* КОРЗИНА НАД ПРОФИЛЕМ */
         #cart-fab {
             position: fixed;
-            right: 25px;
-            bottom: 115px;
+            right: 30px;
+            bottom: 120px;
             width: 65px;
             height: 65px;
             background: var(--primary);
@@ -168,85 +174,62 @@
             align-items: center;
             justify-content: center;
             font-size: 26px;
-            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.4);
+            box-shadow: 0 12px 30px rgba(255, 0, 0, 0.4);
             z-index: 1000;
             transition: 0.3s;
         }
 
-        /* Tabbar */
+        /* ЖИДКОЕ СТЕКЛО — НИЖНЯЯ ПАНЕЛЬ */
         nav {
             position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: rgba(5, 5, 5, 0.98);
-            padding: 15px 25px 35px;
+            bottom: 25px;
+            left: 20px;
+            right: 20px;
+            height: 75px;
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 35px;
             display: flex;
-            justify-content: space-between;
-            border-top: 1px solid var(--border);
+            justify-content: space-around;
+            align-items: center;
             z-index: 999;
-            backdrop-filter: blur(20px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
         }
-        .nav-tab { text-decoration: none; color: #444; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-        .nav-tab.active { color: var(--orange); }
-        .nav-tab i { font-size: 22px; }
-        .nav-tab span { font-size: 10px; font-weight: 700; text-transform: uppercase; }
+
+        .nav-tab { text-decoration: none; color: rgba(255, 255, 255, 0.3); display: flex; flex-direction: column; align-items: center; gap: 4px; transition: 0.3s; width: 60px; }
+        .nav-tab.active { color: #fff; transform: translateY(-5px); }
+        .nav-tab.active i { background: var(--primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.4)); }
+        .nav-tab i { font-size: 24px; }
+        .nav-tab span { font-size: 9px; font-weight: 800; text-transform: uppercase; }
+        .nav-tab.active::after { content: ''; position: absolute; bottom: -10px; width: 5px; height: 5px; background: var(--orange); border-radius: 50%; box-shadow: 0 0 10px var(--orange); }
+
     </style>
 </head>
 <body>
 
-    <!-- СТРАНИЦА: ГЛАВНАЯ -->
+    <!-- ГЛАВНАЯ -->
     <div id="main" class="page active">
         <header>
             <div class="location"><i class="fa-solid fa-location-dot"></i> Белгород-Днестровский</div>
             <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass" style="opacity: 0.2"></i>
-                <input type="text" placeholder="Поиск блюд или заведений">
+                <i class="fa-solid fa-magnifying-glass" style="opacity: 0.3"></i>
+                <input type="text" placeholder="Поиск еды...">
             </div>
         </header>
 
         <div class="banner">
             <h1>ЛЕГЕНДАРНЫЙ ВКУС.<br>МОЛНИЕНОСНЫЙ ПУТЬ.</h1>
-            <i class="fa-solid fa-fire-flame-curved banner-icon"></i>
+            <i class="fa-solid fa-bolt-lightning banner-icon"></i>
         </div>
 
-        <div class="section-title">Рестораны <span>Смотреть все</span></div>
+        <div class="section-title">Рестораны</div>
         
-        <!-- Горизонтальный скролл ресторанов -->
-        <div class="h-scroll">
-            <!-- Кафе Маестро -->
-            <div class="res-card-h">
-                <div class="res-img" style="background-image: url('https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=70')">
-                    <div class="rating-tag">⭐ 4.8</div>
-                </div>
-                <div class="res-info">
-                    <h3>Кафе Маестро</h3>
-                    <p>Піца, Суші, Мангал</p>
-                    <div class="res-meta"><span><i class="fa-solid fa-clock"></i> 25-30 хв</span> <span><i class="fa-solid fa-bicycle"></i> 50 ₴</span></div>
-                </div>
-            </div>
-
-            <!-- СВОБОДА -->
-            <div class="res-card-h">
-                <div class="res-img" style="background-image: url('https://lh3.googleusercontent.com/p/AF1QipPsLzVNvrFrEtqQtTJv1OrBp0nDjO7djl6A46EO=s680-w680-h510-rw')">
-                    <div class="rating-tag">⭐ 4.5</div>
-                </div>
-                <div class="res-info">
-                    <h3>СВОБОДА</h3>
-                    <p>Європейська, Українська</p>
-                    <div class="res-meta"><span><i class="fa-solid fa-clock"></i> 30-40 хв</span> <span><i class="fa-solid fa-bicycle"></i> 50 ₴</span></div>
-                </div>
-            </div>
-
-            <!-- Smoke Time -->
-            <div class="res-card-h">
-                <div class="res-img" style="background-image: url('https://lh3.googleusercontent.com/gps-cs-s/AHVAweqfkfSIzNBC1xWFoGHRx_-JrhFoMStYdlfGb56zLqhkIV9czSwmafqmkZNfLr3RFxNMMxhDlwd31MxtCtcdcJsoTrL5zd0KU9bdpLSsYLMQuvGzYtMRawpoEYaM5dB49GjjbLg1wkHWTlR9=w408-h544-k-no')">
-                    <div class="rating-tag">⭐ 4.7</div>
-                </div>
-                <div class="res-info">
-                    <h3>Smoke Time</h3>
-                    <p>Кальян, Напої, Закуски</p>
-                    <div class="res-meta"><span><i class="fa-solid fa-clock"></i> 20-30 хв</span> <span><i class="fa-solid fa-bicycle"></i> 50 ₴</span></div>
-                </div>
+        <!-- Обертка со спец-эффектом исчезновения -->
+        <div class="h-scroll-wrapper">
+            <div class="h-scroll" id="h-scroll-container">
+                <!-- Рестораны из JS -->
             </div>
         </div>
 
@@ -254,33 +237,30 @@
         <div class="dev-block">В разработке</div>
     </div>
 
-    <!-- СТРАНИЦА: КАФЕ (ВЕРТИКАЛЬНЫЙ СПИСОК) -->
+    <!-- КАФЕ -->
     <div id="cafes" class="page">
         <header><h1 class="section-title" style="padding:0">Все заведения</h1></header>
-        <div class="v-list" id="v-list-container">
-            <!-- Сюда JS добавит все 8 ресторанов -->
-        </div>
+        <div class="v-list" id="v-list-container"></div>
     </div>
 
-    <!-- СТРАНИЦА: ЗАКАЗЫ -->
+    <!-- ЗАКАЗЫ -->
     <div id="orders" class="page">
-        <div class="empty-orders">
-            <i class="fa-solid fa-receipt"></i>
-            <h2 style="font-weight: 900">ЗАКАЗОВ НЕТ</h2>
-            <p style="color: #444; margin-top: 10px">Ваша история заказов пока пуста.</p>
+        <div style="text-align: center; padding: 150px 40px;">
+            <i class="fa-solid fa-receipt" style="font-size: 60px; color: #111;"></i>
+            <h2 style="margin-top: 20px; font-weight: 900;">ЗАКАЗОВ НЕТ</h2>
         </div>
     </div>
 
-    <!-- СТРАНИЦА: ПРОФИЛЬ -->
+    <!-- ПРОФИЛЬ -->
     <div id="profile" class="page">
         <div class="profile-box">
             <div class="user-card">
-                <div class="user-avatar"><i class="fa-solid fa-crown"></i></div>
-                <div><h2 style="font-weight: 900">АККЕРМАНЕЦ</h2><p style="opacity: 0.8; font-size: 12px">ID: 777-99-01</p></div>
+                <div class="user-avatar"><i class="fa-solid fa-user-astronaut"></i></div>
+                <div><h2 style="font-weight: 900">АККЕРМАНЕЦ</h2><p style="opacity: 0.7; font-size: 12px">Премиум статус</p></div>
             </div>
-            <div class="menu-link"><span><i class="fa-solid fa-heart" style="color: var(--orange); margin-right: 10px"></i> Избранное</span> <i class="fa-solid fa-chevron-right"></i></div>
-            <div class="menu-link"><span><i class="fa-solid fa-map-pin" style="color: var(--orange); margin-right: 10px"></i> Мои адреса</span> <i class="fa-solid fa-chevron-right"></i></div>
-            <div class="menu-link"><span><i class="fa-solid fa-gear" style="color: var(--orange); margin-right: 10px"></i> Настройки</span> <i class="fa-solid fa-chevron-right"></i></div>
+            <div class="menu-link"><span>Избранное</span> <i class="fa-solid fa-heart" style="color: var(--orange)"></i></div>
+            <div class="menu-link"><span>Адреса</span> <i class="fa-solid fa-map-pin" style="color: var(--orange)"></i></div>
+            <div class="menu-link"><span>Настройки</span> <i class="fa-solid fa-sliders" style="color: var(--orange)"></i></div>
         </div>
     </div>
 
@@ -289,7 +269,7 @@
         <i class="fa-solid fa-cart-shopping"></i>
     </div>
 
-    <!-- NAV BAR -->
+    <!-- ПАНЕЛЬ НАВИГАЦИИ -->
     <nav>
         <a href="javascript:void(0)" class="nav-tab active" onclick="showPage('main', this)">
             <i class="fa-solid fa-house-chimney-window"></i>
@@ -311,27 +291,31 @@
 
     <script>
         const restaurants = [
-            { id: 1, name: 'Кафе Маестро', image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=70', rating: 4.8, cuisine: 'Піца, Суші, Мангал', time: '25-30 хв' },
-            { id: 2, name: 'СВОБОДА', image: 'https://lh3.googleusercontent.com/p/AF1QipPsLzVNvrFrEtqQtTJv1OrBp0nDjO7djl6A46EO=s680-w680-h510-rw', rating: 4.5, cuisine: 'Європейська, Українська', time: '30-40 хв' },
-            { id: 3, name: 'Smoke Time', image: 'https://lh3.googleusercontent.com/gps-cs-s/AHVAweqfkfSIzNBC1xWFoGHRx_-JrhFoMStYdlfGb56zLqhkIV9czSwmafqmkZNfLr3RFxNMMxhDlwd31MxtCtcdcJsoTrL5zd0KU9bdpLSsYLMQuvGzYtMRawpoEYaM5dB49GjjbLg1wkHWTlR9=w408-h544-k-no', rating: 4.7, cuisine: 'Кальян, Напої, Закуски', time: '20-30 хв' },
-            { id: 4, name: 'Food house', image: 'https://lh3.googleusercontent.com/p/AF1QipMROLILFzLckulWfZJxirh0kQaEHRxqYUIRLyQL=w408-h408-k-no', rating: 4.6, cuisine: 'Фаст-фуд, Шаурма', time: '20-25 хв' },
-            { id: 5, name: 'Mama Mia', image: 'https://lh3.googleusercontent.com/p/AF1QipN7D_iLbUOW5TFybEIzwnIcFZT_5B0usif9h4b-=w426-h240-k-no', rating: 4.9, cuisine: 'Італійська, Піца', time: '35-45 хв' },
-            { id: 6, name: 'Піцерія La Mila', image: 'https://lh3.googleusercontent.com/gps-cs-s/AHVAweqMeu6NOMHlsVK8qoyJBW9XHL1IcvLbx4BGPPvXq64O9d3DvltG0YRpLxaEr0dKT7tLhMbapl2uPHUT7IfnwlQj92_mRD2tWl6HW7SLWHxPEs35N3Kuai3hibOyJeaIGTm0t8hsRQUxv_Q=w408-h544-k-no', rating: 4.7, cuisine: 'Піца, Паста', time: '30-40 хв' },
-            { id: 7, name: 'ДАХ АККЕРМАН', image: 'https://lh3.googleusercontent.com/p/AF1QipOMlCR2AA_IJY8CoNUeEZQGNlWCa88dHEq2qorO=w408-h612-k-no', rating: 4.8, cuisine: 'Ресторан, Європейська', time: '40-50 хв' },
-            { id: 8, name: 'Маестро (Перемога)', image: 'https://lh3.googleusercontent.com/p/AF1QipOIirOKsjsCJgNiePNF0x9szxYM4-OKM03j9O30=w408-h544-k-no', rating: 4.8, cuisine: 'Кафе, Десерти', time: '25-35 хв' }
+            { id: 1, name: 'Кафе Маестро', image: 'https://lh3.googleusercontent.com/gps-cs-s/AHVAwer7zoR2kbht6bkSZJLZctjnDdWupbkRKmODGHyz9xSRMEuxJa53xCRP3AmivXaspetZclRfkwyIRgzg4jncA-kGRXmtnKVyk1OYN4x4ydSJjt43c13hR1xQwc6XraNHJe_v7KAV=w408-h306-k-no', rating: 4.8, cuisine: 'Піца, Суші, Мангал' },
+            { id: 2, name: 'СВОБОДА', image: 'https://lh3.googleusercontent.com/p/AF1QipPsLzVNvrFrEtqQtTJv1OrBp0nDjO7djl6A46EO=s680-w680-h510-rw', rating: 4.5, cuisine: 'Європейська, Українська' },
+            { id: 3, name: 'Smoke Time', image: 'https://lh3.googleusercontent.com/gps-cs-s/AHVAweqfkfSIzNBC1xWFoGHRx_-JrhFoMStYdlfGb56zLqhkIV9czSwmafqmkZNfLr3RFxNMMxhDlwd31MxtCtcdcJsoTrL5zd0KU9bdpLSsYLMQuvGzYtMRawpoEYaM5dB49GjjbLg1wkHWTlR9=w408-h544-k-no', rating: 4.7, cuisine: 'Кальян, Напої, Закуски' },
+            { id: 4, name: 'Food house', image: 'https://lh3.googleusercontent.com/p/AF1QipMROLILFzLckulWfZJxirh0kQaEHRxqYUIRLyQL=w408-h408-k-no', rating: 4.6, cuisine: 'Фаст-фуд, Шаурма' },
+            { id: 5, name: 'Mama Mia', image: 'https://lh3.googleusercontent.com/p/AF1QipN7D_iLbUOW5TFybEIzwnIcFZT_5B0usif9h4b-=w426-h240-k-no', rating: 4.9, cuisine: 'Італійська, Піца' },
+            { id: 6, name: 'Піцерія La Mila', image: 'https://lh3.googleusercontent.com/gps-cs-s/AHVAweqMeu6NOMHlsVK8qoyJBW9XHL1IcvLbx4BGPPvXq64O9d3DvltG0YRpLxaEr0dKT7tLhMbapl2uPHUT7IfnwlQj92_mRD2tWl6HW7SLWHxPEs35N3Kuai3hibOyJeaIGTm0t8hsRQUxv_Q=w408-h544-k-no', rating: 4.7, cuisine: 'Піца, Паста' },
+            { id: 7, name: 'ДАХ АККЕРМАН', image: 'https://lh3.googleusercontent.com/p/AF1QipOMlCR2AA_IJY8CoNUeEZQGNlWCa88dHEq2qorO=w408-h612-k-no', rating: 4.8, cuisine: 'Ресторан, Європейська' },
+            { id: 8, name: 'Маестро (Перемога)', image: 'https://lh3.googleusercontent.com/p/AF1QipOIirOKsjsCJgNiePNF0x9szxYM4-OKM03j9O30=w408-h544-k-no', rating: 4.8, cuisine: 'Кафе, Десерти' }
         ];
 
-        function initCafes() {
-            const container = document.getElementById('v-list-container');
+        function init() {
+            const hContainer = document.getElementById('h-scroll-container');
+            const vContainer = document.getElementById('v-list-container');
+            
             restaurants.forEach(res => {
-                container.innerHTML += `
+                hContainer.innerHTML += `
+                    <div class="res-card-h">
+                        <div class="res-img" style="background-image: url('${res.image}')"><div class="rating-tag">⭐ ${res.rating}</div></div>
+                        <div class="res-info"><h3>${res.name}</h3><p>${res.cuisine}</p></div>
+                    </div>
+                `;
+                vContainer.innerHTML += `
                     <div class="res-card-v">
                         <div class="res-img-v" style="background-image: url('${res.image}')"></div>
-                        <div class="res-info-v">
-                            <h3 style="font-size: 15px; font-weight: 800;">${res.name}</h3>
-                            <p style="font-size: 11px; color: #777; margin: 4px 0;">${res.cuisine}</p>
-                            <div style="font-size: 10px; font-weight: 700; color: var(--orange);">⭐ ${res.rating} • ${res.time}</div>
-                        </div>
+                        <div class="res-info-v"><h3>${res.name}</h3><p style="font-size:11px; color:#666">${res.cuisine}</p></div>
                     </div>
                 `;
             });
@@ -346,15 +330,15 @@
             const cart = document.getElementById('cart-fab');
             if(id === 'profile' || id === 'orders') {
                 cart.style.opacity = '0.3';
-                cart.style.transform = 'scale(0.8)';
+                cart.style.transform = 'scale(0.8) translateY(20px)';
             } else {
                 cart.style.opacity = '1';
-                cart.style.transform = 'scale(1)';
+                cart.style.transform = 'scale(1) translateY(0)';
             }
             window.scrollTo(0,0);
         }
 
-        initCafes();
+        init();
     </script>
 </body>
 </html>
