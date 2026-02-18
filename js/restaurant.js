@@ -17,7 +17,7 @@ function switchCat(cat) {
     t.classList.toggle('on', t.textContent === cat)
   );
   renderCat(cat);
-  document.getElementById('scr').scrollTop = 0;
+  document.getElementById('scr').scrollTop = 0; 
 }
 
 /* ── Відрендерити страви обраної категорії ── */
