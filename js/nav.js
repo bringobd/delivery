@@ -19,7 +19,7 @@ function goPage(id) {
   if (id === 'cart') renderCart();
 }
 
-/* ── Відкрити сторінку ресторану ── */
+/* ── Відкрити сторінку ресторану ── */ 
 function openRest() {
   goPage('rest');
   buildTabs();
