@@ -355,16 +355,11 @@
     <div class="pg" id="pg-orders">
       <div class="tb" style="padding-bottom:14px">
         <div>
-          <div class="logo" style="font-size:18px">Замовлення</div>
-          <div style="font-size:11px;color:var(--t2);margin-top:2px">Активні доставки</div>
+          <div class="logo" style="font-size:18px" id="ordersTitle">Замовлення</div>
+          <div style="font-size:11px;color:var(--t2);margin-top:2px" id="ordersSubtitle">Активні доставки</div>
         </div>
       </div>
-      <div class="ord-empty">
-        <span>📦</span>
-        <h3>Замовлень поки немає</h3>
-        <p>Зробіть перше замовлення!</p>
-        <button class="cta" onclick="openRest()">До меню</button>
-      </div>
+      <div id="ordersBody"></div>
     </div>
 
     <!-- ══ PROFILE ══ -->
