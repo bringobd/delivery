@@ -15,7 +15,7 @@ function finishOnb() {
   const name    = document.getElementById('inpName').value.trim();
   const surname = document.getElementById('inpSurname').value.trim();
   const phone   = document.getElementById('inpPhone').value.trim();
-
+ 
   user = { name, surname, phone };
   localStorage.setItem('bringoUser', JSON.stringify(user));
 
