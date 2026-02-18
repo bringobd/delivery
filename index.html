@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fire Fusion — Premium Delivery</title>
+    <title>Fire Fusion — Доставка Аккерман</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
@@ -12,7 +12,6 @@
             --primary: linear-gradient(135deg, #FF0000 0%, #FF8C00 100%);
             --red: #FF0000;
             --orange: #FF8C00;
-            /* Твой градиентный фон */
             --bg-grad: linear-gradient(180deg, #050505 0%, #1a0202 50%, #201005 100%);
             --glass: rgba(255, 255, 255, 0.08);
             --glass-border: rgba(255, 255, 255, 0.15);
@@ -35,15 +34,27 @@
             overflow-x: hidden;
         }
 
-        /* Анимации страниц */
-        .page { display: none; animation: fadeIn 0.4s ease; }
-        .page.active { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
+        /* --- АНІМАЦІЇ --- */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        @keyframes pulseCart {
+            0% { box-shadow: 0 10px 20px rgba(255, 0, 0, 0.3); transform: scale(1); }
+            50% { box-shadow: 0 15px 35px rgba(255, 69, 0, 0.6); transform: scale(1.05); }
+            100% { box-shadow: 0 10px 20px rgba(255, 0, 0, 0.3); transform: scale(1); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .page { display: none; animation: fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .page.active { display: block; }
+
+        /* --- HEADER --- */
         header { padding: 40px 20px 10px; }
 
         .location {
@@ -82,13 +93,13 @@
         .banner h1 { font-size: 24px; font-weight: 900; line-height: 1.2; position: relative; z-index: 2; }
         .banner-icon { position: absolute; right: -15px; bottom: -15px; font-size: 140px; opacity: 0.15; transform: rotate(-10deg); }
 
-        /* ЭФФЕКТ ПЛАВНОГО ИСЧЕЗНОВЕНИЯ У КРАЯ (Horizontal Scroll) */
+        /* --- ГОРИЗОНТАЛЬНИЙ СКРОЛЛ З ДВОСТОРОННІМ ГРАДІЄНТОМ --- */
         .h-scroll-wrapper {
             position: relative;
             width: 100%;
-            /* Маска, которая делает правую часть (там где зеленая линия) прозрачной */
-            -webkit-mask-image: linear-gradient(to right, black 80%, transparent 98%);
-            mask-image: linear-gradient(to right, black 80%, transparent 98%);
+            /* Градієнтна маска з обох боків */
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
         }
 
         .h-scroll {
@@ -107,8 +118,12 @@
             border-radius: 30px;
             overflow: hidden;
             backdrop-filter: blur(5px);
+            transition: 0.3s;
         }
+        .res-card-h:active { transform: scale(0.96); }
+
         .res-img { height: 160px; background-size: cover; background-position: center; position: relative; }
+        
         .rating-tag {
             position: absolute;
             top: 15px;
@@ -127,7 +142,7 @@
 
         .section-title { padding: 0 20px; font-size: 20px; font-weight: 900; margin-top: 15px; }
 
-        /* В разработке */
+        /* У розробці */
         .dev-block {
             margin: 20px;
             padding: 50px;
@@ -141,7 +156,7 @@
             letter-spacing: 3px;
         }
 
-        /* Вкладка Кафе */
+        /* --- Вкладка Кафе --- */
         .v-list { padding: 20px; }
         .res-card-v {
             background: var(--glass);
@@ -151,17 +166,19 @@
             margin-bottom: 18px;
             display: flex;
             align-items: center;
+            transition: 0.2s;
         }
+        .res-card-v:active { transform: scale(0.98); background: rgba(255,255,255,0.12); }
         .res-card-v .res-img-v { width: 100px; height: 100px; background-size: cover; background-position: center; }
         .res-card-v .res-info-v { padding: 15px; flex: 1; }
 
-        /* Вкладка Профиль */
+        /* --- Вкладка Профіль --- */
         .profile-box { padding: 30px 20px; }
         .user-card { background: var(--primary); padding: 30px; border-radius: 35px; display: flex; align-items: center; gap: 20px; margin-bottom: 30px; }
         .user-avatar { width: 65px; height: 65px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--red); font-size: 26px; }
         .menu-link { background: var(--glass); border: 1px solid var(--glass-border); padding: 22px; border-radius: 25px; display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: 700; }
 
-        /* КОРЗИНА НАД ПРОФИЛЕМ */
+        /* --- КОШИК НАД ПРОФІЛЕМ --- */
         #cart-fab {
             position: fixed;
             right: 30px;
@@ -174,12 +191,11 @@
             align-items: center;
             justify-content: center;
             font-size: 26px;
-            box-shadow: 0 12px 30px rgba(255, 0, 0, 0.4);
             z-index: 1000;
-            transition: 0.3s;
+            animation: pulseCart 3s infinite;
         }
 
-        /* ЖИДКОЕ СТЕКЛО — НИЖНЯЯ ПАНЕЛЬ */
+        /* --- НИЖНЯ ПАНЕЛЬ (Рідке скло) --- */
         nav {
             position: fixed;
             bottom: 25px;
@@ -188,7 +204,6 @@
             height: 75px;
             background: rgba(255, 255, 255, 0.07);
             backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 35px;
             display: flex;
@@ -209,71 +224,71 @@
 </head>
 <body>
 
-    <!-- ГЛАВНАЯ -->
+    <!-- ГОЛОВНА -->
     <div id="main" class="page active">
         <header>
-            <div class="location"><i class="fa-solid fa-location-dot"></i> Белгород-Днестровский</div>
+            <div class="location"><i class="fa-solid fa-location-dot"></i> Білгород-Дністровський</div>
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass" style="opacity: 0.3"></i>
-                <input type="text" placeholder="Поиск еды...">
+                <input type="text" placeholder="Пошук їжі...">
             </div>
         </header>
 
         <div class="banner">
-            <h1>ЛЕГЕНДАРНЫЙ ВКУС.<br>МОЛНИЕНОСНЫЙ ПУТЬ.</h1>
+            <h1>ЛЕГЕНДАРНИЙ СМАК.<br>БЛИСКАВИЧНИЙ ШЛЯХ.</h1>
             <i class="fa-solid fa-bolt-lightning banner-icon"></i>
         </div>
 
-        <div class="section-title">Рестораны</div>
+        <div class="section-title">Ресторани</div>
         
-        <!-- Обертка со спец-эффектом исчезновения -->
         <div class="h-scroll-wrapper">
             <div class="h-scroll" id="h-scroll-container">
-                <!-- Рестораны из JS -->
+                <!-- Ресторани завантажаться з JS -->
             </div>
         </div>
 
-        <div class="section-title">Магазины</div>
-        <div class="dev-block">В разработке</div>
+        <div class="section-title">Магазини</div>
+        <div class="dev-block">У розробці</div>
     </div>
 
     <!-- КАФЕ -->
     <div id="cafes" class="page">
-        <header><h1 class="section-title" style="padding:0">Все заведения</h1></header>
+        <header><h1 class="section-title" style="padding:0">Усі заклади</h1></header>
         <div class="v-list" id="v-list-container"></div>
     </div>
 
-    <!-- ЗАКАЗЫ -->
+    <!-- ЗАМОВЛЕННЯ -->
     <div id="orders" class="page">
         <div style="text-align: center; padding: 150px 40px;">
             <i class="fa-solid fa-receipt" style="font-size: 60px; color: #111;"></i>
-            <h2 style="margin-top: 20px; font-weight: 900;">ЗАКАЗОВ НЕТ</h2>
+            <h2 style="margin-top: 20px; font-weight: 900;">ЗАМОВЛЕНЬ НЕМАЄ</h2>
+            <p style="color: #444; margin-top: 10px; font-weight: 600;">Тут будуть ваші замовлення</p>
         </div>
     </div>
 
-    <!-- ПРОФИЛЬ -->
+    <!-- ПРОФІЛЬ -->
     <div id="profile" class="page">
         <div class="profile-box">
             <div class="user-card">
                 <div class="user-avatar"><i class="fa-solid fa-user-astronaut"></i></div>
-                <div><h2 style="font-weight: 900">АККЕРМАНЕЦ</h2><p style="opacity: 0.7; font-size: 12px">Премиум статус</p></div>
+                <div><h2 style="font-weight: 900">АККЕРМАНЕЦЬ</h2><p style="opacity: 0.7; font-size: 12px">Преміум статус</p></div>
             </div>
-            <div class="menu-link"><span>Избранное</span> <i class="fa-solid fa-heart" style="color: var(--orange)"></i></div>
-            <div class="menu-link"><span>Адреса</span> <i class="fa-solid fa-map-pin" style="color: var(--orange)"></i></div>
-            <div class="menu-link"><span>Настройки</span> <i class="fa-solid fa-sliders" style="color: var(--orange)"></i></div>
+            <div class="menu-link"><span>Обране</span> <i class="fa-solid fa-heart" style="color: var(--orange)"></i></div>
+            <div class="menu-link"><span>Адреси</span> <i class="fa-solid fa-map-pin" style="color: var(--orange)"></i></div>
+            <div class="menu-link"><span>Налаштування</span> <i class="fa-solid fa-sliders" style="color: var(--orange)"></i></div>
         </div>
     </div>
 
-    <!-- КОРЗИНА -->
+    <!-- КОШИК -->
     <div id="cart-fab">
         <i class="fa-solid fa-cart-shopping"></i>
     </div>
 
-    <!-- ПАНЕЛЬ НАВИГАЦИИ -->
+    <!-- ПАНЕЛЬ НАВІГАЦІЇ -->
     <nav>
         <a href="javascript:void(0)" class="nav-tab active" onclick="showPage('main', this)">
             <i class="fa-solid fa-house-chimney-window"></i>
-            <span>Главная</span>
+            <span>Головна</span>
         </a>
         <a href="javascript:void(0)" class="nav-tab" onclick="showPage('cafes', this)">
             <i class="fa-solid fa-utensils"></i>
@@ -281,11 +296,11 @@
         </a>
         <a href="javascript:void(0)" class="nav-tab" onclick="showPage('orders', this)">
             <i class="fa-solid fa-clipboard-list"></i>
-            <span>Заказы</span>
+            <span>Замовлення</span>
         </a>
         <a href="javascript:void(0)" class="nav-tab" onclick="showPage('profile', this)">
             <i class="fa-solid fa-user-tie"></i>
-            <span>Профиль</span>
+            <span>Профіль</span>
         </a>
     </nav>
 
@@ -305,15 +320,18 @@
             const hContainer = document.getElementById('h-scroll-container');
             const vContainer = document.getElementById('v-list-container');
             
-            restaurants.forEach(res => {
+            restaurants.forEach((res, index) => {
+                // Плавна затримка появи для кожної картки
+                const delay = index * 0.1;
+
                 hContainer.innerHTML += `
-                    <div class="res-card-h">
+                    <div class="res-card-h" style="animation: fadeInUp 0.5s ease ${delay}s both">
                         <div class="res-img" style="background-image: url('${res.image}')"><div class="rating-tag">⭐ ${res.rating}</div></div>
                         <div class="res-info"><h3>${res.name}</h3><p>${res.cuisine}</p></div>
                     </div>
                 `;
                 vContainer.innerHTML += `
-                    <div class="res-card-v">
+                    <div class="res-card-v" style="animation: fadeInUp 0.5s ease ${delay}s both">
                         <div class="res-img-v" style="background-image: url('${res.image}')"></div>
                         <div class="res-info-v"><h3>${res.name}</h3><p style="font-size:11px; color:#666">${res.cuisine}</p></div>
                     </div>
@@ -335,7 +353,7 @@
                 cart.style.opacity = '1';
                 cart.style.transform = 'scale(1) translateY(0)';
             }
-            window.scrollTo(0,0);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         init();
