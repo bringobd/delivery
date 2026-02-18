@@ -12,7 +12,7 @@ const MENU = [
         d: 'Фірмова піца від шефа — соус, сулугуні, моцарела та начинка на ваш вибір',
         img: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&q=80',
         basePrice: 190,
-        groups: [
+        groups: [ 
           {
             label: 'Розмір', sub: 'Виберіть 1 варіант', type: 'radio', required: true,
             options: [
