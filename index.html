@@ -654,19 +654,36 @@ function goPage(id) {
   document.getElementById('pg-' + id).classList.add('on');
   document.getElementById('nb-' + id)?.classList.add('on');
   document.getElementById('scr').scrollTop = 0;
-  if (id === 'cart')   renderCart();
-  if (id === 'orders') renderOrders();
+  if (id === 'cart')    renderCart();
+  if (id === 'orders')  renderOrders();
+  if (id === 'history') renderHistory();
+  if (id === 'home-courier')    renderCourierHome();
+  if (id === 'home-restaurant') renderRestaurantHome();
 }
 
 function openRest() { goPage('rest'); buildTabs(); renderCat(curCat); }
 
 function applyRoleUI() {
   const role = getRole();
-  if (role === 'restaurant' || role === 'courier') {
+
+  if (role === 'courier') {
+    // Сховати вкладки клієнта
     document.getElementById('nb-rests').style.display = 'none';
     document.getElementById('nb-cart').style.display  = 'none';
-    goPage('orders');
-    showToast(role === 'restaurant' ? '👨‍🍳 Режим ресторану' : '🛵 Режим курʼєра');
+    // Перевести кнопку "Головна" на courier-home
+    document.getElementById('nb-home').onclick = () => goPage('home-courier');
+    goPage('home-courier');
+    showToast('🛵 Режим курʼєра');
+  }
+
+  else if (role === 'restaurant') {
+    // Сховати вкладки клієнта
+    document.getElementById('nb-rests').style.display = 'none';
+    document.getElementById('nb-cart').style.display  = 'none';
+    // Перевести кнопку "Головна" на restaurant-home
+    document.getElementById('nb-home').onclick = () => goPage('home-restaurant');
+    goPage('home-restaurant');
+    showToast('👨‍🍳 Режим ресторану');
   }
 }
 
@@ -1054,7 +1071,7 @@ function showToast(msg) {
 }
 
 /* ========================================
-   БЛОК 12 — ФІЛЬТРИ + СТАРТ
+   БЛОК 12 — ФІЛЬТРИ + СТАРТ + РЕНДЕРИ ГОЛОВНИХ
 ======================================== */
 document.querySelectorAll('.fi').forEach(f => {
   f.addEventListener('click', () => {
@@ -1063,12 +1080,127 @@ document.querySelectorAll('.fi').forEach(f => {
   });
 });
 
-// Якщо юзер вже зареєстрований — пропускаємо онбординг
+// ── ГОЛОВНА КУРЄРА ──
+function renderCourierHome() {
+  const active = isShiftActive();
+
+  // Бейдж статусу зміни
+  const badge = document.getElementById('shiftBadge');
+  if (badge) {
+    badge.textContent        = active ? '🟢 На зміні' : '🔴 Не на зміні';
+    badge.style.background   = active ? 'rgba(34,197,94,.15)' : 'rgba(239,68,68,.15)';
+    badge.style.color        = active ? '#22C55E' : '#EF4444';
+  }
+
+  // Статистика зміни
+  const history = getHistory();
+  const todayDeliveries = history.length;
+  const todayEarnings   = history.reduce((s, o) => s + (o.total || 0), 0);
+  const shiftMinutes    = active
+    ? Math.floor((Date.now() - parseInt(localStorage.getItem('bringoShiftTime') || Date.now())) / 60000)
+    : 0;
+
+  const earn = document.getElementById('courierEarnings');
+  const del  = document.getElementById('courierDeliveries');
+  const tim  = document.getElementById('courierShiftTime');
+  if (earn) earn.textContent = todayEarnings;
+  if (del)  del.textContent  = todayDeliveries;
+  if (tim)  tim.textContent  = shiftMinutes;
+
+  // Кнопка зміни
+  const block = document.getElementById('courierShiftBlock');
+  if (block) {
+    block.innerHTML = `
+      <button id="shiftBtn" onclick="toggleShift()"
+        style="width:100%;padding:15px;background:${active ? '#EF4444' : 'var(--or)'};border:none;border-radius:14px;
+               color:#fff;font-family:'Geologica',sans-serif;font-size:14px;font-weight:900;
+               cursor:pointer;margin-bottom:14px">
+        ${active ? '🔴 Завершити зміну' : '🟢 Почати робочу зміну'}
+      </button>`;
+  }
+}
+
+// ── ГОЛОВНА РЕСТОРАНУ ──
+function renderRestaurantHome() {
+  // Курʼєри онлайн
+  const online = couriersOnline();
+  const el = document.getElementById('couriersOnlineCount');
+  if (el) el.textContent = online > 0 ? online : '—';
+
+  // Статистика з історії
+  const history = getHistory();
+  const todayOrders  = history.length;
+  const todayRevenue = history.reduce((s, o) => s + (o.total || 0), 0);
+
+  const ord = document.getElementById('restTodayOrders');
+  const rev = document.getElementById('restTodayRevenue');
+  if (ord) ord.textContent = todayOrders;
+  if (rev) rev.textContent = todayRevenue;
+
+  // Алерт якщо є нове замовлення
+  const order = getOrder();
+  const alert = document.getElementById('restNewOrderAlert');
+  if (alert) {
+    if (order && order.status === 'new') {
+      alert.innerHTML = `
+        <div style="background:var(--orl);border:1.5px solid var(--orb);border-radius:14px;padding:16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-family:'Geologica',sans-serif;font-size:13px;font-weight:900;color:var(--or)">🔔 Нове замовлення!</div>
+            <div style="font-size:11px;color:var(--t2);margin-top:3px">Замовлення #${String(order.id).slice(-4)} · ${order.total} грн</div>
+          </div>
+          <button onclick="goPage('orders')"
+            style="background:var(--or);border:none;border-radius:10px;color:#fff;padding:8px 14px;
+                   font-family:'Geologica',sans-serif;font-size:12px;font-weight:800;cursor:pointer">
+            Переглянути
+          </button>
+        </div>`;
+    } else {
+      alert.innerHTML = '';
+    }
+  }
+}
+
+// ── РЕНДЕР СТОРІНКИ ІСТОРІЇ ──
+function renderHistory() {
+  const el = document.getElementById('historyBody');
+  if (!el) return;
+  const history = getHistory();
+  if (!history.length) {
+    el.innerHTML = `<div class="ord-empty"><span>📋</span><h3>Історія порожня</h3><p>Тут зʼявляться виконані замовлення</p></div>`;
+    return;
+  }
+  el.innerHTML = history.map(o => `
+    <div style="background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="font-family:'Geologica',sans-serif;font-size:13px;font-weight:800">Замовлення #${String(o.id).slice(-4)}</div>
+        <div style="font-size:10px;color:var(--t2)">${o.finishedAt || o.time}</div>
+      </div>
+      <div style="font-size:11px;color:var(--t2);margin-bottom:8px">${o.items.map(i => i.name + ' ×' + i.qty).join(', ')}</div>
+      <div style="font-size:11px;color:var(--t2);margin-bottom:8px">👤 ${o.client} · 📍 ${o.address}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="background:var(--gl);color:var(--g);border-radius:6px;padding:3px 10px;font-size:10px;font-weight:800">🎉 Доставлено</div>
+        <div style="font-family:'Geologica',sans-serif;font-size:14px;font-weight:900;color:var(--or)">${o.total} грн</div>
+      </div>
+    </div>`).join('');
+}
+
+// ── ПРОФІЛЬ КУРЄРА — кнопка зміни ──
+function renderProfile() {
+  if (getRole() !== 'courier') return;
+  const btn = document.getElementById('shiftBtn');
+  if (!btn) return;
+  const active = isShiftActive();
+  btn.textContent      = active ? '🔴 Завершити зміну' : '🟢 Почати робочу зміну';
+  btn.style.background = active ? '#EF4444' : 'var(--or)';
+}
+
+// ── СТАРТ ──
 if (user) {
   document.getElementById('onb').style.display = 'none';
   updateProfile();
   applyRoleUI();
 }
-</script>
-</body>
-</html>
+
+// Оновлення кожні 2 сек для ресторану і курʼєра
+setInterval(() => {
+  if (cur === 'home-courier')    renderC
