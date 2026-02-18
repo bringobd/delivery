@@ -470,6 +470,31 @@ function getRole() {
   return 'client';
 }
 
+// Курʼєр онлайн (робоча зміна)
+function isShiftActive() {
+  return localStorage.getItem('bringoShift') === 'active';
+}
+
+function toggleShift() {
+  const active = isShiftActive();
+  if (active) {
+    localStorage.removeItem('bringoShift');
+    showToast('🔴 Зміну завершено');
+  } else {
+    localStorage.setItem('bringoShift', 'active');
+    localStorage.setItem('bringoShiftTime', Date.now());
+    showToast('🟢 Зміну розпочато!');
+  }
+  renderProfile();
+  renderOrders();
+}
+
+// Скільки курʼєрів онлайн (для ресторану)
+// Для тесту: якщо курʼєр на зміні — рахуємо 1
+function couriersOnline() {
+  return localStorage.getItem('bringoShift') === 'active' ? 1 : 0;
+}
+
 function updateProfile() {
   if (!user) return;
   const full = [user.name, user.surname].filter(Boolean).join(' ');
@@ -477,8 +502,30 @@ function updateProfile() {
   document.getElementById('profPhone').textContent = user.phone ? '📞 +38' + user.phone : '🏅 Новий клієнт';
 }
 
+function renderProfile() {
+  // Перерендерити кнопку зміни якщо є елемент
+  const btn = document.getElementById('shiftBtn');
+  if (!btn) return;
+  const active = isShiftActive();
+  btn.textContent    = active ? '🔴 Завершити зміну' : '🟢 Почати робочу зміну';
+  btn.style.background = active ? '#EF4444' : 'var(--or)';
+}
+
+// Історія замовлень
+function getHistory() {
+  return JSON.parse(localStorage.getItem('bringoHistory') || '[]');
+}
+
+function addToHistory(order) {
+  const history = getHistory();
+  history.unshift({ ...order, finishedAt: new Date().toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' }) });
+  // Зберігаємо максимум 20 замовлень
+  localStorage.setItem('bringoHistory', JSON.stringify(history.slice(0, 20)));
+}
+
 function logout() {
   localStorage.removeItem('bringoUser');
+  localStorage.removeItem('bringoShift');
   location.reload();
 }
 
