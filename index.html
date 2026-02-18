@@ -261,6 +261,89 @@
     </div>
 
     <!-- ══ RESTS ══ -->
+    <!-- ══ HOME COURIER ══ -->
+<div class="pg" id="pg-home-courier">
+  <div class="tb">
+    <div class="logo">BRINGO</div>
+    <div id="shiftBadge" style="border-radius:20px;padding:6px 12px;font-size:11px;font-weight:700;font-family:'Geologica',sans-serif"></div>
+  </div>
+  <div style="padding:0 18px 20px">
+
+    <div style="background:var(--s2);border:1px solid var(--bd);border-radius:18px;padding:20px;margin-bottom:14px">
+      <div style="font-family:'Geologica',sans-serif;font-size:13px;font-weight:800;color:var(--t2);margin-bottom:14px;text-transform:uppercase;letter-spacing:.6px">Моя зміна</div>
+      <div style="display:flex;gap:10px">
+        <div style="flex:1;background:var(--s3);border-radius:13px;padding:14px;text-align:center">
+          <div style="font-family:'Geologica',sans-serif;font-size:22px;font-weight:900;color:var(--or)" id="courierEarnings">0</div>
+          <div style="font-size:10px;color:var(--t2);margin-top:3px;font-weight:700">грн заробіток</div>
+        </div>
+        <div style="flex:1;background:var(--s3);border-radius:13px;padding:14px;text-align:center">
+          <div style="font-family:'Geologica',sans-serif;font-size:22px;font-weight:900;color:var(--or)" id="courierDeliveries">0</div>
+          <div style="font-size:10px;color:var(--t2);margin-top:3px;font-weight:700">доставок</div>
+        </div>
+        <div style="flex:1;background:var(--s3);border-radius:13px;padding:14px;text-align:center">
+          <div style="font-family:'Geologica',sans-serif;font-size:22px;font-weight:900;color:var(--or)" id="courierShiftTime">0</div>
+          <div style="font-size:10px;color:var(--t2);margin-top:3px;font-weight:700">хвилин</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="courierShiftBlock"></div>
+
+    <div style="background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:16px">
+      <div style="font-family:'Geologica',sans-serif;font-size:12px;font-weight:800;color:var(--t2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px">Підказки</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.8">
+        🟢 Почніть зміну щоб отримувати замовлення<br>
+        🛵 Замовлення зʼявляться у вкладці Замовлення<br>
+        💰 Заробіток рахується після доставки
+      </div>
+    </div>
+
+  </div>
+</div>
+    <!-- ══ HOME RESTAURANT ══ -->
+<div class="pg" id="pg-home-restaurant">
+  <div class="tb">
+    <div class="logo">BRINGO</div>
+    <div class="city">☕ Кафе Маестро</div>
+  </div>
+  <div style="padding:0 18px 20px">
+
+    <div style="background:linear-gradient(130deg,#FF5C00,#C82800);border-radius:22px;padding:22px;margin-bottom:14px;position:relative;overflow:hidden">
+      <div style="position:absolute;right:-10px;top:-10px;font-size:100px;opacity:.1">🍽</div>
+      <div style="font-family:'Geologica',sans-serif;font-size:12px;font-weight:700;opacity:.8;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Статус ресторану</div>
+      <div style="font-family:'Geologica',sans-serif;font-size:20px;font-weight:900;margin-bottom:14px">Готові до роботи 🟢</div>
+      <div style="display:flex;gap:8px">
+        <div style="background:rgba(255,255,255,.2);border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700">
+          🛵 Курʼєрів онлайн: <span id="couriersOnlineCount">0</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+      <div style="background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:16px;text-align:center">
+        <div style="font-family:'Geologica',sans-serif;font-size:26px;font-weight:900;color:var(--or)" id="restTodayOrders">0</div>
+        <div style="font-size:10px;color:var(--t2);font-weight:700;margin-top:3px">замовлень сьогодні</div>
+      </div>
+      <div style="background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:16px;text-align:center">
+        <div style="font-family:'Geologica',sans-serif;font-size:26px;font-weight:900;color:var(--or)" id="restTodayRevenue">0</div>
+        <div style="font-size:10px;color:var(--t2);font-weight:700;margin-top:3px">грн виручка</div>
+      </div>
+    </div>
+
+    <div id="restNewOrderAlert"></div>
+
+    <div style="background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:16px">
+      <div style="font-family:'Geologica',sans-serif;font-size:12px;font-weight:800;color:var(--t2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px">Підказки</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.8">
+        📦 Нові замовлення зʼявляться у вкладці Замовлення<br>
+        👨‍🍳 Прийміть замовлення і почніть готувати<br>
+        🛵 Курʼєр забере коли страва буде готова
+      </div>
+    </div>
+
+  </div>
+</div>
+    
     <div class="pg" id="pg-rests">
       <div class="tb" style="padding-bottom:14px">
         <div><div class="logo" style="font-size:18px">Ресторани</div><div style="font-size:11px;color:var(--t2);margin-top:2px">1 заклад у місті</div></div>
@@ -313,6 +396,13 @@
     </div>
 
     <!-- ══ PROFILE ══ -->
+    <!-- ══ HISTORY ══ -->
+<div class="pg" id="pg-history">
+  <div class="tb" style="padding-bottom:14px">
+    <div class="back" onclick="goPage('profile')" style="padding:0">← Назад</div>
+  </div>
+  <div style="padding:0 18px" id="historyBody"></div>
+</div>
     <div class="pg" id="pg-profile">
       <div class="tb" style="padding-bottom:14px"><div class="logo" style="font-size:18px">Профіль</div></div>
       <div class="prof-top">
@@ -329,7 +419,7 @@
         <div class="stat"><div class="stat-n">0</div><div class="stat-l">бонусів</div></div>
       </div>
       <div class="plist">
-        <div class="pi"><div class="pi-ic">📋</div><div class="pi-lbl">Мої замовлення</div><span style="color:var(--t3)">›</span></div>
+        <div class="pi" onclick="goPage('history')"><div class="pi-ic">📋</div><div class="pi-lbl">Історія замовлень</div><span style="color:var(--t3)">›</span></div>
         <div class="pi"><div class="pi-ic">📍</div><div class="pi-lbl">Збережені адреси</div><span style="color:var(--t3)">›</span></div>
         <div class="pi"><div class="pi-ic">💳</div><div class="pi-lbl">Способи оплати</div><span style="color:var(--t3)">›</span></div>
         <div class="pi"><div class="pi-ic">🎁</div><div class="pi-lbl">Промокоди та бонуси</div><span style="color:var(--t3)">›</span></div>
@@ -756,9 +846,9 @@ function clearCart()    { cart = []; updateCartBadge(); renderCart(); }
 /* ========================================
    БЛОК 9 — ЗАМОВЛЕННЯ (стан + синхронізація)
 ======================================== */
-function getOrder()    { return JSON.parse(localStorage.getItem('bringoOrder') || 'null'); }
-function saveOrder(o)  { localStorage.setItem('bringoOrder', JSON.stringify(o)); renderOrders(); }
-function clearOrder()  { localStorage.removeItem('bringoOrder'); renderOrders(); }
+function getOrder()   { return JSON.parse(localStorage.getItem('bringoOrder') || 'null'); }
+function saveOrder(o) { localStorage.setItem('bringoOrder', JSON.stringify(o)); renderOrders(); }
+function clearOrder() { localStorage.removeItem('bringoOrder'); renderOrders(); }
 
 function placeOrder() {
   if (!cart.length) return;
@@ -778,12 +868,27 @@ function placeOrder() {
 
 function changeStatus(s) {
   const o = getOrder(); if (!o) return;
-  o.status = s; saveOrder(o);
+
+  // Коли доставлено — записуємо в історію і очищаємо активне
+  if (s === 'done') {
+    o.status = 'done';
+    addToHistory(o);
+    clearOrder();
+    showToast('🎉 Замовлення доставлено!');
+    return;
+  }
+
+  o.status = s;
+  saveOrder(o);
   showToast(STATUS[s].label);
 }
 
 // Синхронізація між вкладками
-window.addEventListener('storage', e => { if (e.key === 'bringoOrder' && cur === 'orders') renderOrders(); });
+window.addEventListener('storage', e => {
+  if (e.key === 'bringoOrder' || e.key === 'bringoHistory' || e.key === 'bringoShift') {
+    if (cur === 'orders')  renderOrders();
+  }
+});
 setInterval(() => { if (cur === 'orders') renderOrders(); }, 2000);
 
 /* ========================================
@@ -795,46 +900,66 @@ function renderOrders() {
   const o    = getOrder();
   const role = getRole();
 
+  // ── КУРʼЄР БЕЗ ЗМІНИ ──
+  if (role === 'courier' && !isShiftActive()) {
+    el.innerHTML = `<div class="ord-empty">
+      <span>🛵</span>
+      <h3>Зміна не розпочата</h3>
+      <p>Перейдіть у профіль і натисніть<br>«Почати робочу зміну»</p>
+      <button class="cta" onclick="goPage('profile')">До профілю →</button>
+    </div>`;
+    return;
+  }
+
+  // ── ПОРОЖНІЙ СТАН ──
   if (!o) {
-    const e = {
-      client:     ['📦', 'Замовлень поки немає', 'Зробіть перше замовлення!', `<button class="cta" onclick="openRest()">До меню</button>`],
-      restaurant: ['🍽',  'Нових замовлень немає', 'Очікуйте на замовлення від клієнтів', ''],
-      courier:    ['🛵',  'Немає активних доставок', 'Очікуйте коли зʼявиться замовлення', ''],
+    const msgs = {
+      client:     ['📦', 'Замовлень поки немає',    'Зробіть перше замовлення!',              `<button class="cta" onclick="openRest()">До меню</button>`],
+      restaurant: ['🍽',  'Нових замовлень немає',   'Очікуйте на замовлення від клієнтів',    ''],
+      courier:    ['🛵',  'Немає активних доставок', 'Нові замовлення зʼявляться тут автоматично', ''],
     }[role];
-    el.innerHTML = `<div class="ord-empty"><span>${e[0]}</span><h3>${e[1]}</h3><p>${e[2]}</p>${e[3]}</div>`;
+    el.innerHTML = `<div class="ord-empty">
+      <span>${msgs[0]}</span><h3>${msgs[1]}</h3><p>${msgs[2]}</p>${msgs[3]}
+    </div>${renderHistorySection(role)}`;
     return;
   }
 
+  // ── КУРʼЄР НЕ БАЧИТЬ ПОКИ РЕСТОРАН НЕ ПОЧАВ ГОТУВАТИ ──
   if (role === 'courier' && ['new','accepted'].includes(o.status)) {
-    el.innerHTML = `<div class="ord-empty"><span>🛵</span><h3>Ресторан ще приймає замовлення</h3>
-      <p>Повідомлення зʼявиться коли розпочнеться готування</p></div>`;
+    el.innerHTML = `<div class="ord-empty">
+      <span>🛵</span>
+      <h3>Ресторан приймає замовлення</h3>
+      <p>Повідомлення зʼявиться коли розпочнеться готування</p>
+    </div>${renderHistorySection(role)}`;
     return;
   }
 
-  const st   = STATUS[o.status];
+  const st    = STATUS[o.status];
   const steps = ['new','accepted','cooking','ready','picked','delivering','done'];
-  const ci   = steps.indexOf(o.status);
+  const ci    = steps.indexOf(o.status);
 
+  // ── КНОПКИ ДІЙ ──
   let btn = '';
   if (role === 'restaurant') {
-    if      (o.status === 'new')      btn = AB('✅ Прийняти замовлення',   "changeStatus('accepted')");
-    else if (o.status === 'accepted') btn = AB('👨‍🍳 Почати готувати',       "changeStatus('cooking')");
-    else if (o.status === 'cooking')  btn = AB('🍽 Страва готова!',         "changeStatus('ready')");
+    if      (o.status === 'new')      btn = AB('✅ Прийняти замовлення',    "changeStatus('accepted')");
+    else if (o.status === 'accepted') btn = AB('👨‍🍳 Почати готувати',        "changeStatus('cooking')");
+    else if (o.status === 'cooking')  btn = AB('🍽 Страва готова!',          "changeStatus('ready')");
     else if (o.status === 'ready')    btn = DB('⏳ Чекаємо курʼєра…');
     else                              btn = DB(st.label);
   } else if (role === 'courier') {
     if      (o.status === 'cooking')    btn = DB('👨‍🍳 Ресторан готує — їдьте до закладу');
-    else if (o.status === 'ready')      btn = AB('🛵 Забрав замовлення',        "changeStatus('picked')");
-    else if (o.status === 'picked')     btn = AB('🚀 Виїхав до клієнта',        "changeStatus('delivering')");
-    else if (o.status === 'delivering') btn = AB('🎉 Доставлено клієнту!',      "changeStatus('done')", '#22C55E');
+    else if (o.status === 'ready')      btn = AB('🛵 Забрав замовлення',         "changeStatus('picked')");
+    else if (o.status === 'picked')     btn = AB('🚀 Виїхав до клієнта',         "changeStatus('delivering')");
+    else if (o.status === 'delivering') btn = AB('🎉 Доставлено клієнту!',       "changeStatus('done')", '#22C55E');
     else                                btn = DB(st.label);
   } else {
-    btn = o.status === 'done'
-      ? AB('🆕 Зробити нове замовлення', 'clearOrder()')
-      : `<div style="text-align:center;font-size:12px;color:var(--t2);padding:8px 0">Оновлення статусу кожні 2 сек…</div>`;
+    // клієнт — тільки перегляд
+    btn = `<div style="text-align:center;font-size:12px;color:var(--t2);padding:8px 0">Оновлення статусу кожні 2 сек…</div>`;
   }
 
   el.innerHTML = `<div style="padding:0 18px 24px">
+
+    <!-- Статус бейдж -->
     <div style="background:${st.color}22;border:1.5px solid ${st.color}66;border-radius:16px;padding:16px;margin-bottom:14px;display:flex;align-items:center;gap:12px">
       <div style="font-size:32px">${st.label.split(' ')[0]}</div>
       <div>
@@ -842,9 +967,11 @@ function renderOrders() {
         <div style="font-size:11px;color:var(--t2);margin-top:2px">Замовлення #${String(o.id).slice(-4)} · ${o.time}</div>
       </div>
     </div>
+
+    <!-- Склад -->
     <div style="background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:14px">
       <div style="font-family:'Geologica',sans-serif;font-size:11px;font-weight:800;color:var(--or);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px">Склад замовлення</div>
-      ${o.items.map(i=>`
+      ${o.items.map(i => `
         <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--bd);font-size:13px;font-weight:600">
           <div>${i.name} ×${i.qty}<div style="font-size:10px;color:var(--t2);margin-top:2px">${i.opts.join(', ')}</div></div>
           <div style="font-family:'Geologica',sans-serif;font-weight:900;color:var(--or);flex-shrink:0;margin-left:8px">${i.price} грн</div>
@@ -853,27 +980,62 @@ function renderOrders() {
         <span>Разом</span><span style="color:var(--or)">${o.total} грн</span>
       </div>
     </div>
+
+    <!-- Деталі -->
     <div style="background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:14px;font-size:13px;font-weight:600">
-      <div style="font-family:'Geologica',sans-serif;font-size:11px;font-weight:800;color:var(--or);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">Деталі</div>
+      <div style="font-family:'Geologica',sans-serif;font-size:11px;font-weight:800;color:var(--or);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">Деталі доставки</div>
       <div style="color:var(--t2);margin-bottom:5px">👤 Клієнт: <span style="color:var(--t1)">${o.client}</span></div>
       <div style="color:var(--t2)">📍 Адреса: <span style="color:var(--t1)">${o.address}</span></div>
     </div>
+
+    <!-- Прогрес -->
     <div style="background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:14px">
       <div style="font-family:'Geologica',sans-serif;font-size:11px;font-weight:800;color:var(--or);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px">Прогрес доставки</div>
-      ${steps.map((s,i)=>{
-        const done=i<ci, act=i===ci;
-        const col=act?STATUS[s].color:done?'#22C55E':'var(--t3)';
+      ${steps.map((s, i) => {
+        const done = i < ci, act = i === ci;
+        const col  = act ? STATUS[s].color : done ? '#22C55E' : 'var(--t3)';
         return `<div style="display:flex;align-items:center;gap:10px;padding:5px 0;opacity:${done||act?1:.35}">
           <div style="font-size:14px;color:${col};width:18px;text-align:center;font-weight:900">${act?'●':done?'✓':'○'}</div>
           <div style="font-size:12px;font-weight:700;color:${act?col:'var(--t2)'}">${STATUS[s].label.slice(STATUS[s].label.indexOf(' ')+1)}</div>
         </div>`;
       }).join('')}
     </div>
+
+    <!-- Кнопка дії -->
     ${btn}
+
+  </div>
+
+  <!-- Історія під активним замовленням -->
+  ${renderHistorySection(role)}`;
+}
+
+// ── РЕНДЕР ІСТОРІЇ ──
+function renderHistorySection(role) {
+  if (role === 'restaurant') return ''; // ресторан не бачить історію тут
+  const history = getHistory();
+  if (!history.length) return '';
+
+  const items = history.map(o => `
+    <div style="background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="font-family:'Geologica',sans-serif;font-size:12px;font-weight:800">Замовлення #${String(o.id).slice(-4)}</div>
+        <div style="font-size:10px;color:var(--t2)">${o.finishedAt || o.time}</div>
+      </div>
+      <div style="font-size:11px;color:var(--t2);margin-bottom:6px">${o.items.map(i=>i.name+' ×'+i.qty).join(', ')}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="background:var(--gl);color:var(--g);border-radius:6px;padding:2px 9px;font-size:10px;font-weight:800">🎉 Доставлено</div>
+        <div style="font-family:'Geologica',sans-serif;font-size:13px;font-weight:900;color:var(--or)">${o.total} грн</div>
+      </div>
+    </div>`).join('');
+
+  return `<div style="padding:0 18px 8px">
+    <div style="font-family:'Geologica',sans-serif;font-size:14px;font-weight:800;margin-bottom:12px;margin-top:4px">📋 Історія замовлень</div>
+    ${items}
   </div>`;
 }
 
-// Хелпери для кнопок
+// ── ХЕЛПЕРИ КНОПОК ──
 function AB(label, onclick, bg='var(--or)') {
   return `<button onclick="${onclick}" style="width:100%;padding:15px;background:${bg};border:none;border-radius:14px;color:#fff;font-family:'Geologica',sans-serif;font-size:14px;font-weight:900;cursor:pointer">${label}</button>`;
 }
