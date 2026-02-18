@@ -622,23 +622,36 @@ function logout() {
 /* ========================================
    БЛОК 4 — ОНБОРДИНГ
 ======================================== */
-document.getElementById('inpName').addEventListener('input', function() {
-  document.getElementById('onbBtn').disabled = !this.value.trim();
-});
-
-document.getElementById('onbBtn').addEventListener('click', function() {
-  user = {
-    name:    document.getElementById('inpName').value.trim(),
-    surname: document.getElementById('inpSurname').value.trim(),
-    phone:   document.getElementById('inpPhone').value.trim(),
-  };
-  localStorage.setItem('bringoUser', JSON.stringify(user));
-  const el = document.getElementById('onb');
-  el.style.transition = 'opacity .3s,transform .3s';
-  el.style.opacity    = '0';
-  el.style.transform  = 'translateY(20px)';
-  setTimeout(() => { el.remove(); applyRoleUI(); }, 320);
-  updateProfile();
+// Чекаємо завантаження DOM
+document.addEventListener('DOMContentLoaded', function() {
+  const inpName = document.getElementById('inpName');
+  const onbBtn = document.getElementById('onbBtn');
+  
+  if (inpName) {
+    inpName.addEventListener('input', function() {
+      onbBtn.disabled = !this.value.trim();
+    });
+  }
+  
+  if (onbBtn) {
+    onbBtn.addEventListener('click', function() {
+      user = {
+        name:    document.getElementById('inpName').value.trim(),
+        surname: document.getElementById('inpSurname').value.trim(),
+        phone:   document.getElementById('inpPhone').value.trim(),
+      };
+      localStorage.setItem('bringoUser', JSON.stringify(user));
+      const el = document.getElementById('onb');
+      el.style.transition = 'opacity .3s,transform .3s';
+      el.style.opacity    = '0';
+      el.style.transform  = 'translateY(20px)';
+      setTimeout(() => { 
+        el.remove(); 
+        updateProfile();
+        applyRoleUI(); 
+      }, 320);
+    });
+  }
 });
 
 /* ========================================
