@@ -9,7 +9,7 @@
     
     <style>
         :root {
-            --primary: linear-gradient(135deg, #FF0000 0%, #FF8C00 100%);
+            --primary: #FF4500;
             --red: #FF0000;
             --orange: #FF8C00;
             --bg-grad: linear-gradient(180deg, #050505 0%, #1a0202 50%, #201005 100%);
@@ -41,9 +41,15 @@
         }
 
         @keyframes pulseCart {
-            0% { box-shadow: 0 10px 20px rgba(255, 0, 0, 0.3); transform: scale(1); }
-            50% { box-shadow: 0 15px 35px rgba(255, 69, 0, 0.6); transform: scale(1.05); }
-            100% { box-shadow: 0 10px 20px rgba(255, 0, 0, 0.3); transform: scale(1); }
+            0% { box-shadow: 0 10px 20px rgba(255, 0, 0, 0.3); }
+            50% { box-shadow: 0 15px 35px rgba(255, 69, 0, 0.6); }
+            100% { box-shadow: 0 10px 20px rgba(255, 0, 0, 0.3); }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         @keyframes shimmer {
@@ -192,40 +198,492 @@
             justify-content: center;
             font-size: 26px;
             z-index: 1000;
-            animation: pulseCart 3s infinite;
+            animation: pulseCart 6s infinite;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        
+        #cart-fab:hover {
+            box-shadow: 0 20px 40px rgba(255, 69, 0, 0.7);
+        }
+        
+        #cart-fab:active {
+            transform: scale(0.95) translateY(0);
         }
 
-        /* --- НИЖНЯ ПАНЕЛЬ (Рідке скло) --- */
+        /* --- НИЖНЯ ПАНЕЛЬ (Рідке скло 2.0) --- */
         nav {
             position: fixed;
             bottom: 25px;
             left: 20px;
             right: 20px;
             height: 75px;
-            background: rgba(255, 255, 255, 0.07);
-            backdrop-filter: blur(25px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(20px) saturate(200%);
+            -webkit-backdrop-filter: blur(20px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 35px;
             display: flex;
             justify-content: space-around;
             align-items: center;
             z-index: 999;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        nav::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+            border-radius: 35px;
         }
 
         .nav-tab { text-decoration: none; color: rgba(255, 255, 255, 0.3); display: flex; flex-direction: column; align-items: center; gap: 4px; transition: 0.3s; width: 60px; }
         .nav-tab.active { color: #fff; transform: translateY(-5px); }
-        .nav-tab.active i { background: var(--primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.4)); }
+        .nav-tab.active i { color: var(--primary); filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.4)); }
         .nav-tab i { font-size: 24px; }
         .nav-tab span { font-size: 9px; font-weight: 800; text-transform: uppercase; }
         .nav-tab.active::after { content: ''; position: absolute; bottom: -10px; width: 5px; height: 5px; background: var(--orange); border-radius: 50%; box-shadow: 0 0 10px var(--orange); }
+
+        /* --- АВТОРИЗАЦИЯ --- */
+        .login-container {
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .login-header h1 {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: #aaa;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .login-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .login-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.5s ease both;
+        }
+
+        .login-card:nth-child(1) { animation-delay: 0.1s; }
+        .login-card:nth-child(2) { animation-delay: 0.2s; }
+        .login-card:nth-child(3) { animation-delay: 0.3s; }
+        .login-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 15px 35px rgba(255, 140, 0, 0.2);
+        }
+
+        .login-card:active {
+            transform: translateY(-2px);
+        }
+
+        .login-card i {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .login-card h3 {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .login-card p {
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 12px;
+        }
+
+        .login-hint {
+            background: rgba(255, 140, 0, 0.2);
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            border-radius: 12px;
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--orange);
+        }
+
+        /* --- КНОПКА УПРАВЛЕНИЯ МЕНЮ --- */
+        .menu-manage-btn {
+            position: fixed;
+            right: 30px;
+            top: 100px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 25px rgba(255, 0, 0, 0.3);
+        }
+
+        .menu-manage-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 35px rgba(255, 69, 0, 0.5);
+        }
+
+        .menu-manage-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* --- ПАНЕЛЬ УПРАВЛЕНИЯ МЕНЮ --- */
+        .menu-manager-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 400px;
+            max-height: 80vh;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 25px;
+            backdrop-filter: blur(20px);
+            z-index: 1002;
+            overflow-y: auto;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .menu-manager-panel h3 {
+            font-size: 20px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .panel-header h3 {
+            margin: 0;
+            text-align: left;
+        }
+
+        .close-panel-btn {
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-panel-btn:hover {
+            background: rgba(255, 0, 0, 0.3);
+            transform: scale(1.1);
+        }
+
+        .close-panel-btn:active {
+            transform: scale(0.95);
+        }
+
+        .menu-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .menu-form input,
+        .menu-form select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 12px 15px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .menu-form input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .menu-form input:focus,
+        .menu-form select:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--orange);
+        }
+
+        .menu-form button {
+            background: var(--primary);
+            border: none;
+            border-radius: 15px;
+            padding: 12px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .menu-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 69, 0, 0.4);
+        }
+
+        .menu-form button:active {
+            transform: translateY(0);
+        }
+
+        #menu-items-list {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 15px;
+        }
+
+        #menu-items-list h4 {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: var(--orange);
+        }
+
+        .menu-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+
+        .menu-item strong {
+            color: var(--orange);
+            font-weight: 700;
+        }
+
+        .menu-item small {
+            color: #aaa;
+            font-size: 12px;
+        }
+
+        /* --- СТРАНИЦА МЕНЮ РЕСТОРАНА --- */
+        .restaurant-header {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+            border-radius: 0 0 25px 25px;
+            margin-bottom: 20px;
+        }
+
+        .restaurant-header-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.7);
+        }
+
+        .restaurant-title {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            font-size: 24px;
+            font-weight: 900;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            z-index: 2;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 50px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 3;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .back-btn:active {
+            transform: scale(0.95);
+        }
+
+        .menu-items {
+            padding: 20px;
+        }
+
+        .menu-item-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            display: flex;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .menu-item-card:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .menu-item-img {
+            width: 100px;
+            height: 100px;
+            background-size: cover;
+            background-position: center;
+            flex-shrink: 0;
+        }
+
+        .menu-item-info {
+            padding: 15px;
+            flex: 1;
+        }
+
+        .menu-item-info h3 {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        .menu-item-info p {
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .menu-item-price {
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--orange);
+        }
+
+        .empty-menu {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-menu i {
+            font-size: 60px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
 
     </style>
 </head>
 <body>
 
+    <!-- АВТОРИЗАЦИЯ -->
+    <div id="login" class="page active">
+        <div class="login-container">
+            <div class="login-header">
+                <h1>Fire Fusion</h1>
+                <p>Оберіть тип акаунта</p>
+            </div>
+            
+            <div class="login-options">
+                <div class="login-card" onclick="login('client')">
+                    <i class="fa-solid fa-user"></i>
+                    <h3>Клієнт</h3>
+                    <p>Замовляти їжу</p>
+                    <div class="login-hint">Логін: 1</div>
+                </div>
+                
+                <div class="login-card" onclick="login('courier')">
+                    <i class="fa-solid fa-motorcycle"></i>
+                    <h3>Кур'єр</h3>
+                    <p>Доставляти замовлення</p>
+                    <div class="login-hint">Логін: 2</div>
+                </div>
+                
+                <div class="login-card" onclick="login('restaurant')">
+                    <i class="fa-solid fa-store"></i>
+                    <h3>Ресторан</h3>
+                    <p>Керувати меню</p>
+                    <div class="login-hint">Логін: 3</div>
+                </div>
+                
+                <div class="login-card" onclick="login('admin')">
+                    <i class="fa-solid fa-crown"></i>
+                    <h3>Адмін</h3>
+                    <p>Повний доступ</p>
+                    <div class="login-hint">Логін: 4</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ГОЛОВНА -->
-    <div id="main" class="page active">
+    <div id="main" class="page">
         <header>
             <div class="location"><i class="fa-solid fa-location-dot"></i> Білгород-Дністровський</div>
             <div class="search-box">
@@ -251,10 +709,24 @@
         <div class="dev-block">У розробці</div>
     </div>
 
-    <!-- КАФЕ -->
+    <!-- РЕСТОРАНИ -->
     <div id="cafes" class="page">
         <header><h1 class="section-title" style="padding:0">Усі заклади</h1></header>
         <div class="v-list" id="v-list-container"></div>
+    </div>
+
+    <!-- МЕНЮ РЕСТОРАНА -->
+    <div id="restaurant-menu" class="page">
+        <div class="restaurant-header">
+            <button class="back-btn" onclick="showPage('cafes')">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div class="restaurant-header-img" id="restaurant-header-img"></div>
+            <div class="restaurant-title" id="restaurant-name">Назва ресторана</div>
+        </div>
+        <div class="menu-items" id="restaurant-menu-items">
+            <!-- Товары будут загружаться динамически -->
+        </div>
     </div>
 
     <!-- ЗАМОВЛЕННЯ -->
@@ -292,7 +764,7 @@
         </a>
         <a href="javascript:void(0)" class="nav-tab" onclick="showPage('cafes', this)">
             <i class="fa-solid fa-utensils"></i>
-            <span>Кафе</span>
+            <span>Ресторани</span>
         </a>
         <a href="javascript:void(0)" class="nav-tab" onclick="showPage('orders', this)">
             <i class="fa-solid fa-clipboard-list"></i>
@@ -305,6 +777,272 @@
     </nav>
 
     <script>
+        // Глобальные переменные
+        let currentUser = null;
+        // Глобальное меню для всех ресторанов (сохраняется между сессиями)
+        let restaurantMenus = JSON.parse(localStorage.getItem('restaurantMenus')) || {}; 
+        let currentRestaurant = null;
+
+        // Функция авторизации
+        function login(userType) {
+            const loginInput = prompt('Введіть логін:');
+            
+            // Проверка логинов
+            if ((userType === 'client' && loginInput === '1') ||
+                (userType === 'courier' && loginInput === '2') ||
+                (userType === 'restaurant' && loginInput === '3') ||
+                (userType === 'admin' && loginInput === '4')) {
+                
+                currentUser = {
+                    type: userType,
+                    login: loginInput
+                };
+                
+                // Скрыть экран авторизации
+                document.getElementById('login').classList.remove('active');
+                
+                // Показать основной интерфейс
+                document.getElementById('main').classList.add('active');
+                
+                // Настроить интерфейс под тип пользователя
+                setupUserInterface(userType);
+                
+            } else {
+                alert('Невірний логін!');
+            }
+        }
+
+        // Настройка интерфейса под тип пользователя
+        function setupUserInterface(userType) {
+            if (userType === 'restaurant' || userType === 'admin') {
+                // Добавить кнопку + только для ресторана и админа
+                // Кнопка будет добавляться при входе в страницу ресторанов
+            }
+            
+            if (userType === 'courier') {
+                // Настройка интерфейса для курьера
+                setupCourierInterface();
+            }
+            
+            // Добавить кнопку выхода
+            addLogoutButton();
+        }
+
+        // Показать меню ресторана
+        function showRestaurantMenu(restaurantId, restaurantName) {
+            currentRestaurant = restaurantId;
+            
+            // Найти ресторан по ID для получения изображения
+            const restaurant = restaurants.find(r => r.id === restaurantId);
+            
+            // Скрыть все страницы
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            
+            // Показать страницу меню
+            document.getElementById('restaurant-menu').classList.add('active');
+            
+            // Установить название и изображение ресторана
+            document.getElementById('restaurant-name').textContent = restaurantName;
+            if (restaurant) {
+                document.getElementById('restaurant-header-img').style.backgroundImage = `url('${restaurant.image}')`;
+            }
+            
+            // Загрузить меню ресторана
+            loadRestaurantMenu(restaurantId);
+            
+            // Добавить кнопку управления меню если это ресторан или админ
+            if (currentUser && (currentUser.type === 'restaurant' || currentUser.type === 'admin')) {
+                addRestaurantMenuButton();
+            }
+        }
+
+        // Загрузить меню ресторана
+        function loadRestaurantMenu(restaurantId) {
+            const menuContainer = document.getElementById('restaurant-menu-items');
+            const menu = restaurantMenus[restaurantId] || [];
+            
+            if (menu.length === 0) {
+                menuContainer.innerHTML = `
+                    <div class="empty-menu">
+                        <i class="fa-solid fa-utensils"></i>
+                        <h3>Меню порожнє</h3>
+                        <p>Ресторан ще не додав страви</p>
+                    </div>
+                `;
+            } else {
+                menuContainer.innerHTML = menu.map(item => `
+                    <div class="menu-item-card">
+                        <div class="menu-item-img" style="background-image: url('${item.image || 'https://via.placeholder.com/100x100'}')"></div>
+                        <div class="menu-item-info">
+                            <h3>${item.name}</h3>
+                            <p>${item.description}</p>
+                            <div class="menu-item-price">${item.price} грн</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Добавить кнопку управления меню ресторана
+        function addRestaurantMenuButton() {
+            // Удалить существующую кнопку если есть
+            const existingBtn = document.querySelector('.menu-manage-btn');
+            if (existingBtn) existingBtn.remove();
+            
+            // Добавить новую кнопку
+            const menuButton = document.createElement('div');
+            menuButton.className = 'menu-manage-btn';
+            menuButton.innerHTML = '<i class="fa-solid fa-plus"></i>';
+            menuButton.onclick = toggleMenuManager;
+            document.body.appendChild(menuButton);
+        }
+
+        // Переключение панели управления меню
+        function toggleMenuManager() {
+            const panel = document.getElementById('menu-manager');
+            const menuBtn = document.querySelector('.menu-manage-btn');
+            
+            if (panel) {
+                if (panel.style.display === 'none') {
+                    panel.style.display = 'block';
+                    menuBtn.style.display = 'none';
+                } else {
+                    panel.style.display = 'none';
+                    menuBtn.style.display = 'flex';
+                }
+            } else {
+                createMenuManager();
+                // Скрыть кнопку + при открытии панели
+                if (menuBtn) {
+                    menuBtn.style.display = 'none';
+                }
+            }
+        }
+
+        // Создать панель управления меню
+        function createMenuManager() {
+            const panel = document.createElement('div');
+            panel.id = 'menu-manager';
+            panel.className = 'menu-manager-panel';
+            panel.innerHTML = `
+                <div class="panel-header">
+                    <h3>Керування меню</h3>
+                    <button class="close-panel-btn" onclick="toggleMenuManager()">
+                        <i class="fa-solid fa-times"></i>
+                    </button>
+                </div>
+                <div class="menu-form">
+                    <input type="text" id="item-name" placeholder="Назва страви">
+                    <input type="text" id="item-description" placeholder="Опис">
+                    <input type="text" id="item-category" placeholder="Категорія">
+                    <input type="text" id="item-image" placeholder="URL зображення">
+                    <input type="number" id="item-price" placeholder="Ціна (грн)">
+                    <button onclick="addMenuItem()">Додати страву</button>
+                </div>
+                <div id="menu-items-list"></div>
+            `;
+            document.body.appendChild(panel);
+        }
+
+        // Добавить товар в меню
+        function addMenuItem() {
+            const name = document.getElementById('item-name').value;
+            const description = document.getElementById('item-description').value;
+            const category = document.getElementById('item-category').value;
+            const image = document.getElementById('item-image').value;
+            const price = document.getElementById('item-price').value;
+            
+            if (name && description && price) {
+                const menuItem = {
+                    id: Date.now(),
+                    name,
+                    description,
+                    category: category || 'Без категорії',
+                    image: image || 'https://via.placeholder.com/100x100',
+                    price: parseFloat(price)
+                };
+                
+                // Инициализировать меню для ресторана если нет
+                if (!restaurantMenus[currentRestaurant]) {
+                    restaurantMenus[currentRestaurant] = [];
+                }
+                
+                restaurantMenus[currentRestaurant].push(menuItem);
+                
+                // Сохранить в localStorage
+                localStorage.setItem('restaurantMenus', JSON.stringify(restaurantMenus));
+                
+                updateMenuDisplay();
+                loadRestaurantMenu(currentRestaurant);
+                
+                // Очистить форму
+                document.getElementById('item-name').value = '';
+                document.getElementById('item-description').value = '';
+                document.getElementById('item-category').value = '';
+                document.getElementById('item-image').value = '';
+                document.getElementById('item-price').value = '';
+                
+                alert('Страву додано!');
+            } else {
+                alert('Заповніть усі поля!');
+            }
+        }
+
+        // Обновить отображение меню в панели управления
+        function updateMenuDisplay() {
+            const list = document.getElementById('menu-items-list');
+            if (list && currentRestaurant) {
+                const menu = restaurantMenus[currentRestaurant] || [];
+                list.innerHTML = '<h4>Поточне меню:</h4>' + 
+                    menu.map(item => `
+                        <div class="menu-item">
+                            <strong>${item.name}</strong> - ${item.price}грн
+                            <br><small>${item.description}</small>
+                        </div>
+                    `).join('');
+            }
+        }
+
+        // Добавить кнопку выхода
+        function addLogoutButton() {
+            const profileSection = document.querySelector('.profile-box');
+            if (profileSection) {
+                const logoutBtn = document.createElement('div');
+                logoutBtn.className = 'menu-link';
+                logoutBtn.innerHTML = '<span>Вихід</span> <i class="fa-solid fa-sign-out-alt" style="color: var(--red)"></i>';
+                logoutBtn.onclick = logout;
+                profileSection.appendChild(logoutBtn);
+            }
+        }
+
+        // Функция выхода
+        function logout() {
+            currentUser = null;
+            restaurantMenus = {};
+            currentRestaurant = null;
+            
+            // Скрыть все страницы
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            
+            // Показать экран авторизации
+            document.getElementById('login').classList.add('active');
+            
+            // Удалить дополнительные элементы
+            const menuBtn = document.querySelector('.menu-manage-btn');
+            const menuPanel = document.getElementById('menu-manager');
+            const logoutBtn = document.querySelector('.menu-link:last-child');
+            
+            if (menuBtn) menuBtn.remove();
+            if (menuPanel) menuPanel.remove();
+            if (logoutBtn) logoutBtn.remove();
+        }
+
+        // Настройка интерфейса для курьера
+        function setupCourierInterface() {
+            // Здесь можно добавить специфичный функционал для курьера
+            console.log('Courier interface setup');
+        }
+
         const restaurants = [
             { id: 1, name: 'Кафе Маестро', image: 'https://lh3.googleusercontent.com/gps-cs-s/AHVAwer7zoR2kbht6bkSZJLZctjnDdWupbkRKmODGHyz9xSRMEuxJa53xCRP3AmivXaspetZclRfkwyIRgzg4jncA-kGRXmtnKVyk1OYN4x4ydSJjt43c13hR1xQwc6XraNHJe_v7KAV=w408-h306-k-no', rating: 4.8, cuisine: 'Піца, Суші, Мангал' },
             { id: 2, name: 'СВОБОДА', image: 'https://lh3.googleusercontent.com/p/AF1QipPsLzVNvrFrEtqQtTJv1OrBp0nDjO7djl6A46EO=s680-w680-h510-rw', rating: 4.5, cuisine: 'Європейська, Українська' },
@@ -317,11 +1055,17 @@
         ];
 
         function init() {
+            // Загрузить меню из localStorage при инициализации
+            const savedMenus = localStorage.getItem('restaurantMenus');
+            if (savedMenus) {
+                restaurantMenus = JSON.parse(savedMenus);
+            }
+            
             const hContainer = document.getElementById('h-scroll-container');
             const vContainer = document.getElementById('v-list-container');
             
             restaurants.forEach((res, index) => {
-                // Плавна затримка появи для кожної картки
+                // Плавная задержка появления для каждой карточки
                 const delay = index * 0.1;
 
                 hContainer.innerHTML += `
@@ -331,7 +1075,7 @@
                     </div>
                 `;
                 vContainer.innerHTML += `
-                    <div class="res-card-v" style="animation: fadeInUp 0.5s ease ${delay}s both">
+                    <div class="res-card-v" style="animation: fadeInUp 0.5s ease ${delay}s both" onclick="showRestaurantMenu(${res.id}, '${res.name}')">
                         <div class="res-img-v" style="background-image: url('${res.image}')"></div>
                         <div class="res-info-v"><h3>${res.name}</h3><p style="font-size:11px; color:#666">${res.cuisine}</p></div>
                     </div>
@@ -344,6 +1088,21 @@
             document.getElementById(id).classList.add('active');
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
             el.classList.add('active');
+            
+            // Скрыть кнопку управления меню при выходе из страницы ресторана
+            const menuBtn = document.querySelector('.menu-manage-btn');
+            const menuPanel = document.getElementById('menu-manager');
+            if (menuBtn && id !== 'restaurant-menu') {
+                menuBtn.remove();
+            }
+            if (menuPanel && id !== 'restaurant-menu') {
+                menuPanel.remove();
+            }
+            
+            // Показать кнопку управления если на странице меню и есть права
+            if (id === 'restaurant-menu' && currentUser && (currentUser.type === 'restaurant' || currentUser.type === 'admin')) {
+                addRestaurantMenuButton();
+            }
             
             const cart = document.getElementById('cart-fab');
             if(id === 'profile' || id === 'orders') {
