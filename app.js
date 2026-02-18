@@ -509,6 +509,7 @@ function showToast(msg) {
 /* ════════════════════════════════
    ІНІЦІАЛІЗАЦІЯ
 ════════════════════════════════ */
+// Фільтри ресторанів
 document.querySelectorAll('.fi').forEach(f => {
   f.addEventListener('click', () => {
     document.querySelectorAll('.fi').forEach(x => x.classList.remove('on'));
@@ -516,6 +517,11 @@ document.querySelectorAll('.fi').forEach(f => {
   });
 });
 
+// Онбординг — обробники без inline атрибутів в HTML
+document.getElementById('inpName').addEventListener('input', checkOnb);
+document.getElementById('onbBtn').addEventListener('click', finishOnb);
+
+// Старт
 if (user) {
   document.getElementById('onb').style.display = 'none';
   updateProfile();
