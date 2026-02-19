@@ -623,7 +623,7 @@ async function placeOrder(){
     address:addr,
     client:user?[user.name,user.surname].filter(Boolean).join(' '):'Гість',
     clientPhone:user?.phone||'',
-    clientTgId:user?.tgId||null,
+    clientTgId:tgId()||user?.tgId||null,
     time:new Date().toLocaleTimeString('uk-UA',{hour:'2-digit',minute:'2-digit'}),
     placed:Date.now(),
     courierName:null,courierTgId:null,courierAccepted:false,
@@ -654,8 +654,8 @@ async function changeStatus(s){
 async function courierAccept(){
   const o=await fbGetOrder(); const sh=getShift();
   if(!sh.on){showToast('⚫ Спочатку вийдіть на зміну');return;}
-  o.courierName=user?[user.name,user.surname].filter(Boolean).join(' '):'Курʼєр #1';
-  o.courierTgId=user?.tgId||null;
+  o.courierName=user&&user.name!=='1'?[user.name,user.surname].filter(Boolean).join(' '):(tgUser()?.first_name||'Курʼєр');
+  o.courierTgId=tgId()||user?.tgId||null;
   o.courierAccepted=true;
   await fbSaveOrder(o);
   showToast('✅ Прийнято! Їдьте до ресторану');
