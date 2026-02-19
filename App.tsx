@@ -30,9 +30,6 @@ const ScrollToTop = () => {
 const AppContent: React.FC<{ 
   user: User | null, 
   setUser: any, 
-  loginCode: string, 
-  setLoginCode: any, 
-  handleLogin: any,
   cart: any[],
   setCart: any,
   allOrders: Order[],
@@ -45,7 +42,7 @@ const AppContent: React.FC<{
   setHeroSlideIndex: any
 }> = (props) => {
   const { 
-    user, setUser, loginCode, setLoginCode, handleLogin, 
+    user, setUser,
     cart, setCart, allOrders, showToast, 
     globalMenu, setGlobalMenu, restaurants, setRestaurants,
     heroSlideIndex, setHeroSlideIndex 
@@ -54,56 +51,8 @@ const AppContent: React.FC<{
   const location = useLocation();
   const isDetailPage = location.pathname.includes('/manage-') || location.pathname.includes('/item/');
 
-  if (!user) {
-    return (
-      <div className="h-screen bg-brand-bg flex flex-col font-nunito relative overflow-hidden">
-        <div className="absolute top-[-20%] left-[-20%] w-[140%] h-[60%] bg-[radial-gradient(ellipse_at_center,_rgba(255,92,0,0.15)_0%,_rgba(5,5,8,0)_60%)] pointer-events-none"></div>
-        
-        <div className="flex-1 flex flex-col items-center justify-center p-8 z-10">
-            <div className="mb-12 animate-float">
-                <div className="w-24 h-24 bg-gradient-to-tr from-brand-red to-brand-orange rounded-[32px] flex items-center justify-center text-5xl shadow-[0_15px_30px_rgba(255,92,0,0.25)]">
-                  🛵
-                </div>
-            </div>
-            
-            <h1 className="font-geologica text-4xl font-black text-white tracking-tighter mb-3 text-center">BRINGO</h1>
-            <p className="text-t2 text-xs font-bold tracking-[0.2em] uppercase opacity-50 text-center mb-16">Delivery App</p>
-
-            <form onSubmit={handleLogin} className="w-full max-w-xs space-y-8">
-                <div className="relative group">
-                    <input 
-                        type="password" 
-                        inputMode="numeric"
-                        value={loginCode}
-                        onChange={(e) => setLoginCode(e.target.value)}
-                        className="w-full bg-transparent border-b-2 border-white/10 py-4 text-center text-5xl font-geologica font-black tracking-[0.5em] outline-none focus:border-brand-orange transition-all text-white placeholder-white/5"
-                        placeholder="••••"
-                        maxLength={4}
-                    />
-                    <div className="absolute left-0 right-0 -bottom-6 text-center text-[9px] font-bold text-t3 uppercase tracking-widest opacity-0 group-focus-within:opacity-100 transition-opacity">
-                        Access Code
-                    </div>
-                </div>
-            </form>
-        </div>
-
-        <div className="p-8 z-10 bg-gradient-to-t from-brand-bg via-brand-bg to-transparent">
-             <button 
-                onClick={handleLogin}
-                className="w-full py-6 btn-gradient rounded-[24px] text-white font-geologica font-black text-sm uppercase tracking-[3px] active-scale transition-transform shadow-[0_10px_30px_rgba(255,92,0,0.25)]"
-             >
-                Увійти
-             </button>
-
-             <div className="mt-8 flex justify-center gap-4 opacity-30">
-                <span className="text-[9px] font-bold uppercase tracking-widest">Client: 1</span>
-                <span className="text-[9px] font-bold uppercase tracking-widest">Courier: 2</span>
-                <span className="text-[9px] font-bold uppercase tracking-widest">Admin: 4</span>
-             </div>
-        </div>
-      </div>
-    );
-  }
+  // If we reach here, user is guaranteed to be loaded (handled in App component)
+  if (!user) return null;
 
   return (
     <div className="min-h-screen bg-brand-bg flex flex-col max-w-[430px] mx-auto relative font-nunito text-t1 shadow-2xl">
@@ -130,10 +79,8 @@ const AppContent: React.FC<{
 };
 
 const App: React.FC = () => {
-  const [user, setUser] = useState<User | null>(() => {
-    const saved = localStorage.getItem('bringo_user');
-    return saved ? JSON.parse(saved) : null;
-  });
+  const [user, setUser] = useState<User | null>(null);
+  const [authStatus, setAuthStatus] = useState<'loading' | 'unregistered' | 'not_telegram' | 'authenticated'>('loading');
 
   // REALTIME FIREBASE STATES
   const [restaurants, setRestaurantsLocal] = useState<Restaurant[]>(INITIAL_RESTAURANTS);
@@ -145,8 +92,6 @@ const App: React.FC = () => {
   });
   
   const [heroSlideIndex, setHeroSlideIndex] = useState(0);
-  const [loginCode, setLoginCode] = useState('');
-  const [showSplash, setShowSplash] = useState(true);
   const [toast, setToast] = useState<string | null>(null);
 
   const showToast = useCallback((msg: string) => {
@@ -156,34 +101,48 @@ const App: React.FC = () => {
 
   // TELEGRAM WEB APP & FIREBASE SYNC
   useEffect(() => {
-    // 1. Setup Telegram Web App Auto-Login
-    const twa = (window as any).Telegram?.WebApp;
-    if (twa) {
-      twa.ready();
-      twa.expand();
-      if (twa.initDataUnsafe?.user) {
-         const tgId = twa.initDataUnsafe.user.id.toString();
-         get(ref(db, `users/${tgId}`)).then(snap => {
-            if (snap.exists()) {
-                const fetchedUser = snap.val();
-                setUser(fetchedUser);
-                localStorage.setItem('bringo_user', JSON.stringify(fetchedUser));
-                showToast(`Вітаємо, ${fetchedUser.name}!`);
-            }
-         });
-      }
-    }
+    const initAuth = async () => {
+      const twa = (window as any).Telegram?.WebApp;
+      let tgId = null;
 
-    // 2. Sync Global Data from Firebase
+      // Check if opened inside Telegram
+      if (twa && twa.initDataUnsafe?.user) {
+         twa.ready();
+         twa.expand();
+         tgId = twa.initDataUnsafe.user.id.toString();
+      } else {
+         // Fallback for local testing on PC browser (e.g. ?tgId=admin_1)
+         const urlParams = new URLSearchParams(window.location.search);
+         tgId = urlParams.get('tgId');
+      }
+
+      if (!tgId) {
+         setAuthStatus('not_telegram');
+         return;
+      }
+
+      // Check user in Firebase
+      const snap = await get(ref(db, `users/${tgId}`));
+      if (snap.exists()) {
+          const fetchedUser = snap.val();
+          setUser(fetchedUser);
+          setAuthStatus('authenticated');
+      } else {
+          setAuthStatus('unregistered');
+      }
+    };
+
+    initAuth();
+
+    // Sync Global Data from Firebase
     onValue(ref(db, 'restaurants'), snap => {
         if (snap.exists()) setRestaurantsLocal(snap.val());
-        else set(ref(db, 'restaurants'), INITIAL_RESTAURANTS); // Seed DB if empty
+        else set(ref(db, 'restaurants'), INITIAL_RESTAURANTS);
     });
 
     onValue(ref(db, 'globalMenu'), snap => {
         if (snap.exists()) setGlobalMenuLocal(snap.val());
         else {
-            // Seed DB if empty
             const initialMenu: Record<string, MenuCategory[]> = {};
             INITIAL_RESTAURANTS.forEach(r => { initialMenu[r.id] = JSON.parse(JSON.stringify(INITIAL_MENU)); });
             set(ref(db, 'globalMenu'), initialMenu);
@@ -198,12 +157,9 @@ const App: React.FC = () => {
             setAllOrders([]);
         }
     });
-
-    setTimeout(() => setShowSplash(false), 1200);
   }, []);
 
   useEffect(() => { localStorage.setItem('bringo_cart', JSON.stringify(cart)); }, [cart]);
-  useEffect(() => { if (user) { localStorage.setItem('bringo_user', JSON.stringify(user)); } }, [user]);
 
   // WRAPPERS TO PUSH CHANGES TO FIREBASE
   const setRestaurantsFirebase = (newRests: any) => {
@@ -216,30 +172,8 @@ const App: React.FC = () => {
       set(ref(db, 'globalMenu'), updated);
   };
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    let newUser: User | null = null;
-    
-    if (loginCode === '1') newUser = { id: 'client_1', name: 'Олександр', role: 'client' };
-    else if (loginCode === '2') newUser = { id: 'courier_1', name: 'Сервіс Доставки', role: 'courier', isOnline: false };
-    else if (loginCode === '4') newUser = { id: 'admin_1', name: 'Адміністратор', role: 'admin' };
-    else if (loginCode.startsWith('3') && loginCode.length === 3) {
-        const idx = parseInt(loginCode) - 301;
-        if (restaurants[idx]) {
-            newUser = { id: `rest_${restaurants[idx].id}`, name: `Менеджер ${restaurants[idx].n}`, role: 'restaurant', ownedRestaurantId: restaurants[idx].id };
-        }
-    }
-    
-    if (newUser) {
-      setUser(newUser);
-      localStorage.setItem('bringo_user', JSON.stringify(newUser));
-      showToast(`Ласкаво просимо, ${newUser.name}`);
-    } else {
-      showToast('❌ Невірний код');
-    }
-  };
-
-  if (showSplash) {
+  // ---------------- RENDER AUTH STATES ----------------
+  if (authStatus === 'loading') {
     return (
       <div className="fixed inset-0 bg-brand-bg z-[999] flex flex-col items-center justify-center">
         <div className="relative">
@@ -254,12 +188,38 @@ const App: React.FC = () => {
     );
   }
 
+  if (authStatus === 'not_telegram') {
+    return (
+      <div className="h-screen bg-brand-bg flex flex-col items-center justify-center p-8 text-center">
+        <div className="text-6xl mb-6">📱</div>
+        <h1 className="font-geologica text-2xl font-black text-white mb-4">Відкрийте через Telegram</h1>
+        <p className="text-sm text-t2">Цей додаток працює лише всередині Telegram. Будь ласка, перейдіть до нашого бота.</p>
+      </div>
+    );
+  }
+
+  if (authStatus === 'unregistered') {
+    return (
+      <div className="h-screen bg-brand-bg flex flex-col items-center justify-center p-8 text-center relative overflow-hidden">
+        <div className="absolute top-[-20%] left-[-20%] w-[140%] h-[60%] bg-[radial-gradient(ellipse_at_center,_rgba(255,92,0,0.15)_0%,_rgba(5,5,8,0)_60%)] pointer-events-none"></div>
+        <div className="text-6xl mb-6 animate-float z-10">🔒</div>
+        <h1 className="font-geologica text-3xl font-black text-white mb-4 z-10 tracking-tight">Потрібна реєстрація</h1>
+        <p className="text-sm text-t2 mb-8 z-10 leading-relaxed">Ви не зареєстровані в системі.<br/>Закрийте це вікно та пройдіть реєстрацію в чаті з ботом.</p>
+        <button 
+          onClick={() => (window as any).Telegram?.WebApp?.close()}
+          className="bg-brand-orange text-white px-8 py-4 rounded-2xl font-geologica font-black text-sm uppercase active-scale shadow-xl shadow-brand-orange/20 z-10"
+        >
+          Закрити додаток
+        </button>
+      </div>
+    );
+  }
+
+  // ---------------- AUTHENTICATED STATE ----------------
   return (
     <HashRouter>
       <AppContent 
         user={user} setUser={setUser} 
-        loginCode={loginCode} setLoginCode={setLoginCode} 
-        handleLogin={handleLogin}
         cart={cart} setCart={setCart}
         allOrders={allOrders}
         showToast={showToast}
