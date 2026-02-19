@@ -9,6 +9,7 @@ export interface User {
   surname?: string;
   ownedRestaurantId?: string;
   isOnline?: boolean;
+  originalRole?: Role;
 }
 
 export interface Restaurant {
