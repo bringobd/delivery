@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { User, Order, MenuCategory, Restaurant } from './types';
 import Home from './pages/Home';
-import Rests from './pages/Rests';
+import Rests from './pages/Rests'; 
 import RestPage from './pages/RestPage';
 import Cart from './pages/Cart';
 import Orders from './pages/Orders';
