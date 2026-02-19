@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { User } from '../types';
 
 interface ProfileProps {
@@ -7,7 +8,8 @@ interface ProfileProps {
   setUser: (u: User | null) => void;
 }
 
-const Profile: React.FC<ProfileProps> = ({ user }) => {
+const Profile: React.FC<ProfileProps> = ({ user, setUser }) => {
+  const navigate = useNavigate();
   const [showHistory, setShowHistory] = useState(false);
 
   const handleCloseApp = () => {
@@ -17,6 +19,12 @@ const Profile: React.FC<ProfileProps> = ({ user }) => {
     }
   };
 
+  const handleRestoreAdmin = () => {
+    if (!user) return;
+    setUser({ ...user, role: 'admin', originalRole: undefined, ownedRestaurantId: undefined });
+    navigate('/admin-settings');
+  };
+
   const history = [
     { id: 1024, date: '12.02.2024', total: 450, place: 'СВОБОДА', status: 'done' },
     { id: 1023, date: '10.02.2024', total: 320, place: 'Food House', status: 'done' },
@@ -24,7 +32,7 @@ const Profile: React.FC<ProfileProps> = ({ user }) => {
   ];
 
   return (
-    <div className="p-6 animate-reveal">
+    <div className="p-6 animate-reveal pb-32">
       <h1 className="font-geologica text-2xl font-black mb-6 pt-4">Профіль</h1>
       
       <div className="bg-s2 border border-white/5 rounded-[32px] p-6 flex items-center gap-6 mb-8 shadow-lg transform-gpu">
@@ -39,6 +47,18 @@ const Profile: React.FC<ProfileProps> = ({ user }) => {
           </div>
         </div>
       </div>
+
+      {user.originalRole === 'admin' && (
+        <div className="mb-8 animate-reveal">
+          <button
+            onClick={handleRestoreAdmin}
+            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 py-4 rounded-[24px] text-white font-geologica font-black text-xs tracking-widest uppercase active-scale shadow-lg shadow-purple-500/20 flex items-center justify-center gap-3 border border-white/10"
+          >
+            <span className="text-lg">👑</span>
+            Повернутись в Адмін-панель
+          </button>
+        </div>
+      )}
 
       <div className="bg-s2 border border-white/5 rounded-[32px] overflow-hidden shadow-lg mb-8 transform-gpu">
         <button 
@@ -86,7 +106,7 @@ const Profile: React.FC<ProfileProps> = ({ user }) => {
       
       <div className="mt-12 text-center pb-8">
          <div className="text-[10px] text-t3 font-bold uppercase tracking-[4px] opacity-30 mb-1">Bringo Delivery</div>
-         <div className="text-[8px] text-t3 opacity-20">Version 3.0 (TG Auth)</div>
+         <div className="text-[8px] text-t3 opacity-20">Version 3.1 (TG Auth & Admin Mod)</div>
       </div>
     </div>
   );
