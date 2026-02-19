@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Restaurant, MenuCategory, MenuItem } from '../types';
+import { User, Restaurant, MenuCategory, MenuItem, Role } from '../types';
+import { db, ref, get, set } from '../firebase';
 
 const ImageWithFallback: React.FC<{ src: string; alt: string; className?: string }> = ({ src, alt, className }) => {
   const [error, setError] = useState(false);
@@ -27,8 +28,46 @@ const AdminSettings: React.FC<AdminSettingsProps> = ({
   user, restaurants, setRestaurants, globalMenu, setGlobalMenu, showToast 
 }) => {
   const navigate = useNavigate();
-  const [expandedSection, setExpandedSection] = useState<'rests' | 'menus' | null>(null);
+  const [expandedSection, setExpandedSection] = useState<'rests' | 'menus' | 'roles' | null>(null);
   const [selectedRestId, setSelectedRestId] = useState<string | null>(null);
+
+  // Role Management State
+  const [roleTgId, setRoleTgId] = useState('');
+  const [selectedRole, setSelectedRole] = useState('client');
+  const [isAssigning, setIsAssigning] = useState(false);
+
+  const handleAssignRole = async () => {
+    if (!roleTgId.trim()) return showToast('❌ Введіть Telegram ID');
+    setIsAssigning(true);
+
+    try {
+        const snap = await get(ref(db, `users/${roleTgId.trim()}`));
+        if (!snap.exists()) {
+            setIsAssigning(false);
+            return showToast('❌ Користувача не знайдено!');
+        }
+
+        const targetUser = snap.val();
+
+        // Check if role is for a specific restaurant (format: restaurant:ID)
+        if (selectedRole.startsWith('restaurant:')) {
+            targetUser.role = 'restaurant';
+            targetUser.ownedRestaurantId = selectedRole.split(':')[1];
+        } else {
+            targetUser.role = selectedRole as Role;
+            targetUser.ownedRestaurantId = null;
+        }
+
+        await set(ref(db, `users/${roleTgId.trim()}`), targetUser);
+        showToast(`✅ Роль успішно оновлено для ${targetUser.name}!`);
+        setRoleTgId('');
+        
+    } catch (err) {
+        console.error(err);
+        showToast('❌ Помилка при оновленні ролі');
+    }
+    setIsAssigning(false);
+  };
 
   return (
     <div className="p-6 animate-reveal pb-32">
@@ -41,6 +80,61 @@ const AdminSettings: React.FC<AdminSettingsProps> = ({
         </header>
 
         <div className="space-y-4">
+
+            {/* Role Management Section */}
+            <div className="glass rounded-[28px] overflow-hidden border-white/5">
+                <button onClick={() => setExpandedSection(expandedSection === 'roles' ? null : 'roles')} className="w-full p-6 flex items-center justify-between active:bg-white/5 transition-colors">
+                    <div className="flex items-center gap-4"><div className="text-xl">🛡️</div><span className="font-bold text-sm">Керування ролями</span></div>
+                    <span className={`text-t3 transition-transform duration-300 ${expandedSection === 'roles' ? 'rotate-90' : ''}`}>›</span>
+                </button>
+                
+                <div className={`grid transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${expandedSection === 'roles' ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                    <div className="overflow-hidden min-h-0">
+                        <div className="px-4 pb-6 pt-2 space-y-4">
+                            <div>
+                                <label className="text-[9px] font-black uppercase tracking-[2px] text-t3 mb-2 block opacity-60">Telegram ID Користувача</label>
+                                <input 
+                                    type="text" 
+                                    value={roleTgId}
+                                    onChange={(e) => setRoleTgId(e.target.value)}
+                                    placeholder="Наприклад: 123456789"
+                                    className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 text-sm font-bold text-white outline-none focus:border-brand-orange"
+                                />
+                                <p className="text-[9px] text-t3 mt-2">Користувач може знайти свій ID у профілі Telegram або через спеціальних ботів (наприклад, @userinfobot).</p>
+                            </div>
+
+                            <div>
+                                <label className="text-[9px] font-black uppercase tracking-[2px] text-t3 mb-2 block opacity-60">Виберіть роль</label>
+                                <select 
+                                    value={selectedRole}
+                                    onChange={(e) => setSelectedRole(e.target.value)}
+                                    className="w-full bg-white/5 border border-white/5 rounded-2xl px-4 py-4 text-sm font-bold text-white outline-none focus:border-brand-orange appearance-none"
+                                >
+                                    <option value="client" className="text-black">👤 Клієнт</option>
+                                    <option value="courier" className="text-black">🛵 Кур'єр</option>
+                                    <option value="admin" className="text-black">👑 Адміністратор</option>
+                                    <optgroup label="Менеджери закладів:" className="text-black font-black">
+                                        {restaurants.map(r => (
+                                            <option key={r.id} value={`restaurant:${r.id}`} className="text-black">
+                                                👨‍🍳 {r.n} (Заклад)
+                                            </option>
+                                        ))}
+                                    </optgroup>
+                                </select>
+                            </div>
+
+                            <button 
+                                onClick={handleAssignRole}
+                                disabled={isAssigning}
+                                className="w-full py-4 mt-2 btn-gradient text-white text-[10px] font-black uppercase tracking-widest rounded-xl active-scale disabled:opacity-50"
+                            >
+                                {isAssigning ? 'Призначення...' : 'Призначити роль'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {/* Restaurants Section */}
             <div className="glass rounded-[28px] overflow-hidden border-white/5">
                 <button onClick={() => setExpandedSection(expandedSection === 'rests' ? null : 'rests')} className="w-full p-6 flex items-center justify-between active:bg-white/5 transition-colors">
@@ -48,7 +142,6 @@ const AdminSettings: React.FC<AdminSettingsProps> = ({
                     <span className={`text-t3 transition-transform duration-300 ${expandedSection === 'rests' ? 'rotate-90' : ''}`}>›</span>
                 </button>
                 
-                {/* Animation Wrapper */}
                 <div className={`grid transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${expandedSection === 'rests' ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                     <div className="overflow-hidden min-h-0">
                         <div className="px-4 pb-6 pt-2">
@@ -77,7 +170,6 @@ const AdminSettings: React.FC<AdminSettingsProps> = ({
                     <span className={`text-t3 transition-transform duration-300 ${expandedSection === 'menus' ? 'rotate-90' : ''}`}>›</span>
                 </button>
                 
-                {/* Animation Wrapper */}
                 <div className={`grid transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${expandedSection === 'menus' ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                     <div className="overflow-hidden min-h-0">
                         <div className="px-4 pb-6 pt-2">
@@ -89,7 +181,6 @@ const AdminSettings: React.FC<AdminSettingsProps> = ({
                             ))}
                             </div>
                             
-                            {/* Inner Animation for Menu Details */}
                             <div className={`grid transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${selectedRestId ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                                 <div className="overflow-hidden min-h-0">
                                     <div className="space-y-8">
