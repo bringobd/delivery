@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Restaurant, MenuCategory, MenuItem, Role } from '../types';
 import { db, ref, get, set } from '../firebase';
@@ -17,6 +17,7 @@ const ImageWithFallback: React.FC<{ src: string; alt: string; className?: string
 
 interface AdminSettingsProps {
   user: User;
+  setUser: (u: User) => void;
   restaurants: Restaurant[];
   setRestaurants: React.Dispatch<React.SetStateAction<Restaurant[]>>;
   globalMenu: Record<string, MenuCategory[]>;
@@ -25,16 +26,25 @@ interface AdminSettingsProps {
 }
 
 const AdminSettings: React.FC<AdminSettingsProps> = ({ 
-  user, restaurants, setRestaurants, globalMenu, setGlobalMenu, showToast 
+  user, setUser, restaurants, setRestaurants, globalMenu, setGlobalMenu, showToast 
 }) => {
   const navigate = useNavigate();
-  const [expandedSection, setExpandedSection] = useState<'rests' | 'menus' | 'roles' | null>(null);
+  const [expandedSection, setExpandedSection] = useState<'rests' | 'menus' | 'roles' | 'viewAs' | null>(null);
   const [selectedRestId, setSelectedRestId] = useState<string | null>(null);
 
   // Role Management State
   const [roleTgId, setRoleTgId] = useState('');
   const [selectedRole, setSelectedRole] = useState('client');
   const [isAssigning, setIsAssigning] = useState(false);
+
+  // Impersonate State
+  const [impersonateRestId, setImpersonateRestId] = useState('');
+
+  useEffect(() => {
+      if (restaurants.length > 0 && !impersonateRestId) {
+          setImpersonateRestId(restaurants[0].id);
+      }
+  }, [restaurants]);
 
   const handleAssignRole = async () => {
     if (!roleTgId.trim()) return showToast('❌ Введіть Telegram ID');
@@ -49,7 +59,6 @@ const AdminSettings: React.FC<AdminSettingsProps> = ({
 
         const targetUser = snap.val();
 
-        // Check if role is for a specific restaurant (format: restaurant:ID)
         if (selectedRole.startsWith('restaurant:')) {
             targetUser.role = 'restaurant';
             targetUser.ownedRestaurantId = selectedRole.split(':')[1];
@@ -69,6 +78,17 @@ const AdminSettings: React.FC<AdminSettingsProps> = ({
     setIsAssigning(false);
   };
 
+  const handleImpersonate = (targetRole: Role, restId?: string) => {
+    setUser({
+        ...user,
+        originalRole: 'admin', // Remember we are admin!
+        role: targetRole,
+        ownedRestaurantId: restId
+    });
+    showToast(`Увімкнено режим: ${targetRole}`);
+    navigate('/');
+  };
+
   return (
     <div className="p-6 animate-reveal pb-32">
         <header className="flex items-center justify-between mb-10 pt-4">
@@ -80,6 +100,46 @@ const AdminSettings: React.FC<AdminSettingsProps> = ({
         </header>
 
         <div className="space-y-4">
+
+            {/* Impersonate Section */}
+            <div className="glass rounded-[28px] overflow-hidden border-brand-orange/20 shadow-[0_0_15px_rgba(255,92,0,0.1)]">
+                <button onClick={() => setExpandedSection(expandedSection === 'viewAs' ? null : 'viewAs')} className="w-full p-6 flex items-center justify-between active:bg-white/5 transition-colors">
+                    <div className="flex items-center gap-4"><div className="text-xl">🎭</div><span className="font-bold text-sm text-brand-orange">Режим перегляду</span></div>
+                    <span className={`text-brand-orange transition-transform duration-300 ${expandedSection === 'viewAs' ? 'rotate-90' : ''}`}>›</span>
+                </button>
+                
+                <div className={`grid transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${expandedSection === 'viewAs' ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                    <div className="overflow-hidden min-h-0">
+                        <div className="px-4 pb-6 pt-2 space-y-3">
+                            <p className="text-[9px] text-t3 mb-4 leading-relaxed">
+                                Тимчасово перемкніть інтерфейс, щоб побачити додаток очима іншого користувача. Щоб повернутись назад, перейдіть у Профіль.
+                            </p>
+                            <div className="flex gap-2">
+                                <button onClick={() => handleImpersonate('client')} className="flex-1 py-4 glass border-white/10 rounded-xl text-white font-bold text-[11px] active-scale flex flex-col items-center justify-center gap-1">
+                                    <span className="text-lg">👤</span> Клієнт
+                                </button>
+                                <button onClick={() => handleImpersonate('courier')} className="flex-1 py-4 glass border-white/10 rounded-xl text-white font-bold text-[11px] active-scale flex flex-col items-center justify-center gap-1">
+                                    <span className="text-lg">🛵</span> Кур'єр
+                                </button>
+                            </div>
+
+                            <div className="p-3 border border-white/5 rounded-2xl bg-white/[0.02] mt-2">
+                                <label className="text-[9px] font-black uppercase tracking-[2px] text-t3 mb-2 block opacity-60">Від імені Ресторану:</label>
+                                <select 
+                                    value={impersonateRestId}
+                                    onChange={(e) => setImpersonateRestId(e.target.value)}
+                                    className="w-full bg-white/5 border border-white/5 rounded-xl px-4 py-3 text-xs font-bold text-white outline-none mb-3"
+                                >
+                                    {restaurants.map(r => <option key={r.id} value={r.id} className="text-black">{r.n}</option>)}
+                                </select>
+                                <button onClick={() => handleImpersonate('restaurant', impersonateRestId)} className="w-full py-3 bg-brand-orange text-white rounded-xl font-geologica font-black text-[10px] uppercase tracking-widest active-scale">
+                                    Увійти як заклад
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             {/* Role Management Section */}
             <div className="glass rounded-[28px] overflow-hidden border-white/5">
