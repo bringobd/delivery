@@ -1,7 +1,0 @@
-{
-  "name": "Bringo Delivery",
-  "description": "Modern food delivery application for Bilhorod-Dnistrovskyi with multi-role support for customers, couriers, restaurants, and admins.",
-  "requestFramePermissions": [
-    "geolocation"
-  ]
-}
