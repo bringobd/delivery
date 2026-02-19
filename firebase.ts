@@ -1,5 +1,5 @@
-
 import { initializeApp } from "firebase/app";
+// @ts-ignore
 import { getDatabase, ref, set, get, onValue, update, remove } from "firebase/database";
 
 const firebaseConfig = {
