@@ -982,31 +982,21 @@ async function renderCourierOrders(el){
 }
   
 async function startGPSThenPickup(){
+  showToast('📡 Запит геолокації…');
   if(TG && TG.LocationManager){
     try{
       await TG.LocationManager.init();
-      const loc = await TG.LocationManager.getLocation();
-      if(!loc){ showToast('❌ Геолокацію не надано'); return; }
+      // Не ждём getLocation — просто запускаем GPS и меняем статус
       startCourierGPS();
       await changeStatus('picked');
     } catch(e){
-      // Якщо відмовив — пробуємо браузерний GPS
-      if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(
-          async ()=>{ startCourierGPS(); await changeStatus('picked'); },
-          ()=>{ showToast('❌ GPS не надано — дозвольте геолокацію'); }
-        );
-      } else {
-        showToast('❌ GPS недоступний');
-      }
+      console.warn('TG GPS failed:', e);
+      startCourierGPS(); // попробует браузерный fallback внутри
+      await changeStatus('picked');
     }
-  } else if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(
-      async ()=>{ startCourierGPS(); await changeStatus('picked'); },
-      ()=>{ showToast('❌ GPS не надано — дозвольте геолокацію'); }
-    );
   } else {
-    showToast('❌ GPS недоступний на цьому пристрої');
+    startCourierGPS();
+    await changeStatus('picked');
   }
 }
   
