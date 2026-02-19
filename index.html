@@ -8,29 +8,20 @@
 <!-- Telegram Web App SDK -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-<!-- Firebase -->
-<script type="module">
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-  import { getDatabase, ref, set, get, update, onValue, off, query, orderByChild, equalTo, limitToLast, push }
-    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
-
-  const firebaseConfig = {
+<!-- Firebase v9 compat (надійніший спосіб — без ES modules) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+  firebase.initializeApp({
     apiKey: "AIzaSyCcwGEMEegu3KTDJi7sx4KO_GPHRpPkz5k",
     authDomain: "bringo-b66c2.firebaseapp.com",
     databaseURL: "https://bringo-b66c2-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "bringo-b66c2",
     storageBucket: "bringo-b66c2.firebasestorage.app",
-    messagingSenderId: "1015048005239",
-    appId: "1:1015048005239:web:1223e81179e30a044ac872",
-    measurementId: "G-SY3W7Y8EMY"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db  = getDatabase(app);
-
-  // ── Expose to global scope ────────────────────────────────────────────
-  window._FB = { db, ref, set, get, update, onValue, off, query, orderByChild, equalTo, limitToLast, push };
-  window.dispatchEvent(new Event('fbReady'));
+    messagingSenderId: "1015048005219",
+    appId: "1:1015048005239:web:1223e81179e30a044ac872"
+  });
+  window._DB = firebase.database();
 </script>
 
 <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;500;700;800;900&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
@@ -342,7 +333,7 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
     <div class="dots"><span>•</span><span>•</span><span>•</span></div>
   </div>
 
-  <!-- ONBOARDING -->
+  <!-- ONBOARDING — реєстрація через бота -->
   <div class="onb" id="onb" style="display:none">
     <div class="onb-hero">
       <div class="onb-icon">🛵</div>
@@ -350,26 +341,19 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
       <div class="onb-tagline">Доставка їжі у Білгород-Дністровському</div>
     </div>
     <div class="onb-card">
-      <div class="onb-title">Привіт! Як вас звати?</div>
-      <div class="onb-hint">Акаунт прив'язується до Telegram. Номер телефону потрібен для доставки.</div>
-      <div id="tgPre"></div>
-      <div class="inp-wrap">
-        <label class="inp-label">Ім'я <span style="color:var(--r)">*</span></label>
-        <input class="inp" id="inpName" type="text" placeholder="Олексій" autocomplete="given-name">
-      </div>
-      <div class="inp-wrap">
-        <label class="inp-label">Прізвище <span style="color:var(--t3)">— не обов'язково</span></label>
-        <input class="inp" id="inpSurname" type="text" placeholder="Іванов" autocomplete="family-name">
-      </div>
-      <div class="inp-wrap">
-        <label class="inp-label">Телефон <span style="color:var(--r)">*</span></label>
-        <div class="inp-row">
-          <div class="inp-code">🇺🇦&nbsp;+38</div>
-          <input class="inp" id="inpPhone" type="tel" placeholder="0XX XXX XX XX" autocomplete="tel" style="flex:1">
+      <div class="onb-title">Потрібна реєстрація</div>
+      <div class="onb-hint">Зареєструйтесь через Telegram-бота за 1 хвилину. Номер підтверджується через Telegram — ввести чужий номер неможливо.</div>
+      <div style="background:var(--gl);border:1.5px solid var(--gb);border-radius:16px;padding:16px;margin-bottom:14px">
+        <div style="font-family:'Geologica',sans-serif;font-size:13px;font-weight:900;color:var(--g);margin-bottom:8px">✅ Як зареєструватись:</div>
+        <div style="font-size:12px;color:var(--t1);line-height:1.9;font-weight:600">
+          1. Натисніть кнопку нижче<br>
+          2. У боті натисніть <b>"📝 Реєстрація"</b><br>
+          3. Введіть ім'я та поділіться номером<br>
+          4. Поверніться і натисніть "Я вже зареєструвався"
         </div>
-        <div class="err-msg" id="phoneErr">Цей номер вже зареєстрований</div>
       </div>
-      <button class="onb-btn" id="onbBtn" disabled>Продовжити →</button>
+      <button class="onb-btn" onclick="openBot()">📱 Відкрити бота BRINGO</button>
+      <button class="onb-btn" onclick="checkRegistration()" style="background:var(--s3);color:var(--t2);margin-top:0;margin-bottom:24px">🔄 Я вже зареєструвався</button>
     </div>
   </div>
 
@@ -514,37 +498,30 @@ if(TG){ TG.ready(); TG.expand(); }
 function tgUser(){ return TG?.initDataUnsafe?.user || null; }
 function tgId(){ return tgUser() ? String(tgUser().id) : null; }
 
-/* ══ FIREBASE ══ */
-let FB = null;
-window.addEventListener('fbReady', () => { FB = window._FB; init(); });
-// Fallback if already loaded
-if(window._FB){ FB = window._FB; setTimeout(init, 50); }
-
 /* ══ STATE ══ */
-let user = null;       // Current user object from Firebase
-let adminViewAs = null; // 'client'|'courier'|'restaurant'|null
+let user = null;
+let adminViewAs = null;
 let cur = 'home', curCat = MENU[0].cat;
 let cart = [];
 let showingHistory = false;
 let admPer = 'day';
 let roleDropOpen = false;
 let gpsWatchId = null;
-let activeOrderListener = null;
 
-/* ══ INIT ══ */
+/* ══ FIREBASE (compat SDK — синхронний старт) ══ */
+const DB = window._DB; // firebase.database() — вже ініціалізовано в <head>
+
+/* ══ INIT — запускається одразу, без очікування подій ══ */
 async function init() {
   const tid = tgId();
   if(!tid) {
-    // Not in Telegram — use dev mode
+    // Режим розробки — не в Telegram
     hideSplash();
     showOnboarding();
     return;
   }
-
   try {
-    // Check if user exists in Firebase
-    const { db, ref, get } = FB;
-    const snap = await get(ref(db, `users/${tid}`));
+    const snap = await DB.ref(`users/${tid}`).once('value');
     if(snap.exists() && snap.val().verified) {
       user = snap.val();
       hideSplash();
@@ -553,7 +530,7 @@ async function init() {
       listenToOrder();
     } else {
       hideSplash();
-      showOnboarding(tgUser());
+      showOnboarding();
     }
   } catch(e) {
     console.error('Init error:', e);
@@ -562,148 +539,91 @@ async function init() {
   }
 }
 
+// Запускаємо одразу після завантаження DOM
+document.addEventListener('DOMContentLoaded', init);
+
 function hideSplash() {
   const s = document.getElementById('splash');
+  if(!s) return;
   s.classList.add('hide');
   setTimeout(() => s.remove(), 450);
 }
 
-function showOnboarding(tgu) {
-  const el = document.getElementById('onb');
-  el.style.display = 'flex';
-  const inpName  = document.getElementById('inpName');
-  const inpPhone = document.getElementById('inpPhone');
-  const btn      = document.getElementById('onbBtn');
-  const pre      = document.getElementById('tgPre');
-
-  if(tgu) {
-    if(tgu.first_name) inpName.value = tgu.first_name;
-    const surname = document.getElementById('inpSurname');
-    if(tgu.last_name) surname.value = tgu.last_name;
-    pre.innerHTML = `<div class="tg-pill">✈️ &nbsp;Дані з Telegram отримано автоматично</div>`;
-  }
-
-  function checkBtn() {
-    const ph = inpPhone.value.replace(/\D/g,'');
-    btn.disabled = !(inpName.value.trim() && ph.length >= 9);
-  }
-  inpName.addEventListener('input', checkBtn);
-  inpPhone.addEventListener('input', () => {
-    document.getElementById('phoneErr').classList.remove('on');
-    document.getElementById('inpPhone').classList.remove('err');
-    checkBtn();
-  });
-  if(tgu?.first_name) checkBtn();
-
-  btn.addEventListener('click', async () => {
-    btn.classList.add('loading');
-    btn.textContent = 'Перевірка…';
-    const phoneRaw = inpPhone.value.replace(/\D/g,'');
-    const phone = '+38' + phoneRaw;
-
-    try {
-      await registerUser({
-        name:       inpName.value.trim(),
-        surname:    document.getElementById('inpSurname').value.trim(),
-        phone,
-        phoneClean: phoneRaw,
-        tgId:       tgId() || ('dev_' + Date.now()),
-        tgUsername: tgu?.username || '',
-      });
-      el.style.transition = 'opacity .3s,transform .3s';
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(20px)';
-      setTimeout(() => { el.remove(); applyRoleUI(); updateProfile(); listenToOrder(); }, 320);
-    } catch(err) {
-      if(err.message === 'PHONE_TAKEN') {
-        document.getElementById('phoneErr').classList.add('on');
-        document.getElementById('inpPhone').classList.add('err');
-      } else {
-        showToast('❌ Помилка: ' + err.message);
-      }
-      btn.classList.remove('loading');
-      btn.textContent = 'Продовжити →';
-    }
-  });
+function showOnboarding() {
+  document.getElementById('onb').style.display = 'flex';
 }
 
-/* ══ FIREBASE AUTH ══ */
-async function registerUser(data) {
-  const { db, ref, get, set, query, orderByChild, equalTo } = FB;
+// Відкрити бота для реєстрації
+function openBot() {
+  const botUrl = 'https://t.me/BringoDeliveryBot'; // замініть на ваш @username бота
+  if(TG) TG.openTelegramLink(botUrl);
+  else window.open(botUrl, '_blank');
+}
 
-  // 1. Check phone uniqueness
-  const phoneSnap = await get(query(ref(db, 'users'), orderByChild('phoneClean'), equalTo(data.phoneClean)));
-  if(phoneSnap.exists()) {
-    const existing = Object.entries(phoneSnap.val());
-    // Allow if same tgId (re-registration)
-    if(existing.some(([id]) => id !== data.tgId)) {
-      throw new Error('PHONE_TAKEN');
+// Перевірити чи зареєструвався після повернення з бота
+async function checkRegistration() {
+  const tid = tgId();
+  if(!tid) { showToast('❌ Відкрийте додаток через Telegram'); return; }
+  showToast('🔄 Перевірка…');
+  try {
+    const snap = await DB.ref(`users/${tid}`).once('value');
+    if(snap.exists() && snap.val().verified) {
+      user = snap.val();
+      document.getElementById('onb').style.display = 'none';
+      applyRoleUI();
+      updateProfile();
+      listenToOrder();
+      showToast('✅ Вітаємо, ' + user.name + '!');
+    } else {
+      showToast('❌ Реєстрацію не знайдено. Пройдіть реєстрацію в боті');
     }
+  } catch(e) {
+    showToast('❌ Помилка перевірки: ' + e.message);
   }
-
-  // 2. Save user
-  const userData = {
-    ...data,
-    role: 'client',
-    verified: true,
-    createdAt: Date.now(),
-  };
-
-  await set(ref(db, `users/${data.tgId}`), userData);
-  user = userData;
 }
 
 /* ══ ORDER LISTENER ══ */
 function listenToOrder() {
-  if(!FB || !user) return;
-  const { db, ref, onValue } = FB;
-  const tid = user.tgId;
-
-  // Listen to the global order (shared via Firebase)
-  const orderRef = ref(db, 'currentOrder');
-  onValue(orderRef, snap => {
-    const o = snap.val();
-    // Only re-render if on orders page
+  if(!user) return;
+  DB.ref('currentOrder').on('value', snap => {
     if(cur === 'orders') renderOrders();
     if(cur === 'cart') renderCart();
   });
 }
 
-/* ── Firebase order helpers ── */
+/* ── Firebase helpers ── */
+function getOrder() {
+  return JSON.parse(localStorage.getItem('bringoOrder') || 'null');
+}
+function saveOrder(o) { localStorage.setItem('bringoOrder', JSON.stringify(o)); }
+function clearOrder()  { localStorage.removeItem('bringoOrder'); }
+
 async function fbGetOrder() {
-  if(!FB) return getOrder();
-  const { db, ref, get } = FB;
-  const snap = await get(ref(db, 'currentOrder'));
-  return snap.val();
+  try {
+    const snap = await DB.ref('currentOrder').once('value');
+    const o = snap.val();
+    if(o) saveOrder(o);
+    return o || getOrder();
+  } catch(e) { return getOrder(); }
 }
 
 async function fbSaveOrder(o) {
-  if(!FB) { saveOrder(o); return; }
-  const { db, ref, set } = FB;
-  await set(ref(db, 'currentOrder'), o);
-  // Also update locally for speed
   saveOrder(o);
+  try { await DB.ref('currentOrder').set(o); } catch(e) { console.error('fbSave:', e); }
   renderOrders();
 }
 
 async function fbClearOrder() {
-  if(!FB) { clearOrder(); return; }
-  const { db, ref, set } = FB;
-  await set(ref(db, 'currentOrder'), null);
   clearOrder();
+  try { await DB.ref('currentOrder').set(null); } catch(e) {}
 }
 
 async function fbAddToHistory(o) {
-  if(!FB) { addToHistory(o); return; }
-  const { db, ref, push } = FB;
   addToHistory(o);
-  await push(ref(db, `history/${user?.tgId || 'dev'}`), o);
+  try { await DB.ref(`history/${user?.tgId || 'dev'}`).push(o); } catch(e) {}
 }
 
-/* ══ LOCAL STORAGE HELPERS (fallback) ══ */
-function getOrder()    { return JSON.parse(localStorage.getItem('bringoOrder') || 'null'); }
-function saveOrder(o)  { localStorage.setItem('bringoOrder', JSON.stringify(o)); }
-function clearOrder()  { localStorage.removeItem('bringoOrder'); }
+/* ══ LOCAL STORAGE HELPERS ══ */
 function getHistory()  { return JSON.parse(localStorage.getItem('bringoHistory') || '[]'); }
 function addToHistory(o) { const h=getHistory(); h.unshift(o); localStorage.setItem('bringoHistory', JSON.stringify(h.slice(0,100))); }
 function getShift()    { return JSON.parse(localStorage.getItem('bringoShift') || '{"on":false,"orders":0,"income":0,"times":[]}'); }
