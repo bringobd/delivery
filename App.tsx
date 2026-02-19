@@ -66,7 +66,7 @@ const AppContent: React.FC<{
           <Route path="/cart" element={<Cart cart={cart} setCart={setCart} user={user} showToast={showToast} />} />
           <Route path="/orders" element={<Orders user={user} role={user.role} allOrders={allOrders} showToast={showToast} />} />
           <Route path="/stats" element={<Stats user={user} currentOrder={null} />} />
-          <Route path="/admin-settings" element={<AdminSettings user={user} restaurants={restaurants} setRestaurants={setRestaurants} globalMenu={globalMenu} setGlobalMenu={setGlobalMenu} showToast={showToast} />} />
+          <Route path="/admin-settings" element={<AdminSettings user={user} setUser={setUser} restaurants={restaurants} setRestaurants={setRestaurants} globalMenu={globalMenu} setGlobalMenu={setGlobalMenu} showToast={showToast} />} />
           <Route path="/profile" element={<Profile user={user} setUser={setUser} />} />
           <Route path="/manage-item/:restId/:catIdx/:itemIdx" element={<ItemManager globalMenu={globalMenu} setGlobalMenu={setGlobalMenu} showToast={showToast} />} />
           <Route path="/manage-rest/:id" element={<RestaurantManager restaurants={restaurants} setRestaurants={setRestaurants} setGlobalMenu={setGlobalMenu} showToast={showToast} />} />
