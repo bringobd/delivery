@@ -835,29 +835,50 @@ async function cancelOrder(){
 /* ══ GPS ══ */
 let courierGPS={lat:null,lng:null,acc:null};
 function startCourierGPS(){
-  if(!navigator.geolocation||gpsWatchId)return;
+  if(gpsWatchId)return;
   showToast('📡 GPS активовано');
-  gpsWatchId=navigator.geolocation.watchPosition(async pos=>{
-    courierGPS={lat:pos.coords.latitude,lng:pos.coords.longitude,acc:Math.round(pos.coords.accuracy)};
-    const o=getOrder();
-    if(o&&['cooking','delayed','ready','picked'].includes(o.status)){
-      o.courierLat=courierGPS.lat;o.courierLng=courierGPS.lng;o.courierAcc=courierGPS.acc;
-      saveOrder(o);
-      try { await DB.ref('currentOrder').update({courierLat:courierGPS.lat,courierLng:courierGPS.lng,courierAcc:courierGPS.acc}); } catch(e){}
-    }
-  },err=>{console.warn('GPS:',err.message);},{enableHighAccuracy:true,timeout:10000,maximumAge:3000});
+  if(TG && TG.LocationManager){
+    TG.LocationManager.init().then(()=>{
+      gpsWatchId=setInterval(async()=>{
+        TG.LocationManager.getLocation().then(async loc=>{
+          if(!loc)return;
+          courierGPS={lat:loc.latitude,lng:loc.longitude,acc:loc.accuracy||0};
+          const o=getOrder();
+          if(o&&['cooking','delayed','ready','picked'].includes(o.status)){
+            o.courierLat=courierGPS.lat;o.courierLng=courierGPS.lng;o.courierAcc=courierGPS.acc;
+            saveOrder(o);
+            try{await DB.ref('currentOrder').update({courierLat:courierGPS.lat,courierLng:courierGPS.lng,courierAcc:courierGPS.acc});}catch(e){}
+          }
+        });
+      },5000);
+    });
+  } else if(navigator.geolocation){
+    gpsWatchId=navigator.geolocation.watchPosition(async pos=>{
+      courierGPS={lat:pos.coords.latitude,lng:pos.coords.longitude,acc:Math.round(pos.coords.accuracy)};
+      const o=getOrder();
+      if(o&&['cooking','delayed','ready','picked'].includes(o.status)){
+        o.courierLat=courierGPS.lat;o.courierLng=courierGPS.lng;o.courierAcc=courierGPS.acc;
+        saveOrder(o);
+        try{await DB.ref('currentOrder').update({courierLat:courierGPS.lat,courierLng:courierGPS.lng,courierAcc:courierGPS.acc});}catch(e){}
+      }
+    },err=>{console.warn('GPS:',err.message);},{enableHighAccuracy:true,timeout:10000,maximumAge:3000});
+  } else {
+    showToast('❌ GPS недоступний');
+  }
 }
-function stopCourierGPS(){if(gpsWatchId){navigator.geolocation.clearWatch(gpsWatchId);gpsWatchId=null;}}
-
+function stopCourierGPS(){
+  if(!gpsWatchId)return;
+  if(TG && TG.LocationManager) clearInterval(gpsWatchId);
+  else navigator.geolocation.clearWatch(gpsWatchId);
+  gpsWatchId=null;
+}
 function buildMapUrl(lat,lng){return`https://www.openstreetmap.org/export/embed.html?bbox=${lng-.005},${lat-.003},${lng+.005},${lat+.003}&layer=mapnik&marker=${lat},${lng}`;}
 function accBadge(acc){if(!acc)return'';let c='low',l='Низька';if(acc<=15){c='high';l='Висока';}else if(acc<=50){c='med';l='Середня';}return`<span class="gps-acc ${c}">±${acc}м</span>`;}
-
 function gpsCardHtml(o){
   const hasGPS=o?.courierLat&&o?.courierLng;
   const map=hasGPS?`<iframe src="${buildMapUrl(o.courierLat,o.courierLng)}" style="width:100%;height:100%;border:none;border-radius:12px" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>`:`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;color:var(--t2)"><div style="font-size:32px;animation:bob 2s ease-in-out infinite">🛵</div><div style="font-size:12px;font-weight:700">Очікуємо GPS…</div></div>`;
   return`<div class="card" style="margin-bottom:14px"><div class="card-title">🗺 GPS-трекінг курʼєра</div><div class="gps-map-real">${map}</div><div class="gps-overlay-info"><div style="display:flex;align-items:center;gap:7px"><div class="gps-dot-live"></div><span style="font-size:11px;font-weight:700">${hasGPS?'Курʼєр в дорозі':'Очікування…'}</span> ${hasGPS?accBadge(o.courierAcc):''}</div><span style="font-size:10px;color:var(--t2)">${hasGPS?'Live':'—'}</span></div></div>`;
 }
-
 /* ══ RENDER ORDERS ══ */
 async function renderOrders(){
   const el=document.getElementById('ordersBody');if(!el)return;
@@ -963,8 +984,11 @@ async function renderCourierOrders(el){
 function toggleShift(){const s=getShift();s.on=!s.on;if(!s.on){s.orders=0;s.income=0;s.times=[];stopCourierGPS();}saveShift(s);showToast(s.on?'🟢 Зміна розпочата!':'⚫ Зміна завершена');renderOrders();}
 
 /* ─── ADMIN ─── */
-function renderAdminPanel(el){
-  const h=getHistory(),o=getOrder(),sh=getShift();
+async function renderAdminPanel(el){
+  const snap = await DB.ref('history').once('value');
+  const raw = snap.val() || {};
+  const h = Object.values(raw).flatMap(u => Object.values(u)).sort((a,b)=>b.placed-a.placed);
+  const o=await fbGetOrder(),sh=getShift();
   const activeOrds=o&&!['done','cancelled'].includes(o.status)?1:0;
   const arr=h.filter(admPer==='day'?x=>Date.now()-x.placed<86400000&&x.status==='done':x=>Date.now()-x.placed<30*86400000&&x.status==='done');
   const cnt=arr.length,total=arr.reduce((s,x)=>s+x.total,0),profit=arr.reduce((s,x)=>s+(x.platformProfit||0),0);
