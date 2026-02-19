@@ -7,13 +7,14 @@ interface ProfileProps {
   setUser: (u: User | null) => void;
 }
 
-const Profile: React.FC<ProfileProps> = ({ user, setUser }) => {
+const Profile: React.FC<ProfileProps> = ({ user }) => {
   const [showHistory, setShowHistory] = useState(false);
 
-  const handleLogout = () => {
-    localStorage.removeItem('bringo_user');
-    setUser(null);
-    window.location.hash = '/';
+  const handleCloseApp = () => {
+    // Closes the Telegram Mini App natively
+    if ((window as any).Telegram?.WebApp) {
+        (window as any).Telegram.WebApp.close();
+    }
   };
 
   const history = [
@@ -31,8 +32,9 @@ const Profile: React.FC<ProfileProps> = ({ user, setUser }) => {
           {user.role === 'courier' ? '🛵' : user.role === 'restaurant' ? '👨‍🍳' : '👤'}
         </div>
         <div>
-          <div className="font-geologica text-xl font-black mb-1">{user.name}</div>
-          <div className="bg-brand-orange/10 text-brand-orange px-3 py-1 rounded-lg text-[10px] font-black uppercase font-geologica tracking-widest inline-block border border-brand-orange/20">
+          <div className="font-geologica text-xl font-black mb-1">{user.name} {user.surname}</div>
+          <div className="text-[10px] text-t3 font-bold mb-1">{user.phone}</div>
+          <div className="bg-brand-orange/10 text-brand-orange px-3 py-1 rounded-lg text-[10px] font-black uppercase font-geologica tracking-widest inline-block border border-brand-orange/20 mt-1">
             {user.role}
           </div>
         </div>
@@ -48,7 +50,6 @@ const Profile: React.FC<ProfileProps> = ({ user, setUser }) => {
           <span className={`text-t3 transition-transform duration-300 ${showHistory ? 'rotate-90' : ''}`}>›</span>
         </button>
 
-        {/* OPTIMIZATION: Removed padding animation from transition to avoid layout recalculation */}
         <div className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${showHistory ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
             <div className="overflow-hidden min-h-0">
                 <div className="bg-black/20 p-4 space-y-3 border-b border-white/5">
@@ -76,16 +77,16 @@ const Profile: React.FC<ProfileProps> = ({ user, setUser }) => {
         </div>
         <div 
           className="p-5 flex items-center gap-4 cursor-pointer active:bg-brand-red/10 group"
-          onClick={handleLogout}
+          onClick={handleCloseApp}
         >
-          <div className="w-10 h-10 bg-brand-red/10 text-brand-red rounded-2xl flex items-center justify-center text-lg">↩</div>
-          <span className="flex-1 text-sm font-bold text-brand-red">Вийти з акаунту</span>
+          <div className="w-10 h-10 bg-brand-red/10 text-brand-red rounded-2xl flex items-center justify-center text-lg">🚪</div>
+          <span className="flex-1 text-sm font-bold text-brand-red">Закрити додаток</span>
         </div>
       </div>
       
       <div className="mt-12 text-center pb-8">
          <div className="text-[10px] text-t3 font-bold uppercase tracking-[4px] opacity-30 mb-1">Bringo Delivery</div>
-         <div className="text-[8px] text-t3 opacity-20">Version 2.4.1 (Opt)</div>
+         <div className="text-[8px] text-t3 opacity-20">Version 3.0 (TG Auth)</div>
       </div>
     </div>
   );
