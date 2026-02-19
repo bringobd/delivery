@@ -7,5 +7,5 @@ export default defineConfig({
   plugins: [react()],
   // IMPORTANT: Change 'bringo-app' to your repository name if deploying to GitHub Pages
   // e.g. base: '/my-delivery-app/'
-  base: '/bringo-app/', 
+  base: '/delivery/', 
 })
