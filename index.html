@@ -795,7 +795,7 @@ async function placeOrder(){
 
 /* ══ STATUS CHANGES ══ */
 async function changeStatus(s){
-  const o=getOrder();if(!o)return;
+  const o=await fbGetOrder();
   o.status=s;
   if(s==='done'){
     o.doneAt=Date.now();
@@ -812,7 +812,7 @@ async function changeStatus(s){
 }
 
 async function courierAccept(){
-  const o=getOrder();if(!o)return;
+  const o=await fbGetOrder();
   const sh=getShift();
   if(!sh.on){showToast('⚫ Спочатку вийдіть на зміну');return;}
   o.courierName=user?[user.name,user.surname].filter(Boolean).join(' '):'Курʼєр #1';
@@ -823,10 +823,10 @@ async function courierAccept(){
   startCourierGPS();
 }
 
-async function setDelay(){const o=getOrder();if(!o)return;o.status='delayed';await fbSaveOrder(o);showToast('⏳ Клієнт сповіщений');}
-async function removeDelay(){const o=getOrder();if(!o)return;o.status='cooking';await fbSaveOrder(o);showToast('✅ Затримку знято');}
+async function setDelay(){const o=await fbGetOrder();if(!o)return;o.status='delayed';await fbSaveOrder(o);showToast('⏳ Клієнт сповіщений');}
+async function removeDelay(){const o=await fbGetOrder();if(!o)return;o.status='cooking';await fbSaveOrder(o);showToast('✅ Затримку знято');}
 async function cancelOrder(){
-  const o=getOrder();if(!o)return;
+  const o=await fbGetOrder();if(!o)return;
   await fbAddToHistory({...o,status:'cancelled'});
   await fbClearOrder();
   showToast('❌ Замовлення скасовано');
@@ -843,7 +843,7 @@ function startCourierGPS(){
     if(o&&['cooking','delayed','ready','picked'].includes(o.status)){
       o.courierLat=courierGPS.lat;o.courierLng=courierGPS.lng;o.courierAcc=courierGPS.acc;
       saveOrder(o);
-      if(FB){const{db,ref,update}=FB;await update(ref(db,'currentOrder'),{courierLat:courierGPS.lat,courierLng:courierGPS.lng,courierAcc:courierGPS.acc});}
+      try { await DB.ref('currentOrder').update({courierLat:courierGPS.lat,courierLng:courierGPS.lng,courierAcc:courierGPS.acc}); } catch(e){}
     }
   },err=>{console.warn('GPS:',err.message);},{enableHighAccuracy:true,timeout:10000,maximumAge:3000});
 }
@@ -859,7 +859,7 @@ function gpsCardHtml(o){
 }
 
 /* ══ RENDER ORDERS ══ */
-function renderOrders(){
+async function renderOrders(){
   const el=document.getElementById('ordersBody');if(!el)return;
   const r=getEffectiveRole();
   if(r==='restaurant') renderRestaurantOrders(el);
@@ -871,9 +871,10 @@ function renderOrders(){
 setInterval(()=>{if(cur==='orders')renderOrders();},3000);
 window.addEventListener('storage',e=>{if((e.key==='bringoOrder'||e.key==='bringoSignal')&&cur==='orders')renderOrders();});
 
-/* ─── CLIENT ─── */
-function renderClientOrders(el){
-  const o=getOrder();
+/* ─── COURIER ─── */
+
+async function renderClientOrders(el){
+  const o = await fbGetOrder();
   if(!o){el.innerHTML=`<div class="ord-empty"><span>📦</span><h3>Замовлень поки немає</h3><p>Зробіть перше замовлення!</p><button class="cta" onclick="openRest()">До меню</button></div>`;return;}
   const st=STATUS[o.status],ci=STEPS.indexOf(o.status),canCancel=['new','accepted'].includes(o.status);
   el.innerHTML=`<div style="padding:0 18px 24px">
@@ -889,9 +890,9 @@ function renderClientOrders(el){
   </div>`;
 }
 
-/* ─── RESTAURANT ─── */
-function renderRestaurantOrders(el){
-  const o=getOrder(),todayH=getHistory().filter(h=>Date.now()-h.placed<86400000&&h.status==='done');
+async function renderRestaurantOrders(el){
+  const o = await fbGetOrder();
+  const todayH=getHistory().filter(h=>Date.now()-h.placed<86400000&&h.status==='done');
   const top=`<div style="padding:0 18px"><div class="stat-grid" style="padding:0;margin-bottom:16px"><div class="sg"><div class="sg-val">${todayH.length}</div><div class="sg-lbl">Замовлень сьогодні</div></div><div class="sg"><div class="sg-val" style="color:var(--g)">${todayH.reduce((s,h)=>s+(h.restaurantProfit||0),0)}</div><div class="sg-lbl">Грн зароблено</div></div></div></div>`;
   if(showingHistory){el.innerHTML=top+historyListHtml(getHistory(),'restaurant');return;}
   if(!o||['done','cancelled','picked'].includes(o.status)){el.innerHTML=top+`<div class="ord-empty"><span>🍽</span><h3>Нових замовлень немає</h3><p>Очікуйте на замовлення від клієнтів</p></div>`;return;}
@@ -913,12 +914,11 @@ function renderRestaurantOrders(el){
   </div>`;
 }
 
-/* ─── COURIER ─── */
-function renderCourierOrders(el){
-  const sh=getShift(),o=getOrder();
+async function renderCourierOrders(el){
+  const o = await fbGetOrder();
+  const sh=getShift();
   const avgT=sh.times.length?Math.round(sh.times.reduce((a,b)=>a+b)/sh.times.length):0;
   const hasActive=o&&!['done','cancelled'].includes(o.status);
-  // FIX: shift lock only if courier has ACCEPTED the order (courierAccepted===true)
   const courierOwnsOrder = hasActive && o.courierAccepted && (o.courierTgId === user?.tgId || o.courierTgId === null);
   const shiftDisabled = courierOwnsOrder;
 
