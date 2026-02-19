@@ -4,11 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Bringo</title>
-
-<!-- Telegram Web App SDK -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-<!-- Firebase v9 compat (надійніший спосіб — без ES modules) -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
@@ -23,7 +19,6 @@
   });
   window._DB = firebase.database();
 </script>
-
 <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;500;700;800;900&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -40,8 +35,6 @@
 }
 html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(--t1);overflow:hidden}
 .app{max-width:430px;height:100dvh;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;overflow:hidden}
-
-/* LOADER */
 .splash{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .4s}
 .splash.hide{opacity:0;pointer-events:none}
 .splash-logo{font-family:'Geologica',sans-serif;font-size:52px;font-weight:900;color:var(--or);letter-spacing:-3px}
@@ -51,14 +44,11 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
 .dots span{display:inline-block;animation:dot 1.2s ease-in-out infinite;font-size:18px;color:var(--or)}
 .dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}
 @keyframes dot{0%,80%,100%{transform:scale(0);opacity:.3}40%{transform:scale(1);opacity:1}}
-
 .scr{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .scr::-webkit-scrollbar{display:none}
 .pg{display:none;padding-bottom:calc(var(--nav)+16px)}
 .pg.on{display:block;animation:fu .22s ease}
 @keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-/* ONBOARDING */
 .onb{position:fixed;inset:0;z-index:500;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
 .onb-hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 32px 0;gap:12px}
 .onb-icon{font-size:90px;filter:drop-shadow(0 8px 32px rgba(255,92,0,.35));animation:bob 3s ease-in-out infinite}
@@ -67,23 +57,8 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
 .onb-card{width:100%;max-width:430px;background:var(--s1);border-radius:28px 28px 0 0;padding:28px 24px 0;border-top:1px solid var(--bd2)}
 .onb-title{font-family:'Geologica',sans-serif;font-size:20px;font-weight:900;margin-bottom:6px}
 .onb-hint{font-size:12px;color:var(--t2);margin-bottom:18px;line-height:1.55}
-.tg-pill{background:var(--bl);border:1px solid rgba(59,130,246,.35);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;font-size:12px;font-weight:700;color:#60a5fa;margin-bottom:14px}
-.inp-wrap{margin-bottom:12px}
-.inp-label{font-size:11px;font-weight:700;color:var(--t2);margin-bottom:5px;font-family:'Geologica',sans-serif;text-transform:uppercase;letter-spacing:.5px;display:block}
-.inp{width:100%;background:var(--s2);border:1.5px solid var(--bd2);border-radius:14px;padding:13px 16px;font-size:15px;font-weight:600;color:var(--t1);outline:none;font-family:'Nunito',sans-serif;transition:.15s}
-.inp:focus{border-color:var(--or);background:var(--orl)}
-.inp::placeholder{color:var(--t3)}
-.inp.err{border-color:var(--r);background:var(--rl)}
-.inp-row{display:flex;gap:8px}
-.inp-code{background:var(--s2);border:1.5px solid var(--bd2);border-radius:14px;padding:13px 12px;font-size:14px;font-weight:700;color:var(--t2);width:72px;text-align:center;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.err-msg{font-size:11px;color:var(--r);margin-top:5px;display:none}
-.err-msg.on{display:block}
 .onb-btn{width:100%;padding:15px;background:var(--or);border:none;border-radius:14px;color:#fff;font-family:'Geologica',sans-serif;font-size:15px;font-weight:900;cursor:pointer;margin-top:6px;margin-bottom:24px;transition:.12s}
 .onb-btn:active{background:#df4f00;transform:scale(.98)}
-.onb-btn:disabled{opacity:.35;pointer-events:none}
-.onb-btn.loading{opacity:.7;pointer-events:none}
-
-/* NAV */
 .nav{height:var(--nav);background:var(--s1);border-top:1px solid var(--bd);display:flex;flex-shrink:0;padding-bottom:env(safe-area-inset-bottom)}
 .nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;color:var(--t3);cursor:pointer;transition:.15s;position:relative;padding-top:6px}
 .nb.on{color:var(--or)}
@@ -94,8 +69,6 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
 .nb .nl{font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-family:'Geologica',sans-serif}
 .nb-badge{position:absolute;top:2px;right:calc(50% - 22px);background:var(--or);color:#fff;font-size:9px;font-weight:900;font-family:'Geologica',sans-serif;border-radius:10px;padding:1px 5px;min-width:16px;text-align:center;display:none;line-height:1.4}
 .nb-badge.on{display:block}
-
-/* TOP BAR */
 .tb{padding:16px 18px 12px;display:flex;align-items:center;justify-content:space-between}
 .logo{font-family:'Geologica',sans-serif;font-size:22px;font-weight:900;color:var(--or);letter-spacing:-1px}
 .city-pill{background:var(--s2);border:1px solid var(--bd2);border-radius:20px;padding:6px 12px;font-size:11px;font-weight:600;color:var(--t2);font-family:'Geologica',sans-serif}
@@ -126,8 +99,6 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
 .shop-nm{font-family:'Geologica',sans-serif;font-size:13px;font-weight:800;margin-bottom:2px}
 .shop-sub{font-size:11px;color:var(--t2)}
 .shop-arr{margin-left:auto;color:var(--t3);font-size:18px}
-
-/* FILTERS + RESTS */
 .filters{display:flex;gap:8px;overflow-x:auto;padding:0 18px 4px;margin-bottom:14px;scrollbar-width:none}
 .filters::-webkit-scrollbar{display:none}
 .fi{flex-shrink:0;padding:7px 14px;background:var(--s2);border:1.5px solid var(--bd);border-radius:20px;font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;font-family:'Geologica',sans-serif;transition:.12s}
@@ -140,8 +111,6 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
 .ri-meta{font-size:11px;color:var(--t2);margin-bottom:6px}
 .tags{display:flex;gap:5px;flex-wrap:wrap}
 .tag{background:var(--s3);border-radius:5px;padding:2px 8px;font-size:9px;font-weight:700;color:var(--t2)}
-
-/* REST PAGE */
 .rest-banner{height:190px;background-size:cover;background-position:center;position:relative;flex-shrink:0}
 .rest-banner-ov{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,transparent 55%)}
 .rest-hd{padding:10px 18px 0}
@@ -165,8 +134,6 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
 .mc-foot{display:flex;align-items:center;justify-content:space-between}
 .mc-price{font-family:'Geologica',sans-serif;font-size:12px;font-weight:900;color:var(--or)}
 .mc-add{width:29px;height:29px;background:var(--or);border:none;border-radius:8px;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-
-/* MODAL */
 .mov{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);z-index:300;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:.22s}
 .mov.on{opacity:1;pointer-events:all}
 .modal{width:100%;max-width:430px;background:var(--s1);border-radius:24px 24px 0 0;max-height:92vh;display:flex;flex-direction:column;transform:translateY(20px);transition:.26s cubic-bezier(.4,0,.2,1);overflow:hidden}
@@ -203,8 +170,6 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
 .qn{font-family:'Geologica',sans-serif;font-size:15px;font-weight:900;min-width:18px;text-align:center}
 .add-btn{flex:1;padding:14px;background:var(--or);border:none;border-radius:13px;color:#fff;font-family:'Geologica',sans-serif;font-weight:800;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
 .add-btn:active{background:#df4f00}
-
-/* CART */
 .cart-empty,.ord-empty{text-align:center;padding:60px 28px}
 .cart-empty span,.ord-empty span{font-size:64px;opacity:.2;display:block;margin-bottom:16px}
 .cart-empty h3,.ord-empty h3{font-family:'Geologica',sans-serif;font-size:17px;font-weight:900;margin-bottom:9px}
@@ -223,15 +188,11 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
 .cart-total-val{font-family:'Geologica',sans-serif;font-size:19px;font-weight:900;color:var(--or)}
 .checkout-btn{width:100%;margin:14px 0 0;padding:15px;background:var(--or);border:none;border-radius:14px;color:#fff;font-family:'Geologica',sans-serif;font-size:15px;font-weight:900;cursor:pointer}
 .checkout-btn:active{background:#df4f00;transform:scale(.98)}
-
-/* CARDS */
 .card{background:var(--s2);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:12px}
 .card-title{font-family:'Geologica',sans-serif;font-size:11px;font-weight:800;color:var(--or);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px}
 .act-btn{width:100%;padding:15px;border:none;border-radius:14px;color:#fff;font-family:'Geologica',sans-serif;font-size:14px;font-weight:900;cursor:pointer;margin-top:10px;letter-spacing:.2px;transition:.1s}
 .act-btn:active{transform:scale(.98)}
 .act-btn.disabled{background:var(--s3);color:var(--t2);pointer-events:none;border:1px solid var(--bd)}
-
-/* SHIFT */
 .shift-wrap{padding:0 18px;margin-bottom:16px}
 .shift-card{border-radius:18px;padding:20px;display:flex;align-items:center;justify-content:space-between;border:1.5px solid}
 .shift-card.off{background:var(--s2);border-color:var(--bd)}
@@ -245,8 +206,6 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
 .sg{background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:14px}
 .sg-val{font-family:'Geologica',sans-serif;font-size:20px;font-weight:900;color:var(--or);margin-bottom:2px}
 .sg-lbl{font-size:10px;color:var(--t2);font-weight:700}
-
-/* PROFILE */
 .prof-top{margin:0 18px 16px;background:var(--s2);border:1px solid var(--bd);border-radius:20px;padding:20px;display:flex;align-items:center;gap:14px}
 .prof-av{width:58px;height:58px;background:var(--orl);border:2.5px solid var(--or);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;overflow:hidden}
 .prof-av img{width:100%;height:100%;object-fit:cover}
@@ -266,8 +225,6 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
 .pi.red .pi-ic{background:var(--rl)}
 .pi.blue .pi-lbl{color:#3B82F6}
 .pi.blue .pi-ic{background:var(--bl)}
-
-/* DELIVERY STEPS */
 .dstep{display:flex;align-items:flex-start;gap:12px;padding:5px 0}
 .dstep-col{display:flex;flex-direction:column;align-items:center}
 .dstep-dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--t3);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;transition:.2s}
@@ -279,19 +236,15 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
 .dstep-lbl{font-size:12px;font-weight:700;padding-top:3px}
 .dstep.act .dstep-lbl{color:var(--or)}
 .dstep.done .dstep-lbl{color:var(--g)}
-
-/* GPS */
-.gps-map-real{height:200px;border-radius:12px;overflow:hidden;background:var(--s3);position:relative;margin-bottom:10px}
-.gps-map-real iframe{width:100%;height:100%;border:none;display:block}
-.gps-overlay-info{position:absolute;bottom:8px;left:8px;right:8px;background:rgba(8,8,15,.85);backdrop-filter:blur(8px);border:1px solid var(--bd2);border-radius:10px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center}
-.gps-dot-live{width:8px;height:8px;border-radius:50%;background:var(--g);animation:gpsPulse 2s infinite;flex-shrink:0}
-@keyframes gpsPulse{0%,100%{box-shadow:0 0 0 3px rgba(34,197,94,.2)}50%{box-shadow:0 0 0 7px rgba(34,197,94,0)}}
-.gps-acc{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px}
-.gps-acc.high{background:var(--gl);color:var(--g)}
-.gps-acc.med{background:var(--yl);color:var(--y)}
-.gps-acc.low{background:var(--rl);color:var(--r)}
-
-/* ADMIN ROLE DROPDOWN */
+/* ── CHAT BANNER ── */
+.chat-banner{background:rgba(59,130,246,.12);border:1.5px solid rgba(59,130,246,.3);border-radius:16px;padding:16px;margin-bottom:12px;display:flex;align-items:flex-start;gap:12px}
+.chat-banner-icon{font-size:28px;flex-shrink:0;margin-top:2px}
+.chat-banner-title{font-family:'Geologica',sans-serif;font-size:13px;font-weight:800;color:#3B82F6;margin-bottom:5px}
+.chat-banner-step{font-size:12px;color:var(--t2);line-height:1.6;font-weight:600}
+.chat-open-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:#3B82F6;border:none;border-radius:12px;color:#fff;font-family:'Geologica',sans-serif;font-size:13px;font-weight:800;cursor:pointer;margin-top:10px;transition:.12s}
+.chat-open-btn:active{background:#2563EB;transform:scale(.98)}
+/* ── COURIER BANNER ── */
+.courier-banner{background:rgba(59,130,246,.12);border:1.5px solid rgba(59,130,246,.3);border-radius:14px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
 .role-preview-bar{background:rgba(59,130,246,.12);border:1.5px solid rgba(59,130,246,.35);border-radius:14px;padding:12px 14px;margin:0 18px 10px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:.12s}
 .role-preview-bar:active{background:rgba(59,130,246,.2)}
 .role-preview-dropdown{margin:0 18px 14px;background:var(--s2);border:1px solid var(--bd2);border-radius:14px;overflow:hidden;display:none}
@@ -302,8 +255,6 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
 .rpd-ic{font-size:22px;width:36px;text-align:center}
 .rpd-lbl{font-family:'Geologica',sans-serif;font-size:13px;font-weight:800}
 .rpd-sub{font-size:11px;color:var(--t2)}
-
-/* ADMIN TABLE */
 .adm-period-tabs{display:flex;gap:8px;padding:0 18px;margin-bottom:16px}
 .apt{flex:1;padding:10px;background:var(--s2);border:1.5px solid var(--bd);border-radius:12px;font-size:12px;font-weight:700;color:var(--t2);cursor:pointer;font-family:'Geologica',sans-serif;text-align:center;transition:.12s}
 .apt.on{background:var(--orl);border-color:var(--or);color:var(--or)}
@@ -314,7 +265,6 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
 .hist-card{background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:10px}
 .hist-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
 .hist-meta{font-size:11px;color:var(--t2);margin-top:2px}
-.courier-banner{background:rgba(59,130,246,.12);border:1.5px solid rgba(59,130,246,.3);border-radius:14px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
 .toast{position:fixed;bottom:calc(var(--nav)+14px);left:50%;transform:translateX(-50%) translateY(8px);background:var(--s2);border:1px solid var(--bd2);border-radius:12px;padding:11px 20px;font-size:13px;font-weight:700;z-index:999;opacity:0;transition:.2s;pointer-events:none;white-space:nowrap;font-family:'Geologica',sans-serif;max-width:calc(100% - 36px);text-align:center}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 .back{display:flex;align-items:center;gap:7px;padding:12px 18px 6px;font-size:13px;font-weight:700;color:var(--t2);cursor:pointer;font-family:'Geologica',sans-serif}
@@ -324,8 +274,6 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
 </head>
 <body>
 <div class="app">
-
-  <!-- SPLASH -->
   <div class="splash" id="splash">
     <div class="splash-icon">🛵</div>
     <div class="splash-logo">BRINGO</div>
@@ -333,7 +281,6 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
     <div class="dots"><span>•</span><span>•</span><span>•</span></div>
   </div>
 
-  <!-- ONBOARDING — реєстрація через бота -->
   <div class="onb" id="onb" style="display:none">
     <div class="onb-hero">
       <div class="onb-icon">🛵</div>
@@ -342,7 +289,7 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
     </div>
     <div class="onb-card">
       <div class="onb-title">Потрібна реєстрація</div>
-      <div class="onb-hint">Зареєструйтесь через Telegram-бота за 1 хвилину. Номер підтверджується через Telegram — ввести чужий номер неможливо.</div>
+      <div class="onb-hint">Зареєструйтесь через Telegram-бота за 1 хвилину.</div>
       <div style="background:var(--gl);border:1.5px solid var(--gb);border-radius:16px;padding:16px;margin-bottom:14px">
         <div style="font-family:'Geologica',sans-serif;font-size:13px;font-weight:900;color:var(--g);margin-bottom:8px">✅ Як зареєструватись:</div>
         <div style="font-size:12px;color:var(--t1);line-height:1.9;font-weight:600">
@@ -358,7 +305,6 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
   </div>
 
   <div class="scr" id="scr">
-
     <!-- HOME -->
     <div class="pg on" id="pg-home">
       <div class="tb"><div class="logo">BRINGO</div><div class="city-pill">📍 Білгород-Дністровський</div></div>
@@ -430,7 +376,6 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
         <div class="pi"><div class="pi-ic">💳</div><div class="pi-lbl">Способи оплати</div><span style="color:var(--t3)">›</span></div>
         <div class="pi"><div class="pi-ic">🎁</div><div class="pi-lbl">Промокоди та бонуси</div><span style="color:var(--t3)">›</span></div>
         <div class="pi"><div class="pi-ic">📞</div><div class="pi-lbl">Підтримка</div><span style="color:var(--t3)">›</span></div>
-        <!-- Admin preview reset — shown only when viewing as another role -->
         <div class="pi blue" id="piResetView" style="display:none" onclick="setPreviewRole(null)"><div class="pi-ic">👑</div><div class="pi-lbl">Повернутись до адмін-панелі</div><span style="color:#3B82F6">›</span></div>
         <div class="pi red" onclick="logout()"><div class="pi-ic">↩</div><div class="pi-lbl">Вийти з акаунту</div></div>
       </div>
@@ -442,10 +387,8 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
       <div class="tb" style="padding-top:4px;padding-bottom:10px"><div class="logo" style="font-size:18px">Історія замовлень</div></div>
       <div id="profHistBody"></div>
     </div>
-
   </div>
 
-  <!-- NAV -->
   <nav class="nav" id="mainNav">
     <button class="nb on" id="nb-home"    onclick="goPage('home')">   <div class="nb-dot"></div><div class="ni">🏠</div><div class="nl">Головна</div></button>
     <button class="nb"    id="nb-rests"   onclick="goPage('rests')">  <div class="nb-dot"></div><div class="ni">🍴</div><div class="nl">Ресторани</div></button>
@@ -455,7 +398,6 @@ html,body{height:100%;background:#000;font-family:'Nunito',sans-serif;color:var(
   </nav>
 </div>
 
-<!-- PRODUCT MODAL -->
 <div class="mov" id="mOv" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-drag"></div>
@@ -491,261 +433,163 @@ const STATUS={
   cancelled: {label:'❌ Скасовано',color:'#EF4444'},
 };
 const STEPS=['new','accepted','cooking','ready','picked','done'];
+const BOT_URL = 'https://t.me/Bringo117_bot';
 
-/* ══ TELEGRAM ══ */
 const TG = window.Telegram?.WebApp;
 if(TG){ TG.ready(); TG.expand(); }
 function tgUser(){ return TG?.initDataUnsafe?.user || null; }
 function tgId(){ return tgUser() ? String(tgUser().id) : null; }
 
-/* ══ STATE ══ */
-let user = null;
-let adminViewAs = null;
-let cur = 'home', curCat = MENU[0].cat;
-let cart = [];
-let showingHistory = false;
-let admPer = 'day';
-let roleDropOpen = false;
-let gpsWatchId = null;
+let user=null, adminViewAs=null, cur='home', curCat=MENU[0].cat;
+let cart=[], showingHistory=false, admPer='day', roleDropOpen=false;
 
-/* ══ FIREBASE (compat SDK — синхронний старт) ══ */
-const DB = window._DB; // firebase.database() — вже ініціалізовано в <head>
+const DB = window._DB;
 
-/* ══ INIT — запускається одразу, без очікування подій ══ */
 async function init() {
   const tid = tgId();
-  if(!tid) {
-    // Режим розробки — не в Telegram
-    hideSplash();
-    showOnboarding();
-    return;
-  }
+  if(!tid){ hideSplash(); showOnboarding(); return; }
   try {
     const snap = await DB.ref(`users/${tid}`).once('value');
-    if(snap.exists() && snap.val().verified) {
+    if(snap.exists() && snap.val().verified){
       user = snap.val();
-      hideSplash();
-      applyRoleUI();
-      updateProfile();
-      listenToOrder();
-    } else {
-      hideSplash();
-      showOnboarding();
-    }
-  } catch(e) {
-    console.error('Init error:', e);
-    hideSplash();
-    showOnboarding();
-  }
+      hideSplash(); applyRoleUI(); updateProfile(); listenToOrder();
+    } else { hideSplash(); showOnboarding(); }
+  } catch(e){ hideSplash(); showOnboarding(); }
 }
-
-// Запускаємо одразу після завантаження DOM
 document.addEventListener('DOMContentLoaded', init);
 
-function hideSplash() {
-  const s = document.getElementById('splash');
-  if(!s) return;
-  s.classList.add('hide');
-  setTimeout(() => s.remove(), 450);
-}
+function hideSplash(){ const s=document.getElementById('splash'); if(!s)return; s.classList.add('hide'); setTimeout(()=>s.remove(),450); }
+function showOnboarding(){ document.getElementById('onb').style.display='flex'; }
+function openBot(){ if(TG) TG.openTelegramLink(BOT_URL); else window.open(BOT_URL,'_blank'); }
 
-function showOnboarding() {
-  document.getElementById('onb').style.display = 'flex';
-}
-
-// Відкрити бота для реєстрації
-function openBot() {
-  const botUrl = 'https://t.me/Bringo117_bot'; // замініть на ваш @username бота
-  if(TG) TG.openTelegramLink(botUrl);
-  else window.open(botUrl, '_blank');
-}
-
-// Перевірити чи зареєструвався після повернення з бота
-async function checkRegistration() {
-  const tid = tgId();
-  if(!tid) { showToast('❌ Відкрийте додаток через Telegram'); return; }
+async function checkRegistration(){
+  const tid=tgId(); if(!tid){showToast('❌ Відкрийте через Telegram');return;}
   showToast('🔄 Перевірка…');
-  try {
-    const snap = await DB.ref(`users/${tid}`).once('value');
-    if(snap.exists() && snap.val().verified) {
-      user = snap.val();
-      document.getElementById('onb').style.display = 'none';
-      applyRoleUI();
-      updateProfile();
-      listenToOrder();
-      showToast('✅ Вітаємо, ' + user.name + '!');
-    } else {
-      showToast('❌ Реєстрацію не знайдено. Пройдіть реєстрацію в боті');
-    }
-  } catch(e) {
-    showToast('❌ Помилка перевірки: ' + e.message);
-  }
+  try{
+    const snap=await DB.ref(`users/${tid}`).once('value');
+    if(snap.exists()&&snap.val().verified){
+      user=snap.val(); document.getElementById('onb').style.display='none';
+      applyRoleUI(); updateProfile(); listenToOrder();
+      showToast('✅ Вітаємо, '+user.name+'!');
+    } else { showToast('❌ Реєстрацію не знайдено. Пройдіть реєстрацію в боті'); }
+  } catch(e){ showToast('❌ Помилка: '+e.message); }
 }
 
-/* ══ ORDER LISTENER ══ */
-function listenToOrder() {
-  if(!user) return;
-  DB.ref('currentOrder').on('value', snap => {
-    if(cur === 'orders') renderOrders();
-    if(cur === 'cart') renderCart();
+function listenToOrder(){
+  if(!user)return;
+  DB.ref('currentOrder').on('value', ()=>{
+    if(cur==='orders') renderOrders();
+    if(cur==='cart') renderCart();
   });
 }
 
-/* ── Firebase helpers ── */
-function getOrder() {
-  return JSON.parse(localStorage.getItem('bringoOrder') || 'null');
+function getOrder(){ return JSON.parse(localStorage.getItem('bringoOrder')||'null'); }
+function saveOrder(o){ localStorage.setItem('bringoOrder',JSON.stringify(o)); }
+function clearOrder(){ localStorage.removeItem('bringoOrder'); }
+async function fbGetOrder(){
+  try{ const snap=await DB.ref('currentOrder').once('value'); const o=snap.val(); if(o)saveOrder(o); return o||getOrder(); }
+  catch(e){ return getOrder(); }
 }
-function saveOrder(o) { localStorage.setItem('bringoOrder', JSON.stringify(o)); }
-function clearOrder()  { localStorage.removeItem('bringoOrder'); }
-
-async function fbGetOrder() {
-  try {
-    const snap = await DB.ref('currentOrder').once('value');
-    const o = snap.val();
-    if(o) saveOrder(o);
-    return o || getOrder();
-  } catch(e) { return getOrder(); }
-}
-
-async function fbSaveOrder(o) {
-  saveOrder(o);
-  try { await DB.ref('currentOrder').set(o); } catch(e) { console.error('fbSave:', e); }
-  renderOrders();
-}
-
-async function fbClearOrder() {
-  clearOrder();
-  try { await DB.ref('currentOrder').set(null); } catch(e) {}
-}
-
-async function fbAddToHistory(o) {
+async function fbSaveOrder(o){ saveOrder(o); try{await DB.ref('currentOrder').set(o);}catch(e){} renderOrders(); }
+async function fbClearOrder(){ clearOrder(); try{await DB.ref('currentOrder').set(null);}catch(e){} }
+async function fbAddToHistory(o){
   addToHistory(o);
-  try { await DB.ref(`history/${user?.tgId || 'dev'}`).push(o); } catch(e) {}
+  try{await DB.ref(`history/${user?.tgId||'dev'}`).push(o);}catch(e){}
 }
 
-/* ══ LOCAL STORAGE HELPERS ══ */
-function getHistory()  { return JSON.parse(localStorage.getItem('bringoHistory') || '[]'); }
-function addToHistory(o) { const h=getHistory(); h.unshift(o); localStorage.setItem('bringoHistory', JSON.stringify(h.slice(0,100))); }
-function getShift()    { return JSON.parse(localStorage.getItem('bringoShift') || '{"on":false,"orders":0,"income":0,"times":[]}'); }
-function saveShift(s)  { localStorage.setItem('bringoShift', JSON.stringify(s)); }
+function getHistory(){ return JSON.parse(localStorage.getItem('bringoHistory')||'[]'); }
+function addToHistory(o){ const h=getHistory(); h.unshift(o); localStorage.setItem('bringoHistory',JSON.stringify(h.slice(0,100))); }
+function getShift(){ return JSON.parse(localStorage.getItem('bringoShift')||'{"on":false,"orders":0,"income":0,"times":[]}'); }
+function saveShift(s){ localStorage.setItem('bringoShift',JSON.stringify(s)); }
 
-/* ══ ROLE ══ */
-function getRole() {
-  if(!user) return 'client';
-  if(user.name==='1') return 'courier';
-  if(user.name==='2') return 'restaurant';
-  if(user.name==='3') return 'admin';
-  return user.role || 'client';
+function getRole(){
+  if(!user)return'client';
+  if(user.name==='1')return'courier';
+  if(user.name==='2')return'restaurant';
+  if(user.name==='3')return'admin';
+  return user.role||'client';
 }
-function getEffectiveRole() {
-  return (getRole() === 'admin' && adminViewAs) ? adminViewAs : getRole();
-}
-function logout() {
-  localStorage.clear();
-  user = null;
-  adminViewAs = null;
-  location.reload();
-}
+function getEffectiveRole(){ return(getRole()==='admin'&&adminViewAs)?adminViewAs:getRole(); }
+function logout(){ localStorage.clear(); user=null; adminViewAs=null; location.reload(); }
 
-function updateProfile() {
-  if(!user) return;
-  const r = getRole();
-  const names = { courier:'Курʼєр', restaurant:'Ресторан Маестро', admin:'Адміністратор', client:[user.name,user.surname].filter(Boolean).join(' ') };
-  const badges = { courier:'🛵 Курʼєр', restaurant:'👨‍🍳 Ресторан', admin:'👑 Адміністратор', client: user.phone ? '📞 '+user.phone : '🏅 Новий клієнт' };
-  const icons  = { courier:'🛵', restaurant:'👨‍🍳', admin:'👑', client:'👤' };
-  document.getElementById('profName').textContent  = names[r];
-  document.getElementById('profBadge').textContent = badges[r] + (adminViewAs ? '  👁 Перегляд: '+adminViewAs : '');
-  const av = document.getElementById('profAv');
-  const tgu = tgUser();
-  av.innerHTML = tgu?.photo_url ? `<img src="${tgu.photo_url}" alt="ava">` : icons[r];
-
-  // Show/hide admin reset button
-  document.getElementById('piResetView').style.display = (r === 'admin' && adminViewAs) ? 'flex' : 'none';
+function updateProfile(){
+  if(!user)return;
+  const r=getRole();
+  const names={courier:'Курʼєр',restaurant:'Ресторан Маестро',admin:'Адміністратор',client:[user.name,user.surname].filter(Boolean).join(' ')};
+  const badges={courier:'🛵 Курʼєр',restaurant:'👨‍🍳 Ресторан',admin:'👑 Адміністратор',client:user.phone?'📞 '+user.phone:'🏅 Новий клієнт'};
+  const icons={courier:'🛵',restaurant:'👨‍🍳',admin:'👑',client:'👤'};
+  document.getElementById('profName').textContent=names[r];
+  document.getElementById('profBadge').textContent=badges[r]+(adminViewAs?'  👁 Перегляд: '+adminViewAs:'');
+  const av=document.getElementById('profAv'); const tgu=tgUser();
+  av.innerHTML=tgu?.photo_url?`<img src="${tgu.photo_url}" alt="ava">`:icons[r];
+  document.getElementById('piResetView').style.display=(r==='admin'&&adminViewAs)?'flex':'none';
 }
 
-/* ══ NAV ══ */
-function goPage(id) {
+function goPage(id){
   document.getElementById('pg-'+cur)?.classList.remove('on');
   document.getElementById('nb-'+cur)?.classList.remove('on');
-  cur = id;
+  cur=id;
   document.getElementById('pg-'+id)?.classList.add('on');
   document.getElementById('nb-'+id)?.classList.add('on');
-  document.getElementById('scr').scrollTop = 0;
-  if(id==='cart')    renderCart();
-  if(id==='orders')  renderOrders();
-  if(id==='profile') { renderProfile(); updateProfile(); }
+  document.getElementById('scr').scrollTop=0;
+  if(id==='cart') renderCart();
+  if(id==='orders') renderOrders();
+  if(id==='profile'){ renderProfile(); updateProfile(); }
 }
-function openRest() { goPage('rest'); buildTabs(); renderCat(curCat); }
+function openRest(){ goPage('rest'); buildTabs(); renderCat(curCat); }
 
-function applyRoleUI() {
-  const r = getEffectiveRole();
-  // Reset nav
-  ['nb-home','nb-rests','nb-cart'].forEach(id => { const e=document.getElementById(id); if(e) e.style.display=''; });
-
-  if(r === 'courier') {
-    ['nb-home','nb-rests','nb-cart'].forEach(id => { const e=document.getElementById(id); if(e) e.style.display='none'; });
-    document.getElementById('ordersPageTitle').textContent = 'Мої доставки';
-    document.getElementById('ordersPageSub').textContent = 'Активна зміна';
-    document.getElementById('nb-orders').querySelector('.ni').textContent = '🛵';
-    document.getElementById('nb-orders-lbl').textContent = 'Доставки';
-    const rb = document.getElementById('ordersRightBtn'); rb.style.display='block'; rb.textContent='Історія';
-    goPage('orders');
-    if(!adminViewAs) showToast('🛵 Режим курʼєра');
-  } else if(r === 'restaurant') {
-    ['nb-home','nb-rests','nb-cart'].forEach(id => { const e=document.getElementById(id); if(e) e.style.display='none'; });
-    document.getElementById('ordersPageTitle').textContent = 'Замовлення';
-    document.getElementById('ordersPageSub').textContent = 'Панель ресторану';
-    document.getElementById('nb-orders').querySelector('.ni').textContent = '🍽';
-    document.getElementById('nb-orders-lbl').textContent = 'Замовлення';
-    const rb = document.getElementById('ordersRightBtn'); rb.style.display='block'; rb.textContent='Історія';
-    goPage('orders');
-    if(!adminViewAs) showToast('👨‍🍳 Режим ресторану');
-  } else if(r === 'admin') {
-    ['nb-home','nb-rests','nb-cart'].forEach(id => { const e=document.getElementById(id); if(e) e.style.display='none'; });
-    document.getElementById('ordersPageTitle').textContent = 'Адмін-панель';
-    document.getElementById('ordersPageSub').textContent = 'Повний доступ';
-    document.getElementById('nb-orders').querySelector('.ni').textContent = '⚙️';
-    document.getElementById('nb-orders-lbl').textContent = 'Панель';
+function applyRoleUI(){
+  const r=getEffectiveRole();
+  ['nb-home','nb-rests','nb-cart'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='';});
+  if(r==='courier'){
+    ['nb-home','nb-rests','nb-cart'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
+    document.getElementById('ordersPageTitle').textContent='Мої доставки';
+    document.getElementById('ordersPageSub').textContent='Активна зміна';
+    document.getElementById('nb-orders').querySelector('.ni').textContent='🛵';
+    document.getElementById('nb-orders-lbl').textContent='Доставки';
+    const rb=document.getElementById('ordersRightBtn'); rb.style.display='block'; rb.textContent='Історія';
+    goPage('orders'); if(!adminViewAs) showToast('🛵 Режим курʼєра');
+  } else if(r==='restaurant'){
+    ['nb-home','nb-rests','nb-cart'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
+    document.getElementById('ordersPageTitle').textContent='Замовлення';
+    document.getElementById('ordersPageSub').textContent='Панель ресторану';
+    document.getElementById('nb-orders').querySelector('.ni').textContent='🍽';
+    document.getElementById('nb-orders-lbl').textContent='Замовлення';
+    const rb=document.getElementById('ordersRightBtn'); rb.style.display='block'; rb.textContent='Історія';
+    goPage('orders'); if(!adminViewAs) showToast('👨‍🍳 Режим ресторану');
+  } else if(r==='admin'){
+    ['nb-home','nb-rests','nb-cart'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
+    document.getElementById('ordersPageTitle').textContent='Адмін-панель';
+    document.getElementById('ordersPageSub').textContent='Повний доступ';
+    document.getElementById('nb-orders').querySelector('.ni').textContent='⚙️';
+    document.getElementById('nb-orders-lbl').textContent='Панель';
     document.getElementById('ordersRightBtn').style.display='none';
-    goPage('orders');
-    if(!adminViewAs) showToast('👑 Режим адміністратора');
+    goPage('orders'); if(!adminViewAs) showToast('👑 Режим адміністратора');
   } else {
-    document.getElementById('ordersPageTitle').textContent = 'Замовлення';
-    document.getElementById('ordersPageSub').textContent = 'Активна доставка';
-    document.getElementById('nb-orders').querySelector('.ni').textContent = '📦';
-    document.getElementById('nb-orders-lbl').textContent = 'Замовлення';
+    document.getElementById('ordersPageTitle').textContent='Замовлення';
+    document.getElementById('ordersPageSub').textContent='Активна доставка';
+    document.getElementById('nb-orders').querySelector('.ni').textContent='📦';
+    document.getElementById('nb-orders-lbl').textContent='Замовлення';
     document.getElementById('ordersRightBtn').style.display='none';
     goPage('home');
   }
 }
 
-/* ══ ADMIN ROLE PREVIEW ══ */
-const PREVIEW_ROLES = [
-  {id:'client',    icon:'👤', name:'Клієнт',    sub:'Перегляд як покупець'},
-  {id:'restaurant',icon:'👨‍🍳', name:'Ресторан',  sub:'Панель кухні'},
-  {id:'courier',   icon:'🛵', name:'Курʼєр',    sub:'Зміна та доставки'},
+const PREVIEW_ROLES=[
+  {id:'client',icon:'👤',name:'Клієнт',sub:'Перегляд як покупець'},
+  {id:'restaurant',icon:'👨‍🍳',name:'Ресторан',sub:'Панель кухні'},
+  {id:'courier',icon:'🛵',name:'Курʼєр',sub:'Зміна та доставки'},
 ];
+function toggleRoleDropdown(){ roleDropOpen=!roleDropOpen; renderOrders(); }
+function setPreviewRole(role){ adminViewAs=role; roleDropOpen=false; updateProfile(); applyRoleUI(); if(role)showToast('👁 Від імені: '+(role==='client'?'Клієнта':role==='courier'?'Курʼєра':'Ресторану')); else showToast('👑 Повернувся до адмін-панелі'); }
 
-function toggleRoleDropdown() { roleDropOpen=!roleDropOpen; renderOrders(); }
-
-function setPreviewRole(role) {
-  adminViewAs = role;
-  roleDropOpen = false;
-  updateProfile();
-  applyRoleUI();
-  if(role) showToast('👁 Від імені: '+(role==='client'?'Клієнта':role==='courier'?'Курʼєра':'Ресторану'));
-  else     showToast('👑 Повернувся до адмін-панелі');
-}
-
-/* ══ MENU ══ */
-function buildTabs() { document.getElementById('catTabs').innerHTML=MENU.map(({cat})=>`<div class="ct ${cat===curCat?'on':''}" onclick="switchCat('${cat}')">${cat}</div>`).join(''); }
-function switchCat(cat) { curCat=cat; document.querySelectorAll('.ct').forEach(t=>t.classList.toggle('on',t.textContent===cat)); renderCat(cat); document.getElementById('scr').scrollTop=0; }
-function renderCat(cat) {
-  const {items}=MENU.find(s=>s.cat===cat);
+function buildTabs(){ document.getElementById('catTabs').innerHTML=MENU.map(({cat})=>`<div class="ct ${cat===curCat?'on':''}" onclick="switchCat('${cat}')">${cat}</div>`).join(''); }
+function switchCat(cat){ curCat=cat; document.querySelectorAll('.ct').forEach(t=>t.classList.toggle('on',t.textContent===cat)); renderCat(cat); document.getElementById('scr').scrollTop=0; }
+function renderCat(cat){
+  const{items}=MENU.find(s=>s.cat===cat);
   document.getElementById('menuContent').innerHTML=`<div class="msec-title">${cat}</div><div class="mgrid">${items.map(item=>{const d=JSON.stringify(item).replace(/'/g,"&#39;");return`<div class="mc" onclick='openModal(${d})'><div class="mc-img" style="background-image:url('${item.img}')"></div><div class="mc-body"><div class="mc-name">${item.n}</div><div class="mc-desc">${item.d}</div><div class="mc-foot"><div class="mc-price">від ${item.basePrice} грн</div><button class="mc-add" onclick='event.stopPropagation();openModal(${d})'>+</button></div></div></div>`;}).join('')}</div>`;
 }
 
-/* ══ MODAL ══ */
 let mItem=null,mQty=1,mSel={};
 function openModal(item){mItem=item;mQty=1;mSel={};item.groups.forEach((g,gi)=>{mSel[gi]=g.type==='radio'?0:new Set();});document.getElementById('mImg').style.backgroundImage=`url('${item.img}')`;document.getElementById('mName').textContent=item.n;document.getElementById('mDesc').textContent=item.d;document.getElementById('mQtyEl').textContent=1;renderGroups();updTotal();document.getElementById('mOv').classList.add('on');}
 function closeModal(){document.getElementById('mOv').classList.remove('on');}
@@ -757,7 +601,6 @@ function updTotal(){document.getElementById('mTotal').textContent=calcPrice()+' 
 function chQty(d){mQty=Math.max(1,mQty+d);document.getElementById('mQtyEl').textContent=mQty;updTotal();}
 function addCart(){const unitPrice=calcPrice()/mQty;const opts=[];mItem.groups.forEach((g,gi)=>{if(g.type==='radio')opts.push(g.options[mSel[gi]].n);else mSel[gi].forEach(oi=>opts.push(g.options[oi].n));});cart.push({item:mItem,opts,unitPrice,qty:mQty});updateCartBadge();closeModal();showToast('✅ '+mItem.n+' · '+opts[0]);}
 
-/* ══ CART ══ */
 function updateCartBadge(){const t=cart.reduce((s,c)=>s+c.qty,0);const b=document.getElementById('cartBadge');b.textContent=t||'';b.classList.toggle('on',t>0);}
 function renderCart(){
   const el=document.getElementById('cartBody');
@@ -765,12 +608,11 @@ function renderCart(){
   if(!cart.length){el.innerHTML=`<div class="cart-empty"><span>🛒</span><h3>Кошик порожній</h3><p>Додайте страви з меню</p><button class="cta" onclick="openRest()">До меню</button></div>`;return;}
   const sub=cart.reduce((s,c)=>s+c.unitPrice*c.qty,0);
   el.innerHTML=`<div class="cart-items">${cart.map((c,i)=>`<div class="ci"><div class="ci-img" style="background-image:url('${c.item.img}')"></div><div style="flex:1;min-width:0"><div class="ci-name">${c.item.n} ×${c.qty}</div><div class="ci-opts">${c.opts.join(', ')}</div><div class="ci-price">${c.unitPrice*c.qty} грн</div></div><button class="ci-rm" onclick="removeCart(${i})">✕</button></div>`).join('')}</div>
-  <div class="cart-footer"><div class="cart-row"><span style="color:var(--t2)">Сума</span><span>${sub} грн</span></div><div class="cart-row"><span style="color:var(--t2)">Доставка</span><span>50 грн</span></div><div class="cart-total-row cart-row"><span class="cart-total-lbl">Разом</span><span class="cart-total-val">${sub+50} грн</span></div><div class="inp-wrap" style="margin-top:12px;margin-bottom:0"><label class="inp-label" style="margin-bottom:5px">📍 Адреса доставки</label><input class="inp" id="deliveryAddr" placeholder="вул. Приморська 12, кв. 3" value="вул. Приморська 12, кв. 3"></div><button class="checkout-btn" onclick="placeOrder()">Оформити замовлення →</button></div>`;
+  <div class="cart-footer"><div class="cart-row"><span style="color:var(--t2)">Сума</span><span>${sub} грн</span></div><div class="cart-row"><span style="color:var(--t2)">Доставка</span><span>50 грн</span></div><div class="cart-total-row cart-row"><span class="cart-total-lbl">Разом</span><span class="cart-total-val">${sub+50} грн</span></div><div style="margin-top:12px;margin-bottom:0"><label style="font-size:11px;font-weight:700;color:var(--t2);display:block;margin-bottom:5px;font-family:'Geologica',sans-serif;text-transform:uppercase;letter-spacing:.5px">📍 Адреса доставки</label><input style="width:100%;background:var(--s2);border:1.5px solid var(--bd2);border-radius:14px;padding:13px 16px;font-size:15px;font-weight:600;color:var(--t1);outline:none;font-family:'Nunito',sans-serif" id="deliveryAddr" placeholder="вул. Приморська 12, кв. 3" value="вул. Приморська 12, кв. 3"></div><button class="checkout-btn" onclick="placeOrder()">Оформити замовлення →</button></div>`;
 }
 function removeCart(i){cart.splice(i,1);updateCartBadge();renderCart();}
 function clearCart(){cart=[];updateCartBadge();renderCart();}
 
-/* ══ ORDER ══ */
 async function placeOrder(){
   if(!cart.length)return;
   const addr=document.getElementById('deliveryAddr')?.value||'вул. Приморська 12, кв. 3';
@@ -785,7 +627,7 @@ async function placeOrder(){
     time:new Date().toLocaleTimeString('uk-UA',{hour:'2-digit',minute:'2-digit'}),
     placed:Date.now(),
     courierName:null,courierTgId:null,courierAccepted:false,
-    courierLat:null,courierLng:null,courierAcc:null,
+    courierLat:null,courierLng:null,courierLiveTs:null,
   };
   o.restaurantProfit=Math.round((o.total-50)*.8);
   o.platformProfit=Math.round((o.total-50)*.2)+50;
@@ -793,34 +635,40 @@ async function placeOrder(){
   cart=[];updateCartBadge();goPage('orders');showToast('🎉 Замовлення відправлено!');
 }
 
-/* ══ STATUS CHANGES ══ */
 async function changeStatus(s){
-  const o=await fbGetOrder();
+  const o=await fbGetOrder(); if(!o)return;
   o.status=s;
   if(s==='done'){
     o.doneAt=Date.now();
     o.deliveryMinutes=Math.round((o.doneAt-o.placed)/60000);
     await fbAddToHistory({...o});
     const sh=getShift();sh.orders++;sh.income+=50;sh.times.push(o.deliveryMinutes);saveShift(sh);
-    stopCourierGPS();
     await fbClearOrder();
     showToast('🎉 Доставку завершено!');
     return;
   }
   await fbSaveOrder(o);
-  if(s!=='done')showToast(STATUS[s].label);
+  showToast(STATUS[s].label);
 }
 
 async function courierAccept(){
-  const o=await fbGetOrder();
-  const sh=getShift();
+  const o=await fbGetOrder(); const sh=getShift();
   if(!sh.on){showToast('⚫ Спочатку вийдіть на зміну');return;}
   o.courierName=user?[user.name,user.surname].filter(Boolean).join(' '):'Курʼєр #1';
   o.courierTgId=user?.tgId||null;
   o.courierAccepted=true;
   await fbSaveOrder(o);
   showToast('✅ Прийнято! Їдьте до ресторану');
-  startCourierGPS();
+}
+
+// ══ НОВА КНОПКА "ЗАБРАВ ЗАМОВЛЕННЯ" — без GPS, відкриває бот ══
+async function pickupOrder(){
+  const o=await fbGetOrder(); if(!o)return;
+  o.status='picked';
+  await fbSaveOrder(o);
+  showToast('📦 Статус оновлено! Відкрийте бота');
+  // Відкрити бота через 1 секунду щоб toast показався
+  setTimeout(()=>{ if(TG) TG.openTelegramLink(BOT_URL); }, 800);
 }
 
 async function setDelay(){const o=await fbGetOrder();if(!o)return;o.status='delayed';await fbSaveOrder(o);showToast('⏳ Клієнт сповіщений');}
@@ -832,53 +680,6 @@ async function cancelOrder(){
   showToast('❌ Замовлення скасовано');
 }
 
-/* ══ GPS ══ */
-let courierGPS={lat:null,lng:null,acc:null};
-function startCourierGPS(){
-  if(gpsWatchId)return;
-  showToast('📡 GPS активовано');
-  if(TG && TG.LocationManager){
-    TG.LocationManager.init().then(()=>{
-      gpsWatchId=setInterval(async()=>{
-        TG.LocationManager.getLocation().then(async loc=>{
-          if(!loc)return;
-          courierGPS={lat:loc.latitude,lng:loc.longitude,acc:loc.accuracy||0};
-          const o=getOrder();
-          if(o&&['cooking','delayed','ready','picked'].includes(o.status)){
-            o.courierLat=courierGPS.lat;o.courierLng=courierGPS.lng;o.courierAcc=courierGPS.acc;
-            saveOrder(o);
-            try{await DB.ref('currentOrder').update({courierLat:courierGPS.lat,courierLng:courierGPS.lng,courierAcc:courierGPS.acc});}catch(e){}
-          }
-        });
-      },5000);
-    });
-  } else if(navigator.geolocation){
-    gpsWatchId=navigator.geolocation.watchPosition(async pos=>{
-      courierGPS={lat:pos.coords.latitude,lng:pos.coords.longitude,acc:Math.round(pos.coords.accuracy)};
-      const o=getOrder();
-      if(o&&['cooking','delayed','ready','picked'].includes(o.status)){
-        o.courierLat=courierGPS.lat;o.courierLng=courierGPS.lng;o.courierAcc=courierGPS.acc;
-        saveOrder(o);
-        try{await DB.ref('currentOrder').update({courierLat:courierGPS.lat,courierLng:courierGPS.lng,courierAcc:courierGPS.acc});}catch(e){}
-      }
-    },err=>{console.warn('GPS:',err.message);},{enableHighAccuracy:true,timeout:10000,maximumAge:3000});
-  } else {
-    showToast('❌ GPS недоступний');
-  }
-}
-function stopCourierGPS(){
-  if(!gpsWatchId)return;
-  if(TG && TG.LocationManager) clearInterval(gpsWatchId);
-  else navigator.geolocation.clearWatch(gpsWatchId);
-  gpsWatchId=null;
-}
-function buildMapUrl(lat,lng){return`https://www.openstreetmap.org/export/embed.html?bbox=${lng-.005},${lat-.003},${lng+.005},${lat+.003}&layer=mapnik&marker=${lat},${lng}`;}
-function accBadge(acc){if(!acc)return'';let c='low',l='Низька';if(acc<=15){c='high';l='Висока';}else if(acc<=50){c='med';l='Середня';}return`<span class="gps-acc ${c}">±${acc}м</span>`;}
-function gpsCardHtml(o){
-  const hasGPS=o?.courierLat&&o?.courierLng;
-  const map=hasGPS?`<iframe src="${buildMapUrl(o.courierLat,o.courierLng)}" style="width:100%;height:100%;border:none;border-radius:12px" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>`:`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;color:var(--t2)"><div style="font-size:32px;animation:bob 2s ease-in-out infinite">🛵</div><div style="font-size:12px;font-weight:700">Очікуємо GPS…</div></div>`;
-  return`<div class="card" style="margin-bottom:14px"><div class="card-title">🗺 GPS-трекінг курʼєра</div><div class="gps-map-real">${map}</div><div class="gps-overlay-info"><div style="display:flex;align-items:center;gap:7px"><div class="gps-dot-live"></div><span style="font-size:11px;font-weight:700">${hasGPS?'Курʼєр в дорозі':'Очікування…'}</span> ${hasGPS?accBadge(o.courierAcc):''}</div><span style="font-size:10px;color:var(--t2)">${hasGPS?'Live':'—'}</span></div></div>`;
-}
 /* ══ RENDER ORDERS ══ */
 async function renderOrders(){
   const el=document.getElementById('ordersBody');if(!el)return;
@@ -888,14 +689,40 @@ async function renderOrders(){
   else if(r==='admin') renderAdminPanel(el);
   else renderClientOrders(el);
 }
+setInterval(()=>{if(cur==='orders')renderOrders();},4000);
 
-setInterval(()=>{if(cur==='orders')renderOrders();},3000);
-window.addEventListener('storage',e=>{if((e.key==='bringoOrder'||e.key==='bringoSignal')&&cur==='orders')renderOrders();});
+// ── Блок чату для клієнта (коли курʼєр в дорозі) ─────────────────────────────
+function chatBlockHtml(){
+  return `<div class="chat-banner">
+    <div class="chat-banner-icon">💬</div>
+    <div style="flex:1">
+      <div class="chat-banner-title">Чат з курʼєром відкрито в боті!</div>
+      <div class="chat-banner-step">Пишіть повідомлення, надсилайте фото чи геолокацію — курʼєр отримає все. Курʼєр може поділитись live-геолокацією.</div>
+      <button class="chat-open-btn" onclick="openBot()">📱 Відкрити чат в боті BRINGO</button>
+    </div>
+  </div>`;
+}
 
-/* ─── COURIER ─── */
+// ── Блок чату для курʼєра (коли picked) ─────────────────────────────────────
+function courierChatBlockHtml(){
+  return `<div class="chat-banner" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3)">
+    <div class="chat-banner-icon">💬</div>
+    <div style="flex:1">
+      <div class="chat-banner-title" style="color:var(--g)">Чат з клієнтом активний!</div>
+      <div class="chat-banner-step">
+        Пишіть повідомлення, надсилайте фото та відео боту — клієнт отримає.<br><br>
+        <b>📡 Щоб поділитись live-геолокацією:</b><br>
+        1. Натисніть 📎 в боті<br>
+        2. Оберіть 📍 Геолокація<br>
+        3. "Поділитись своєю геолокацією" → 15 хв
+      </div>
+      <button class="chat-open-btn" style="background:var(--g)" onclick="openBot()">📱 Відкрити чат в боті BRINGO</button>
+    </div>
+  </div>`;
+}
 
 async function renderClientOrders(el){
-  const o = await fbGetOrder();
+  const o=await fbGetOrder();
   if(!o){el.innerHTML=`<div class="ord-empty"><span>📦</span><h3>Замовлень поки немає</h3><p>Зробіть перше замовлення!</p><button class="cta" onclick="openRest()">До меню</button></div>`;return;}
   const st=STATUS[o.status],ci=STEPS.indexOf(o.status),canCancel=['new','accepted'].includes(o.status);
   el.innerHTML=`<div style="padding:0 18px 24px">
@@ -903,7 +730,7 @@ async function renderClientOrders(el){
       <div style="font-size:36px">${st.label.split(' ')[0]}</div>
       <div><div style="font-family:'Geologica',sans-serif;font-weight:900;font-size:15px;color:${st.color}">${st.label.slice(st.label.indexOf(' ')+1)}</div><div style="font-size:11px;color:var(--t2);margin-top:3px">Замовлення #${String(o.id).slice(-4)} · ${o.time}</div></div>
     </div>
-    ${o.status==='picked'?gpsCardHtml(o):''}
+    ${o.status==='picked'?chatBlockHtml():''}
     ${o.courierAccepted&&['cooking','delayed','ready'].includes(o.status)?`<div class="courier-banner"><div style="font-size:22px">🛵</div><div><div style="font-family:'Geologica',sans-serif;font-size:13px;font-weight:800;color:#3B82F6">Курʼєр вже їде до ресторану</div><div style="font-size:11px;color:var(--t2);margin-top:2px">Очікуйте — після готування одразу привезуть</div></div></div>`:''}
     <div class="card"><div class="card-title">Склад замовлення</div>${o.items.map(i=>`<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--bd);font-size:13px;font-weight:600"><div>${i.name} ×${i.qty}<div style="font-size:10px;color:var(--t2);margin-top:2px">${i.opts.join(', ')}</div></div><div style="font-family:'Geologica',sans-serif;font-weight:900;color:var(--or);flex-shrink:0;margin-left:8px">${i.price} грн</div></div>`).join('')}<div style="display:flex;justify-content:space-between;padding:10px 0 0;font-family:'Geologica',sans-serif;font-size:14px;font-weight:900"><span>Разом</span><span style="color:var(--or)">${o.total} грн</span></div></div>
     <div class="card"><div class="card-title">Прогрес доставки</div>${STEPS.map((s,i)=>{const done=i<ci,act=i===ci,last=i===STEPS.length-1;return`<div class="dstep ${done?'done':act?'act':''}"><div class="dstep-col"><div class="dstep-dot">${done?'✓':act?'●':'○'}</div>${!last?`<div class="dstep-line" style="background:${done?'var(--g)':'var(--t3)'}"></div>`:''}</div><div class="dstep-lbl">${STATUS[s].label.slice(STATUS[s].label.indexOf(' ')+1)}</div></div>`;}).join('')}</div>
@@ -912,14 +739,14 @@ async function renderClientOrders(el){
 }
 
 async function renderRestaurantOrders(el){
-  const o = await fbGetOrder();
+  const o=await fbGetOrder();
   const todayH=getHistory().filter(h=>Date.now()-h.placed<86400000&&h.status==='done');
   const top=`<div style="padding:0 18px"><div class="stat-grid" style="padding:0;margin-bottom:16px"><div class="sg"><div class="sg-val">${todayH.length}</div><div class="sg-lbl">Замовлень сьогодні</div></div><div class="sg"><div class="sg-val" style="color:var(--g)">${todayH.reduce((s,h)=>s+(h.restaurantProfit||0),0)}</div><div class="sg-lbl">Грн зароблено</div></div></div></div>`;
   if(showingHistory){el.innerHTML=top+historyListHtml(getHistory(),'restaurant');return;}
   if(!o||['done','cancelled','picked'].includes(o.status)){el.innerHTML=top+`<div class="ord-empty"><span>🍽</span><h3>Нових замовлень немає</h3><p>Очікуйте на замовлення від клієнтів</p></div>`;return;}
   const st=STATUS[o.status];
   let mainBtn='',delayBtn='';
-  if(o.status==='new')      mainBtn=btnA('✅ Прийняти замовлення',"changeStatus('accepted')");
+  if(o.status==='new') mainBtn=btnA('✅ Прийняти замовлення',"changeStatus('accepted')");
   else if(o.status==='accepted') mainBtn=btnA('👨‍🍳 Почати готувати',"changeStatus('cooking')");
   else if(['cooking','delayed'].includes(o.status)) mainBtn=btnA('🍽 Страва готова!',"changeStatus('ready')");
   else if(o.status==='ready') mainBtn=btnD('⏳ Чекаємо курʼєра…');
@@ -936,19 +763,16 @@ async function renderRestaurantOrders(el){
 }
 
 async function renderCourierOrders(el){
-  const o = await fbGetOrder();
+  const o=await fbGetOrder();
   const sh=getShift();
   const avgT=sh.times.length?Math.round(sh.times.reduce((a,b)=>a+b)/sh.times.length):0;
   const hasActive=o&&!['done','cancelled'].includes(o.status);
-  const courierOwnsOrder = hasActive && o.courierAccepted && (o.courierTgId === user?.tgId || o.courierTgId === null);
-  const shiftDisabled = courierOwnsOrder;
-
-  const shiftCard=`<div class="shift-wrap"><div class="shift-card ${sh.on?'on':'off'}" style="${shiftDisabled?'opacity:.65':''}">
+  const courierOwnsOrder=hasActive&&o.courierAccepted&&(o.courierTgId===user?.tgId||o.courierTgId===null);
+  const shiftCard=`<div class="shift-wrap"><div class="shift-card ${sh.on?'on':'off'}" style="${courierOwnsOrder?'opacity:.65':''}">
     <div><div style="font-family:'Geologica',sans-serif;font-size:14px;font-weight:900;color:${sh.on?'var(--g)':'var(--t2)'}">${sh.on?'🟢 На зміні':'⚫ Поза зміною'}</div>
     <div style="font-size:11px;color:var(--t2);margin-top:3px">${sh.on?'Ви отримуєте замовлення':'Натисніть щоб розпочати'}</div></div>
-    <button class="shift-toggle ${sh.on?'on':'off'}" onclick="${shiftDisabled?"showToast('⚠️ Ви прийняли замовлення — завершіть його спочатку')":'toggleShift()'}"></button>
+    <button class="shift-toggle ${sh.on?'on':'off'}" onclick="${courierOwnsOrder?"showToast('⚠️ Завершіть замовлення спочатку')":'toggleShift()'}"></button>
   </div></div>`;
-
   const stats=`<div class="stat-grid"><div class="sg"><div class="sg-val">${sh.orders}</div><div class="sg-lbl">Замовлень сьогодні</div></div><div class="sg"><div class="sg-val" style="color:var(--g)">${sh.income}</div><div class="sg-lbl">Грн дохід</div></div><div class="sg"><div class="sg-val" style="color:#3B82F6">${avgT||'—'}</div><div class="sg-lbl">Середній час (хв)</div></div><div class="sg"><div class="sg-val" style="color:var(--y)">${sh.orders}</div><div class="sg-lbl">Виконано сьогодні</div></div></div>`;
 
   if(showingHistory){el.innerHTML=shiftCard+stats+historyListHtml(getHistory().filter(x=>x.status==='done'),'courier');return;}
@@ -962,57 +786,34 @@ async function renderCourierOrders(el){
   } else if(['cooking','delayed'].includes(o.status)){
     btn=!o.courierAccepted?btnA('🛵 Взяти замовлення — їду до ресторану','courierAccept()','#3B82F6'):btnD('👨‍🍳 Ресторан ще готує — очікуйте');
   } else if(o.status==='ready'){
-    btn=btnA('📦 Забрав замовлення!',"startGPSThenPickup()",'#3B82F6');
+    // ═══ НОВА КНОПКА — просто міняє статус + відкриває бот ═══
+    btn=btnA('📦 Забрав замовлення!','pickupOrder()','#3B82F6');
   } else if(o.status==='picked'){
     btn=btnA('🎉 Доставлено клієнту!',"changeStatus('done')",'var(--g)');
   } else {
     btn=btnD(st.label);
   }
 
-  const gpsInfo=gpsWatchId?`<div style="background:var(--gl);border:1px solid var(--gb);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:8px;margin-bottom:12px"><div class="gps-dot-live"></div><div style="font-size:12px;font-weight:700;color:var(--g)">GPS активний ${courierGPS.acc?accBadge(courierGPS.acc):''}</div></div>`:'';
-
   el.innerHTML=shiftCard+stats+`<div style="padding:0 18px">
     <div style="background:${st.color}1a;border:1.5px solid ${st.color}55;border-radius:18px;padding:16px;margin-bottom:14px;display:flex;align-items:center;gap:12px"><div style="font-size:30px">${st.label.split(' ')[0]}</div><div><div style="font-family:'Geologica',sans-serif;font-weight:900;font-size:14px;color:${st.color}">${st.label.slice(st.label.indexOf(' ')+1)}</div><div style="font-size:11px;color:var(--t2);margin-top:2px">#${String(o.id).slice(-4)}</div></div></div>
-    ${gpsInfo}
-    ${o.status==='picked'?gpsCardHtml(o):''}
+    ${o.status==='picked'?courierChatBlockHtml():''}
     <div class="card"><div class="card-title">Деталі доставки</div><div style="font-size:13px;font-weight:700;margin-bottom:6px">👤 ${o.client}</div>${o.clientPhone?`<div style="margin-bottom:6px"><a href="tel:${o.clientPhone}" style="font-size:13px;font-weight:700;color:#3B82F6;text-decoration:none">📞 ${o.clientPhone}</a></div>`:''}<div style="font-size:13px;font-weight:700;color:var(--or)">📍 ${o.address}</div><div style="font-size:13px;font-weight:700;color:var(--g);margin-top:6px">💰 Ваш дохід: 50 грн</div></div>
     <div class="card"><div class="card-title">Замовлення</div>${o.items.map(i=>`<div style="font-size:12px;font-weight:600;padding:5px 0;border-bottom:1px solid var(--bd)">${i.name} ×${i.qty} — ${i.opts.join(', ')}</div>`).join('')}</div>
     ${btn}
   </div>`;
 }
-  
-async function startGPSThenPickup(){
-  showToast('📡 Запит геолокації…');
-  if(TG && TG.LocationManager){
-    try{
-      await TG.LocationManager.init();
-      // Не ждём getLocation — просто запускаем GPS и меняем статус
-      startCourierGPS();
-      await changeStatus('picked');
-    } catch(e){
-      console.warn('TG GPS failed:', e);
-      startCourierGPS(); // попробует браузерный fallback внутри
-      await changeStatus('picked');
-    }
-  } else {
-    startCourierGPS();
-    await changeStatus('picked');
-  }
-}
-  
-function toggleShift(){const s=getShift();s.on=!s.on;if(!s.on){s.orders=0;s.income=0;s.times=[];stopCourierGPS();}saveShift(s);showToast(s.on?'🟢 Зміна розпочата!':'⚫ Зміна завершена');renderOrders();}
 
-/* ─── ADMIN ─── */
+function toggleShift(){const s=getShift();s.on=!s.on;if(!s.on){s.orders=0;s.income=0;s.times=[];}saveShift(s);showToast(s.on?'🟢 Зміна розпочата!':'⚫ Зміна завершена');renderOrders();}
+
 async function renderAdminPanel(el){
-  const snap = await DB.ref('history').once('value');
-  const raw = snap.val() || {};
-  const h = Object.values(raw).flatMap(u => Object.values(u)).sort((a,b)=>b.placed-a.placed);
+  const snap=await DB.ref('history').once('value');
+  const raw=snap.val()||{};
+  const h=Object.values(raw).flatMap(u=>Object.values(u)).sort((a,b)=>b.placed-a.placed);
   const o=await fbGetOrder(),sh=getShift();
   const activeOrds=o&&!['done','cancelled'].includes(o.status)?1:0;
   const arr=h.filter(admPer==='day'?x=>Date.now()-x.placed<86400000&&x.status==='done':x=>Date.now()-x.placed<30*86400000&&x.status==='done');
   const cnt=arr.length,total=arr.reduce((s,x)=>s+x.total,0),profit=arr.reduce((s,x)=>s+(x.platformProfit||0),0);
   const avgT=arr.length?Math.round(arr.map(x=>x.deliveryMinutes||0).reduce((a,b)=>a+b)/arr.length):0;
-
   const roleBar=`<div class="role-preview-bar" onclick="toggleRoleDropdown()">
     <div style="font-size:22px">${adminViewAs?PREVIEW_ROLES.find(r=>r.id===adminViewAs)?.icon:'👁'}</div>
     <div style="flex:1"><div style="font-family:'Geologica',sans-serif;font-size:13px;font-weight:800;color:#3B82F6">Перегляд від імені ролі</div><div style="font-size:11px;color:var(--t2)">${adminViewAs?'Зараз: '+PREVIEW_ROLES.find(r=>r.id===adminViewAs)?.name:'Оберіть роль для перегляду'}</div></div>
@@ -1022,7 +823,6 @@ async function renderAdminPanel(el){
     <div class="rpd-item ${!adminViewAs?'active':''}" onclick="setPreviewRole(null)"><div class="rpd-ic">👑</div><div><div class="rpd-lbl">Адмін-панель</div><div class="rpd-sub">Повернутись до свого виду</div></div>${!adminViewAs?'<span style="color:var(--or);margin-left:auto">✓</span>':''}</div>
     ${PREVIEW_ROLES.map(r=>`<div class="rpd-item ${adminViewAs===r.id?'active':''}" onclick="setPreviewRole('${r.id}')"><div class="rpd-ic">${r.icon}</div><div><div class="rpd-lbl">${r.name}</div><div class="rpd-sub">${r.sub}</div></div>${adminViewAs===r.id?'<span style="color:var(--or);margin-left:auto">✓</span>':''}</div>`).join('')}
   </div>`;
-
   el.innerHTML=`<div style="padding:18px 18px 4px"><div style="font-size:20px;font-weight:900;font-family:'Geologica',sans-serif;margin-bottom:2px">Адмін-панель</div><div style="font-size:12px;color:var(--t2)">Оновлення в реальному часі</div></div>
   ${roleBar}
   <div style="padding:0 18px"><div class="stat-grid" style="padding:0;margin-bottom:0"><div class="sg"><div class="sg-val" style="color:var(--g)">${activeOrds}</div><div class="sg-lbl">Активних замовлень</div></div><div class="sg"><div class="sg-val" style="color:#3B82F6">${sh.on?1:0}</div><div class="sg-lbl">Активних курʼєрів</div></div></div></div>
@@ -1042,7 +842,6 @@ async function renderAdminPanel(el){
 
 function admPeriod(p){admPer=p;renderOrders();}
 
-/* ─── HISTORY ─── */
 function historyListHtml(h,role){
   if(!h.length)return`<div class="ord-empty"><span>📋</span><h3>Немає записів</h3></div>`;
   return`<div style="padding:0 18px 24px">`+h.map(o=>{
@@ -1051,10 +850,8 @@ function historyListHtml(h,role){
     return`<div class="hist-card"><div class="hist-hd"><div><div style="font-family:'Geologica',sans-serif;font-size:13px;font-weight:800">#${String(o.id).slice(-4)} · ${o.time}</div><div class="hist-meta">${role==='courier'?`⏱ ${o.deliveryMinutes||'?'} хв · 📍 ${o.address}`:`👤 ${o.client} · 📍 ${o.address}`}</div></div><div style="font-family:'Geologica',sans-serif;font-size:14px;font-weight:900;color:var(--g)">${right}</div></div><div style="font-size:12px;color:var(--t2)">${o.items.map(i=>i.name+' ×'+i.qty).join(', ')}</div></div>`;
   }).join('')+`</div>`;
 }
-
 function toggleHistory(){showingHistory=!showingHistory;const rb=document.getElementById('ordersRightBtn');if(rb)rb.textContent=showingHistory?'Активне':'Історія';renderOrders();}
 
-/* ══ PROFILE ══ */
 function renderProfile(){
   const r=getRole(),h=getHistory();
   if(r==='client'){const m=h.filter(x=>x.status==='done');document.getElementById('sOrd').textContent=m.length;document.getElementById('sSpend').textContent=m.reduce((s,x)=>s+x.total,0);document.getElementById('sBonus').textContent=Math.floor(m.reduce((s,x)=>s+x.total,0)*.01);document.getElementById('sSpendLbl').textContent='грн витрат';document.getElementById('sBonusLbl').textContent='бонусів';}
@@ -1071,7 +868,6 @@ function showProfileHistory(){
   goPage('profhist');
 }
 
-/* ══ HELPERS ══ */
 function btnA(label,onclick,bg='var(--or)'){return`<button onclick="${onclick}" class="act-btn" style="background:${bg}">${label}</button>`;}
 function btnD(label){return`<button disabled class="act-btn disabled">${label}</button>`;}
 
