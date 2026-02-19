@@ -962,7 +962,7 @@ async function renderCourierOrders(el){
   } else if(['cooking','delayed'].includes(o.status)){
     btn=!o.courierAccepted?btnA('🛵 Взяти замовлення — їду до ресторану','courierAccept()','#3B82F6'):btnD('👨‍🍳 Ресторан ще готує — очікуйте');
   } else if(o.status==='ready'){
-    btn=btnA('📦 Забрав замовлення!',"changeStatus('picked')");
+    btn=btnA('📦 Забрав замовлення!',"startGPSThenPickup()",'#3B82F6');
   } else if(o.status==='picked'){
     btn=btnA('🎉 Доставлено клієнту!',"changeStatus('done')",'var(--g)');
   } else {
@@ -980,7 +980,36 @@ async function renderCourierOrders(el){
     ${btn}
   </div>`;
 }
-
+  
+async function startGPSThenPickup(){
+  if(TG && TG.LocationManager){
+    try{
+      await TG.LocationManager.init();
+      const loc = await TG.LocationManager.getLocation();
+      if(!loc){ showToast('❌ Геолокацію не надано'); return; }
+      startCourierGPS();
+      await changeStatus('picked');
+    } catch(e){
+      // Якщо відмовив — пробуємо браузерний GPS
+      if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(
+          async ()=>{ startCourierGPS(); await changeStatus('picked'); },
+          ()=>{ showToast('❌ GPS не надано — дозвольте геолокацію'); }
+        );
+      } else {
+        showToast('❌ GPS недоступний');
+      }
+    }
+  } else if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(
+      async ()=>{ startCourierGPS(); await changeStatus('picked'); },
+      ()=>{ showToast('❌ GPS не надано — дозвольте геолокацію'); }
+    );
+  } else {
+    showToast('❌ GPS недоступний на цьому пристрої');
+  }
+}
+  
 function toggleShift(){const s=getShift();s.on=!s.on;if(!s.on){s.orders=0;s.income=0;s.times=[];stopCourierGPS();}saveShift(s);showToast(s.on?'🟢 Зміна розпочата!':'⚫ Зміна завершена');renderOrders();}
 
 /* ─── ADMIN ─── */
