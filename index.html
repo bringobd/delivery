@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BRINGO — Доставка</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--c:#0CEDE9;--b:#1A7EDB;--g:linear-gradient(135deg,#0CEDE9,#1A7EDB);--bg:#f2f4f8;--sf:#fff;--sf2:#f0f2f6;--br:#e2e6ed;--tx:#0f1117;--mu:#7a828f;--sw:260px;--hh:68px}
+body.dark{--bg:#0a0a0a;--sf:#141414;--sf2:#1e1e1e;--br:#272727;--tx:#fff;--mu:#888}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden;transition:background .25s,color .25s}
+
+/* FULLPAGE */
+.fp{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;background:linear-gradient(145deg,#0d0d0d,#0a0a0a);color:#fff;overflow:auto;padding:20px}
+.fp.hidden{display:none}
+.wlc{text-align:center;max-width:460px;padding:40px;width:100%}
+.wlc-logo{font-size:88px;animation:fl 2.5s ease-in-out infinite;display:block;margin-bottom:22px}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+.wlc-brand{font-size:50px;font-weight:900;background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;margin-bottom:8px}
+.wlc-sub{font-size:15px;color:#777;margin-bottom:40px;line-height:1.6}
+.wlc-btn{background:var(--g);color:#fff;border:none;border-radius:50px;padding:15px 56px;font-size:17px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;box-shadow:0 10px 30px rgba(12,199,190,.4);transition:all .3s}
+.wlc-btn:hover{transform:scale(1.04)}
+
+/* AUTH */
+.auth-box{background:#141414;border:1px solid #272727;border-radius:26px;padding:32px;width:420px;max-width:calc(100vw - 40px);text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.auth-logo{font-size:48px;margin-bottom:8px;display:block}
+.auth-ttl{font-size:21px;font-weight:900;background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px}
+.auth-hint{font-size:12px;color:#888;margin-bottom:14px;text-align:left;background:rgba(12,199,190,.07);border:1px solid rgba(12,199,190,.18);border-radius:10px;padding:10px 13px;line-height:1.7}
+.auth-hint b{color:#0CEDE9}
+.ai{display:block;width:100%;background:#1e1e1e;border:1px solid #272727;border-radius:11px;padding:11px 14px;font-size:14px;color:#fff;font-family:'Nunito',sans-serif;outline:none;transition:border-color .2s;margin-bottom:9px}
+.ai:focus{border-color:#0CEDE9}
+.ai::placeholder{color:#555}
+.ab{display:block;width:100%;border:none;border-radius:11px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .25s;padding:12px 16px;text-align:center;line-height:1.3}
+.ab.primary{background:var(--g);color:#fff;margin-top:6px}
+.ab.primary:hover{opacity:.88;box-shadow:0 5px 18px rgba(12,199,190,.4)}
+.ab.sec{background:#1e1e1e;color:#fff;border:1px solid #272727;margin-top:8px}
+.ab.sec:hover{border-color:#0CEDE9}
+.auth-div{color:#555;font-size:13px;margin:11px 0}
+.auth-tos{font-size:11px;color:#444;margin-top:14px;line-height:1.5}
+.auth-tos a{color:#0CEDE9;cursor:pointer}
+
+/* APP */
+.app{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:var(--sw);background:var(--sf);border-right:1px solid var(--br);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;transition:background .25s,border-color .25s}
+.sb-logo{padding:22px 18px 16px;display:flex;align-items:center;gap:11px;border-bottom:1px solid var(--br)}
+.sb-ico{width:40px;height:40px;background:var(--g);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;box-shadow:0 4px 16px rgba(12,199,190,.3);flex-shrink:0}
+.sb-brand{font-size:20px;font-weight:900;background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1.5px}
+.sb-nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:2px;overflow-y:auto}
+.nav-sec{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--mu);text-transform:uppercase;padding:10px 8px 4px}
+.ni{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;cursor:pointer;transition:all .2s;font-size:13px;font-weight:700;color:var(--mu);border:1px solid transparent;user-select:none}
+.ni:hover{background:var(--sf2);color:var(--tx);border-color:var(--br)}
+.ni.active{background:linear-gradient(135deg,rgba(12,237,233,.12),rgba(26,126,219,.12));color:var(--c);border-color:rgba(12,237,233,.2)}
+.ni-ico{font-size:18px;width:21px;text-align:center;flex-shrink:0}
+.ni-lbl{flex:1}
+.ni-badge{background:var(--g);border-radius:20px;padding:2px 7px;font-size:10px;font-weight:700;color:#fff}
+.sb-user{padding:12px;border-top:1px solid var(--br)}
+.uc{display:flex;align-items:center;gap:10px;padding:10px;background:var(--sf2);border-radius:12px;border:1px solid var(--br);transition:all .2s}
+.uc:hover{border-color:var(--c)}
+.uc-av{width:34px;height:34px;background:var(--g);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.uc-nm{font-size:12px;font-weight:800}
+.uc-ph{font-size:11px;color:var(--mu)}
+.uc-role{font-size:10px;font-weight:800;color:#f0a500}
+
+/* MAIN */
+.main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh}
+.topbar{height:var(--hh);background:var(--sf);border-bottom:1px solid var(--br);display:flex;align-items:center;gap:14px;padding:0 26px;position:sticky;top:0;z-index:50;transition:background .25s,border-color .25s}
+.tb-ttl{font-size:19px;font-weight:800}
+.tb-sub{font-size:11px;color:var(--mu);font-weight:600}
+.tb-search{flex:1;max-width:380px;margin:0 auto;position:relative}
+.tb-search input{width:100%;background:var(--sf2);border:1px solid var(--br);border-radius:10px;padding:8px 13px 8px 36px;font-size:13px;color:var(--tx);font-family:'Nunito',sans-serif;outline:none;transition:all .2s}
+.tb-search input:focus{border-color:var(--c)}
+.tb-search input::placeholder{color:#888}
+.tb-si{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:14px;opacity:.5}
+.tb-theme{width:38px;height:38px;background:var(--sf2);border:1px solid var(--br);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;transition:all .2s;flex-shrink:0;user-select:none;margin-left:auto}
+.tb-theme:hover{border-color:var(--c)}
+.content{flex:1;padding:24px 26px 40px}
+
+/* PAGES */
+.page{display:none}
+.page.active{display:block;animation:fu .3s ease-out}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* PROMO */
+/* PROMO */
+.promo-track{position:relative;height:190px;border-radius:19px;overflow:hidden;margin-bottom:11px}
+.promo-slide{position:absolute;inset:0;display:flex;align-items:center;padding:0 36px;opacity:0;pointer-events:none;transition:opacity .5s}
+.promo-slide.active{opacity:1;pointer-events:auto}
+/* Mobile promo: swipe-based, not overlapping */
+.promo-track.mob{height:auto;display:flex;overflow:hidden}
+.promo-track.mob .promo-slide{position:relative;inset:auto;flex:0 0 100%;opacity:1;pointer-events:auto;padding:22px 20px;display:none;align-items:center;border-radius:14px}
+.promo-track.mob .promo-slide.active{display:flex}
+.promo-track.mob .pdeco{display:none}
+.promo-track.mob .pt-ttl{font-size:20px}
+.promo-track.mob .pt-sub{font-size:12px;margin-bottom:12px}
+.promo-track.mob .pt-btn{padding:8px 18px;font-size:12px}
+.pt{flex:1}
+.pt-ttl{font-size:32px;font-weight:900;margin-bottom:5px;color:#fff!important}
+.pt-sub{font-size:14px;opacity:.9;margin-bottom:16px;color:#fff!important}
+.pt-btn{background:rgba(255,255,255,.92);color:var(--b);border:none;padding:10px 24px;border-radius:50px;font-size:13px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s}
+.pt-btn:hover{background:#fff;transform:scale(1.04)}
+.pdeco{font-size:115px;opacity:.17;user-select:none;flex-shrink:0}
+.pdots{display:flex;gap:6px;justify-content:center;margin-top:10px}
+.dot{width:8px;height:8px;border-radius:50%;background:#bbb;cursor:pointer;transition:all .3s}
+body.dark .dot{background:#333}
+.dot.active{background:linear-gradient(135deg,#0CEDE9,#1A7EDB)!important;width:22px;border-radius:4px}
+
+/* SECTION HDR */
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sec-ttl{font-size:18px;font-weight:800}
+.sec-all{font-size:12px;font-weight:700;color:var(--c);cursor:pointer}
+
+/* CATS */
+.cats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.cc{background:var(--sf2);border:1px solid var(--br);border-radius:50px;padding:7px 15px;display:flex;align-items:center;gap:6px;cursor:pointer;transition:all .2s;font-size:13px;font-weight:700}
+.cc:hover,.cc.active{background:var(--g);border-color:var(--c);color:#fff;transform:translateY(-2px);box-shadow:0 5px 14px rgba(12,199,190,.28)}
+
+/* NEARBY */
+.ng{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:15px;margin-bottom:26px}
+.nc{background:var(--sf2);border:1px solid var(--br);border-radius:17px;overflow:hidden;cursor:pointer;transition:all .3s;height:185px;position:relative}
+.nc:hover{border-color:rgba(12,237,233,.45);transform:translateY(-4px);box-shadow:0 12px 26px rgba(12,199,190,.18)}
+.nc-img{position:absolute;inset:0;background-size:cover;background-position:center}
+.nc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:65%;background:linear-gradient(to top,rgba(0,0,0,.88),transparent);pointer-events:none;border-radius:0 0 17px 17px}
+.nc-info{position:absolute;bottom:0;left:0;right:0;padding:12px 14px;z-index:2}
+.nc-nm{font-size:15px;font-weight:800;color:#fff!important;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+.nc-desc{font-size:11px;color:rgba(255,255,255,.77)!important}
+.nc-del{font-size:11px;font-weight:700;color:var(--c);margin-top:3px}
+
+/* REST GRID */
+.rg{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.rc{background:var(--sf2);border:1px solid var(--br);border-radius:17px;overflow:hidden;cursor:pointer;transition:all .3s}
+.rc:hover{border-color:rgba(12,237,233,.38);transform:translateY(-4px);box-shadow:0 12px 26px rgba(12,199,190,.16)}
+.rc-img{height:140px;background-size:cover;background-position:center;position:relative}
+.rc-tag{position:absolute;top:9px;left:9px;background:rgba(0,0,0,.7);padding:3px 10px;border-radius:18px;font-size:11px;font-weight:700;color:#fff!important}
+.rc-body{padding:13px}
+.rc-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px}
+.rc-nm{font-size:15px;font-weight:800}
+.rc-rat{background:var(--g);padding:3px 9px;border-radius:10px;font-size:11px;font-weight:700;flex-shrink:0;color:#fff!important}
+.rc-cuis{font-size:12px;color:var(--mu);margin-bottom:7px}
+.rc-meta{display:flex;gap:12px;font-size:12px;color:var(--mu)}
+
+/* ITEMS */
+.ig{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:15px;margin-bottom:26px}
+.ic{background:var(--sf2);border:1px solid var(--br);border-radius:16px;overflow:hidden;cursor:pointer;transition:all .3s}
+.ic:hover{border-color:rgba(12,237,233,.32);transform:translateY(-3px);box-shadow:0 10px 22px rgba(12,199,190,.15)}
+.ic-img{height:125px;background:var(--g);display:flex;align-items:center;justify-content:center;font-size:50px;background-size:cover;background-position:center}
+.ic-body{padding:12px}
+.ic-nm{font-size:13px;font-weight:800;margin-bottom:3px}
+.ic-desc{font-size:11px;color:var(--mu);margin-bottom:9px;line-height:1.4}
+.ic-ft{display:flex;align-items:center;justify-content:space-between}
+.ic-price{font-size:15px;font-weight:800;background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.add-btn{background:var(--g);color:#fff;border:none;width:28px;height:28px;border-radius:8px;font-size:17px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif}
+.add-btn:hover{transform:scale(1.12);box-shadow:0 4px 10px rgba(12,199,190,.4)}
+
+/* FILTERS */
+.fb{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.fc{background:var(--sf2);border:1px solid var(--br);border-radius:50px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
+.fc:hover,.fc.active{background:var(--g);border-color:var(--c);color:#fff}
+
+/* REST DETAIL */
+.rdh{height:265px;border-radius:19px;overflow:hidden;background-size:cover;background-position:center;position:relative;margin-bottom:5px}
+.rdo{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,rgba(0,0,0,.12) 60%,transparent 100%)}
+.rdc{position:absolute;bottom:0;left:0;right:0;padding:20px 24px;z-index:2}
+.back-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff!important;padding:6px 14px;border-radius:18px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;margin-bottom:9px;display:inline-block;transition:all .2s;backdrop-filter:blur(4px)}
+.back-btn:hover{background:rgba(255,255,255,.25)}
+.rdn{font-size:30px;font-weight:900;color:#fff!important;margin-bottom:5px;text-shadow:0 2px 7px rgba(0,0,0,.4)}
+.rdtags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.rtag{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);padding:2px 8px;border-radius:18px;font-size:11px;font-weight:700;color:#fff!important;backdrop-filter:blur(4px)}
+.rdm{display:flex;gap:13px;font-size:13px;font-weight:700;color:rgba(255,255,255,.9)!important;margin-bottom:6px}
+.rdd{font-size:13px;color:rgba(255,255,255,.7)!important}
+.rd-edit{position:absolute;top:13px;right:13px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.28);color:#fff;padding:6px 13px;border-radius:18px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;z-index:3;transition:all .2s}
+.rd-edit:hover{background:rgba(12,237,233,.4)}
+.add-item-btn{background:var(--g);color:#fff;border:none;padding:7px 15px;border-radius:16px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s}
+.add-item-btn:hover{transform:scale(1.04);box-shadow:0 3px 11px rgba(12,199,190,.35)}
+
+/* ORDERS TABLE */
+.tw{background:var(--sf2);border:1px solid var(--br);border-radius:16px;overflow:hidden}
+.ot{width:100%;border-collapse:collapse}
+.ot th{text-align:left;font-size:11px;font-weight:700;letter-spacing:.9px;color:var(--mu);text-transform:uppercase;padding:11px 15px;border-bottom:1px solid var(--br)}
+.ot td{padding:13px 15px;border-bottom:1px solid var(--br);font-size:13px}
+.ot tr:last-child td{border-bottom:none}
+.o-nm{font-weight:800;font-size:14px}
+.o-rs{color:var(--mu);font-size:11px;margin-top:2px}
+.os{padding:3px 11px;border-radius:16px;font-size:11px;font-weight:700;display:inline-block}
+.os.ok{background:rgba(0,180,74,.12);color:#009944}
+.os.go{background:rgba(26,126,219,.12);color:var(--b)}
+.os.no{background:rgba(120,120,120,.12);color:#888}
+.os.pr{background:rgba(255,165,0,.12);color:#e08800}
+.os.rd{background:rgba(12,199,190,.12);color:#0aa}
+.os.de{background:rgba(26,126,219,.12);color:var(--b)}
+.o-tot{font-size:14px;font-weight:800;background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.o-dt{font-size:11px;color:var(--mu)}
+
+/* CART / EMPTY */
+.ew{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:420px;text-align:center}
+.e-ico{font-size:76px;opacity:.2;margin-bottom:16px}
+.e-t{font-size:21px;font-weight:800;margin-bottom:6px}
+.e-s{font-size:13px;color:var(--mu);margin-bottom:22px}
+.go-btn{background:var(--g);color:#fff;border:none;border-radius:12px;padding:12px 28px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s}
+.go-btn:hover{transform:scale(1.03);box-shadow:0 5px 16px rgba(12,199,190,.38)}
+
+/* PROFILE */
+.pg{display:grid;grid-template-columns:290px 1fr;gap:20px;align-items:start}
+.profile-card{background:var(--sf2);border:1px solid var(--br);border-radius:17px;padding:24px;text-align:center;margin-bottom:16px}
+.p-av{width:82px;height:82px;background:var(--g);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 13px;border:4px solid var(--br)}
+.p-nm{font-size:19px;font-weight:800;margin-bottom:3px}
+.p-ph{font-size:12px;color:var(--mu);margin-bottom:18px}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:18px}
+.sb{background:var(--sf);border:1px solid var(--br);border-radius:12px;padding:12px 6px;text-align:center}
+.sbn{font-size:21px;font-weight:900;background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sbl{font-size:10px;color:var(--mu);margin-top:2px}
+.lo-btn{width:100%;background:var(--g);color:#fff;border:none;border-radius:12px;padding:12px;font-size:13px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s}
+.lo-btn:hover{transform:scale(1.02);box-shadow:0 4px 16px rgba(12,199,190,.35)}
+.pm{background:var(--sf2);border:1px solid var(--br);border-radius:17px;overflow:hidden}
+.pmi{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--br);cursor:pointer;transition:all .2s}
+.pmi:last-child{border-bottom:none}
+.pmi:hover{background:rgba(12,237,233,.05);padding-left:20px}
+.pml{display:flex;align-items:center;gap:11px}
+.pmi-ico{width:34px;height:34px;background:var(--sf);border:1px solid var(--br);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.pmi-txt{font-size:13px;font-weight:700}
+.pmi-arr{font-size:16px;color:#555}
+
+/* ORDER TYPES */
+.otg{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;max-width:740px}
+.otc{background:var(--sf2);border:2px solid var(--br);border-radius:17px;padding:24px 20px;cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden}
+.otc:hover:not(.dis){border-color:var(--c);transform:translateY(-3px);box-shadow:0 9px 24px rgba(12,199,190,.2)}
+.otc.sel{border-color:var(--c);background:linear-gradient(135deg,rgba(12,237,233,.1),rgba(26,126,219,.1))}
+.otc.dis{opacity:.45;cursor:not-allowed}
+.ot-ico{font-size:42px;flex-shrink:0}
+.ot-ttl{font-size:17px;font-weight:800;margin-bottom:3px}
+.ot-desc{font-size:12px;color:var(--mu)}
+.soon{position:absolute;top:9px;right:9px;background:rgba(255,255,255,.07);border:1px solid var(--br);padding:3px 9px;border-radius:16px;font-size:10px;font-weight:700;color:var(--mu)}
+
+/* ADMIN */
+.a-tabs{display:flex;gap:7px;margin-bottom:20px;flex-wrap:wrap}
+.at{background:var(--sf2);border:1px solid var(--br);border-radius:18px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;color:var(--mu)}
+.at:hover{border-color:var(--c);color:var(--tx)}
+.at.active{background:var(--g);border-color:var(--c);color:#fff}
+.al{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
+.ap{background:var(--sf);border:1px solid var(--br);border-radius:17px;overflow:hidden}
+.aph{display:flex;align-items:center;justify-content:space-between;padding:14px 17px;border-bottom:1px solid var(--br)}
+.ar{display:flex;align-items:center;gap:11px;padding:12px 17px;border-bottom:1px solid var(--br);cursor:pointer;transition:all .2s}
+.ar:last-child{border-bottom:none}
+.ar:hover{background:var(--sf2)}
+.ar.sel{background:linear-gradient(135deg,rgba(12,237,233,.07),rgba(26,126,219,.07));border-left:3px solid var(--c)}
+.a-thumb{width:42px;height:42px;border-radius:10px;background-size:cover;background-position:center;background-color:var(--sf2);flex-shrink:0}
+.a-inf{flex:1}
+.a-nm{font-size:13px;font-weight:800;margin-bottom:2px}
+.a-mt{font-size:11px;color:var(--mu)}
+.eb{background:var(--sf2);border:1px solid var(--br);border-radius:8px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:all .2s;flex-shrink:0}
+.eb:hover{border-color:var(--c);transform:scale(1.1)}
+
+/* STATS CARDS */
+.sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:13px;margin-bottom:22px}
+.sc{background:var(--sf);border:1px solid var(--br);border-radius:15px;padding:17px 18px}
+.sc-lbl{font-size:10px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.7px;margin-bottom:7px}
+.sc-val{font-size:27px;font-weight:900;background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sc-sub{font-size:11px;color:var(--mu);margin-top:2px}
+.sc-ico{font-size:26px;float:right;margin-top:-34px}
+.sc.warn{border-color:rgba(220,50,50,.3)}
+.sc.warn .sc-val{background:linear-gradient(135deg,#e53935,#f44336);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* CLIENTS */
+.cl-row{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--br);transition:all .2s}
+.cl-row:last-child{border-bottom:none}
+.cl-av{width:36px;height:36px;background:var(--g);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.cl-inf{flex:1}
+.cl-nm{font-size:13px;font-weight:800}
+.cl-ph{font-size:11px;color:var(--mu)}
+.cl-st{font-size:10px;font-weight:700;padding:3px 9px;border-radius:13px}
+.cl-st.ok{background:rgba(0,180,74,.1);color:#009944}
+.cl-st.bl{background:rgba(220,50,50,.1);color:#e53935}
+.blk-btn{background:rgba(220,50,50,.08);border:1px solid rgba(220,50,50,.22);color:#e53935;border-radius:8px;padding:4px 11px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s}
+.blk-btn:hover{background:rgba(220,50,50,.18)}
+.blk-btn.unblk{background:rgba(0,180,74,.08);border-color:rgba(0,180,74,.22);color:#009944}
+.blk-btn.unblk:hover{background:rgba(0,180,74,.18)}
+
+/* LOGS */
+.le{display:flex;align-items:flex-start;gap:12px;padding:11px 16px;border-bottom:1px solid var(--br);font-size:12px}
+.le:last-child{border-bottom:none}
+.le-t{font-size:10px;color:var(--mu);flex-shrink:0;width:42px;padding-top:1px}
+.le-ico{font-size:17px;flex-shrink:0}
+.le-txt{flex:1;line-height:1.4}
+.le-txt b{font-weight:800}
+.le.warn{background:rgba(220,50,50,.04)}
+
+/* COMMISSION */
+.cmg{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:20px}
+.cmc{background:var(--sf);border:1px solid var(--br);border-radius:15px;padding:18px}
+.cmc-ttl{font-size:14px;font-weight:800;margin-bottom:4px}
+.cmc-sub{font-size:12px;color:var(--mu);margin-bottom:12px;line-height:1.5}
+.cm-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.cm-inp{background:var(--sf2);border:1px solid var(--br);border-radius:9px;padding:8px 12px;font-size:15px;font-weight:800;color:var(--tx);font-family:'Nunito',sans-serif;outline:none;transition:all .2s;width:90px}
+.cm-inp:focus{border-color:var(--c)}
+.cm-save{background:var(--g);color:#fff;border:none;border-radius:9px;padding:8px 15px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s}
+.cm-save:hover{transform:scale(1.04)}
+.cm-badge{background:rgba(12,199,190,.1);border:1px solid rgba(12,199,190,.22);color:var(--c);border-radius:7px;padding:3px 9px;font-size:11px;font-weight:700}
+.cm-ex{font-size:11px;color:var(--mu);margin-top:9px;line-height:1.4}
+
+/* COURIER */
+.cw{max-width:660px}
+.c-hdr{background:var(--g);border-radius:17px;padding:22px 24px;margin-bottom:18px;color:#fff;display:flex;align-items:center;justify-content:space-between}
+.c-hdr-ttl{font-size:19px;font-weight:800;margin-bottom:3px}
+.c-hdr-sub{font-size:13px;opacity:.85}
+.shift-btn{background:rgba(255,255,255,.9);color:var(--b);border:none;border-radius:50px;padding:9px 20px;font-size:13px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s}
+.shift-btn:hover{background:#fff;transform:scale(1.04)}
+.shift-btn.on{background:rgba(220,50,50,.85);color:#fff}
+.c-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:18px}
+.cs{background:var(--sf);border:1px solid var(--br);border-radius:13px;padding:13px 11px;text-align:center}
+.cs-n{font-size:23px;font-weight:900;background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cs-l{font-size:10px;color:var(--mu);margin-top:2px}
+.avail-card{background:var(--sf);border:1px solid var(--br);border-radius:15px;padding:16px;margin-bottom:11px;transition:all .2s}
+.avail-card:hover{border-color:rgba(12,237,233,.3)}
+.ac-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.ac-nm{font-size:14px;font-weight:800}
+.ac-pr{font-size:14px;font-weight:800;background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ac-det{font-size:12px;color:var(--mu);margin-bottom:11px;line-height:1.4}
+.acc-btn{background:var(--g);color:#fff;border:none;border-radius:10px;padding:8px 18px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s}
+.acc-btn:hover{transform:scale(1.04);box-shadow:0 4px 12px rgba(12,199,190,.35)}
+.my-order{background:var(--sf);border:2px solid var(--c);border-radius:15px;padding:18px;margin-bottom:13px}
+.mo-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.mo-nm{font-size:15px;font-weight:800}
+.mo-st{font-size:11px;font-weight:700;padding:3px 11px;border-radius:12px;background:rgba(12,199,190,.12);color:var(--c)}
+.mo-det{font-size:12px;color:var(--mu);margin-bottom:13px;line-height:1.5}
+.st-btns{display:flex;gap:7px;flex-wrap:wrap}
+.stb{border:none;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s}
+.stb.pr{background:var(--g);color:#fff}
+.stb.pr:hover{transform:scale(1.04);box-shadow:0 4px 11px rgba(12,199,190,.35)}
+.stb.sc{background:var(--sf2);border:1px solid var(--br);color:var(--tx)}
+.stb.sc:hover{border-color:var(--c)}
+
+/* REST OWNER */
+.row{max-width:880px}
+.roc{background:var(--sf);border:1px solid var(--br);border-radius:15px;padding:16px;margin-bottom:11px;transition:all .2s}
+.roc:hover{border-color:rgba(12,237,233,.22)}
+.roc-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.roc-nm{font-size:14px;font-weight:800}
+.roc-items{font-size:12px;color:var(--mu);margin-bottom:11px;line-height:1.5}
+.roc-btns{display:flex;gap:7px;flex-wrap:wrap}
+.rb{border:none;border-radius:10px;padding:7px 13px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s}
+.rb.ok{background:rgba(0,180,74,.1);color:#009944;border:1px solid rgba(0,180,74,.22)}
+.rb.ok:hover{background:rgba(0,180,74,.2)}
+.rb.pr{background:rgba(255,165,0,.1);color:#e08800;border:1px solid rgba(255,165,0,.22)}
+.rb.pr:hover{background:rgba(255,165,0,.2)}
+.rb.ry{background:var(--g);color:#fff}
+.rb.ry:hover{transform:scale(1.04)}
+.rb.dl{background:rgba(220,50,50,.08);color:#e53935;border:1px solid rgba(220,50,50,.2)}
+.rb.dl:hover{background:rgba(220,50,50,.18)}
+.dl-badge{background:rgba(220,50,50,.09);color:#e53935;border:1px solid rgba(220,50,50,.18);border-radius:8px;padding:3px 8px;font-size:10px;font-weight:700}
+
+/* SECTION PANEL */
+.sp{background:var(--sf);border:1px solid var(--br);border-radius:16px;overflow:hidden;margin-bottom:18px}
+.sp-ttl{padding:14px 17px;border-bottom:1px solid var(--br);font-size:14px;font-weight:800}
+
+/* MODAL */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.58);display:none;align-items:center;justify-content:center;z-index:9000;backdrop-filter:blur(4px)}
+.mo.active{display:flex;animation:fu .22s ease}
+.mb{background:var(--sf);border:1px solid var(--br);border-radius:21px;padding:24px;width:100%;max-width:490px;box-shadow:0 28px 70px rgba(0,0,0,.38);max-height:88vh;overflow-y:auto}
+.mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.mttl{font-size:17px;font-weight:800}
+.mc{background:var(--sf2);border:1px solid var(--br);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .2s;color:var(--tx)}
+.mc:hover{border-color:var(--c)}
+.fr{margin-bottom:12px}
+.fr label{display:block;font-size:10px;font-weight:700;color:var(--mu);margin-bottom:5px;text-transform:uppercase;letter-spacing:.7px}
+.fi{width:100%;background:var(--sf2);border:1px solid var(--br);border-radius:10px;padding:9px 12px;font-size:13px;color:var(--tx);font-family:'Nunito',sans-serif;outline:none;transition:all .2s;resize:vertical}
+.fi:focus{border-color:var(--c);box-shadow:0 0 0 3px rgba(12,237,233,.09)}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mft{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;padding-top:13px;border-top:1px solid var(--br)}
+.sv-btn{background:var(--g);color:#fff;border:none;border-radius:10px;padding:9px 20px;font-size:13px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s}
+.sv-btn:hover{transform:scale(1.03);box-shadow:0 4px 11px rgba(12,199,190,.35)}
+.dl-btn{background:rgba(220,50,50,.09);color:#e53935;border:1px solid rgba(220,50,50,.28);border-radius:10px;padding:9px 16px;font-size:13px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;margin-right:auto}
+.dl-btn:hover{background:rgba(220,50,50,.18)}
+.can-btn{background:var(--sf2);color:var(--tx);border:1px solid var(--br);border-radius:8px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s}
+.can-btn:hover{border-color:#e53935;color:#e53935}
+
+/* ── TOPBAR BUTTONS ── */
+.tb-cart{width:38px;height:38px;background:var(--sf2);border:1px solid var(--br);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;transition:all .2s;flex-shrink:0;user-select:none;position:relative}
+.tb-cart:hover{border-color:var(--c)}
+.tb-cart-badge{position:absolute;top:-5px;right:-5px;background:var(--g);border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center}
+
+/* ── SWIPE ROW (mobile home) ── */
+.swipe-row{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:6px;margin-bottom:26px}
+.swipe-row::-webkit-scrollbar{display:none}
+.swipe-row .nc{flex:0 0 200px;scroll-snap-align:start;height:175px}
+
+/* ── MOBILE NAV ── */
+.mob-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--sf);border-top:1px solid var(--br);padding:8px 4px calc(8px + env(safe-area-inset-bottom));backdrop-filter:blur(12px)}
+.mob-nav-inner{display:flex;align-items:center;justify-content:space-around}
+.mn-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 14px;border-radius:12px;cursor:pointer;transition:all .2s;min-width:56px;position:relative}
+.mn-item.active{background:linear-gradient(135deg,rgba(12,237,233,.13),rgba(26,126,219,.13))}
+.mn-ico{font-size:22px;line-height:1}
+.mn-lbl{font-size:10px;font-weight:700;color:var(--mu);white-space:nowrap}
+.mn-item.active .mn-lbl{color:var(--c)}
+.mn-badge{position:absolute;top:4px;right:10px;background:var(--g);border-radius:10px;padding:1px 5px;font-size:9px;font-weight:800;color:#fff;min-width:16px;text-align:center}
+
+@media(max-width:700px){
+  .sidebar{display:none}
+  .main{margin-left:0}
+  .mob-nav{display:block}
+  .content{padding:16px 14px calc(80px + env(safe-area-inset-bottom)) 14px}
+  .topbar{padding:0 14px;gap:10px}
+  .tb-search{display:none}
+
+  /* Stats grid - 2 cols, no clip */
+  .stats-grid,.sg{grid-template-columns:1fr 1fr}
+  .sc{overflow:visible}
+  .sc-ico{display:none}
+
+  /* Home swipe rows - wide rectangular cards */
+  #nearbyGrid,#popularGrid{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:6px;margin-bottom:26px}
+  #nearbyGrid::-webkit-scrollbar,#popularGrid::-webkit-scrollbar{display:none}
+  #nearbyGrid .nc,#popularGrid .nc{flex:0 0 260px;scroll-snap-align:start;height:140px}
+
+  /* Restaurants page - 1 column vertical */
+  .rg{grid-template-columns:1fr}
+
+  .ig{grid-template-columns:repeat(2,1fr)}
+  .al{grid-template-columns:1fr}
+
+  /* Order page vertical */
+  .otg{grid-template-columns:1fr;max-width:100%}
+  .otc{padding:18px 16px}
+
+  .pg{grid-template-columns:1fr}
+  .f2{grid-template-columns:1fr}
+  .rdh{height:200px}
+  .cw,.row{max-width:100%}
+
+  .c-hdr{flex-direction:column;gap:12px;text-align:center}
+  .c-stats{grid-template-columns:repeat(3,1fr)}
+}
+
+</style>
+</head>
+<body>
+
+<!-- WELCOME -->
+<div class="fp" id="wp">
+  <div class="wlc">
+    <span class="wlc-logo">🛵</span>
+    <div class="wlc-brand">BRINGO</div>
+    <div class="wlc-sub">Швидка доставка їжі, продуктів та товарів прямо до ваших дверей</div>
+    <button class="wlc-btn" id="startBtn">Почати</button>
+  </div>
+</div>
+
+<!-- AUTH -->
+<div class="fp hidden" id="authPage">
+  <div class="auth-box">
+    <span class="auth-logo">🛵</span>
+    <div class="auth-ttl">Вхід або реєстрація</div>
+    <div class="auth-hint">
+      🔑 <b>Коди доступу:</b><br>
+      <b>3</b> — 👑 Адміністратор<br>
+      <b>1</b> — 🛵 Кур'єр<br>
+      <b>rest_1</b> … <b>rest_6</b> — 🍽️ Обліковий запис ресторану<br>
+      Будь-що інше — 👤 Клієнт
+    </div>
+    <div id="authForm" style="width:100%">
+      <input type="text" class="ai" id="aiName" placeholder="Ім'я (необов'язково)">
+      <input type="tel" class="ai" id="aiPhone" placeholder="Телефон або код входу">
+      <button type="button" class="ab primary" id="loginMainBtn">Увійти / Зареєструватись</button>
+      <div class="auth-div">або</div>
+      <button type="button" class="ab sec" id="guestBtn">Увійти як гість</button>
+    </div>
+    <div class="auth-tos">Продовжуючи, ви приймаєте наші <a>Умови використання</a></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="app" style="display:none">
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-ico">🛵</div>
+      <div class="sb-brand">BRINGO</div>
+    </div>
+    <nav class="sb-nav" id="sbNav"></nav>
+    <div class="sb-user">
+      <div class="uc" id="userCard">
+        <div class="uc-av" id="ucAv">👤</div>
+        <div>
+          <div class="uc-nm" id="ucNm">Користувач</div>
+          <div class="uc-ph" id="ucPh"></div>
+          <div class="uc-role" id="ucRole"></div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div><div class="tb-ttl" id="tbTtl">Головна</div><div class="tb-sub" id="tbSub"></div></div>
+      <div class="tb-search"><span class="tb-si">🔍</span><input type="text" placeholder="Пошук..."></div>
+      <div class="tb-theme" id="themeBtn">🌙</div>
+    </header>
+
+    <main class="content">
+
+      <!-- HOME -->
+      <div class="page active" id="home-page">
+        <div class="promo-track">
+          <div class="promo-slide active" style="background:linear-gradient(135deg,#0CEDE9,#1A7EDB)"><div class="pt"><div class="pt-ttl">Знижка 20%</div><div class="pt-sub">на перше замовлення від 500₴</div><button class="pt-btn">Замовити зараз</button></div><div class="pdeco">🎉</div></div>
+          <div class="promo-slide" style="background:linear-gradient(135deg,#2196F3,#0CEDE9)"><div class="pt"><div class="pt-ttl">Безкоштовна доставка</div><div class="pt-sub">при замовленні від 300₴</div><button class="pt-btn">Замовити зараз</button></div><div class="pdeco">🚀</div></div>
+          <div class="promo-slide" style="background:linear-gradient(135deg,#0CEDE9,#2196F3)"><div class="pt"><div class="pt-ttl">Комбо меню</div><div class="pt-sub">Піца + напій всього 249₴</div><button class="pt-btn">Замовити зараз</button></div><div class="pdeco">🍕</div></div>
+          <div class="promo-slide" style="background:linear-gradient(135deg,#1A7EDB,#0CEDE9)"><div class="pt"><div class="pt-ttl">Швидка доставка</div><div class="pt-sub">Привеземо за 20 хвилин!</div><button class="pt-btn">Замовити зараз</button></div><div class="pdeco">⚡</div></div>
+        </div>
+        <div class="pdots"><div class="dot active" data-i="0"></div><div class="dot" data-i="1"></div><div class="dot" data-i="2"></div><div class="dot" data-i="3"></div></div>
+        <div class="sec-hd" style="margin-top:18px"><div class="sec-ttl">Категорії</div><div class="sec-all">Усі</div></div>
+        <div class="cats"><div class="cc active">🍕 Їжа</div><div class="cc">🛒 Продукти</div><div class="cc">☕ Кава</div><div class="cc">🎂 Десерти</div><div class="cc">🍔 Бургери</div><div class="cc">🍜 Суші</div><div class="cc">🥗 Салати</div><div class="cc">🍺 Напої</div></div>
+        <div class="sec-hd"><div class="sec-ttl">Поруч з вами</div><div class="sec-all" onclick="nav('restaurants-page')">Усі</div></div>
+        <div class="ng" id="nearbyGrid"></div>
+        <div class="sec-hd"><div class="sec-ttl">Популярні ресторани</div><div class="sec-all" onclick="nav('restaurants-page')">Усі</div></div>
+        <div class="ng" id="popularGrid"></div>
+      </div>
+
+      <!-- ORDER TYPE -->
+      <div class="page" id="order-page">
+        <div class="otg">
+          <div class="otc sel" data-target="restaurants-page"><div class="ot-ico">🍽️</div><div><div class="ot-ttl">Ресторани</div><div class="ot-desc">Замовити їжу з улюблених закладів</div></div></div>
+          <div class="otc dis"><div class="ot-ico">🛒</div><div><div class="ot-ttl">Магазини</div><div class="ot-desc">Купити продукти та товари</div></div><div class="soon">Скоро</div></div>
+          <div class="otc dis"><div class="ot-ico">📦</div><div><div class="ot-ttl">Пошта</div><div class="ot-desc">Забрати посилку з відділення</div></div><div class="soon">Скоро</div></div>
+          <div class="otc dis"><div class="ot-ico">💊</div><div><div class="ot-ttl">Аптека</div><div class="ot-desc">Замовити ліки та медикаменти</div></div><div class="soon">Скоро</div></div>
+        </div>
+      </div>
+
+      <!-- RESTAURANTS -->
+      <div class="page" id="restaurants-page">
+        <div class="fb"><div class="fc active">Усі</div><div class="fc">🍕 Піца</div><div class="fc">🍔 Бургери</div><div class="fc">🍜 Суші</div><div class="fc">🥗 Здорова їжа</div><div class="fc">☕ Кава</div><div class="fc">🎂 Десерти</div><div class="fc">🌮 Мексика</div></div>
+        <div class="rg" id="restGrid"></div>
+      </div>
+
+      <!-- RESTAURANT DETAIL -->
+      <div class="page" id="restaurant-page">
+        <div class="rdh" id="rdHero">
+          <div class="rdo"></div>
+          <div class="rdc">
+            <button class="back-btn" id="backBtn">← Назад</button>
+            <div class="rdn" id="rdNm"></div>
+            <div class="rdtags" id="rdTags"></div>
+            <div class="rdm"><span id="rdRat"></span><span id="rdDel"></span><span id="rdTime"></span></div>
+            <div class="rdd" id="rdDesc"></div>
+          </div>
+          <button class="rd-edit" id="rdEdit" style="display:none">✏️ Редагувати</button>
+        </div>
+        <div style="padding:20px 0">
+          <div class="sec-hd"><div class="sec-ttl">Меню</div><button class="add-item-btn" id="rdAddItem" style="display:none">+ Додати страву</button></div>
+          <div class="ig" id="rdMenu"></div>
+        </div>
+      </div>
+
+      <!-- CART -->
+      <div class="page" id="cart-page"><div class="ew"><div class="e-ico">🛒</div><div class="e-t">Кошик порожній</div><div class="e-s">Додайте товари з меню</div><button class="go-btn" onclick="nav('home-page')">Перейти до меню</button></div></div>
+
+      <!-- ORDERS -->
+      <div class="page" id="orders-page">
+        <div class="tw">
+          <table class="ot">
+            <thead><tr><th>Замовлення</th><th>Статус</th><th>Дата</th><th>Сума</th></tr></thead>
+            <tbody>
+              <tr><td><div class="o-nm">#1234</div><div class="o-rs">Піца Маестро — Пепероні, Маргарита</div></td><td><span class="os ok">Доставлено</span></td><td><div class="o-dt">25 лют, 18:30</div></td><td><div class="o-tot">489₴</div></td></tr>
+              <tr><td><div class="o-nm">#1233</div><div class="o-rs">Burger House — Чізбургер х2</div></td><td><span class="os de">В дорозі</span></td><td><div class="o-dt">28 лют, 14:15</div></td><td><div class="o-tot">258₴</div></td></tr>
+              <tr><td><div class="o-nm">#1232</div><div class="o-rs">Суші Бар — Філадельфія сет</div></td><td><span class="os ok">Доставлено</span></td><td><div class="o-dt">24 лют, 20:45</div></td><td><div class="o-tot">599₴</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PROFILE -->
+      <div class="page" id="profile-page">
+        <div class="pg">
+          <div>
+            <div class="profile-card">
+              <div class="p-av" id="profAv">👤</div>
+              <div class="p-nm" id="profNm">Іван Петренко</div>
+              <div class="p-ph" id="profPh">+380 66 123 4567</div>
+              <div class="stats-row">
+                <div class="sb"><div class="sbn">24</div><div class="sbl">Замовлень</div></div>
+                <div class="sb"><div class="sbn">3</div><div class="sbl">Улюблені</div></div>
+                <div class="sb"><div class="sbn">5</div><div class="sbl">Відгуків</div></div>
+              </div>
+              <button class="lo-btn" id="logoutBtn">🚪 Вийти з акаунту</button>
+            </div>
+          </div>
+          <div class="pm">
+            <div class="pmi"><div class="pml"><div class="pmi-ico">👤</div><div class="pmi-txt">Особисті дані</div></div><div class="pmi-arr">›</div></div>
+            <div class="pmi"><div class="pml"><div class="pmi-ico">📍</div><div class="pmi-txt">Мої адреси</div></div><div class="pmi-arr">›</div></div>
+            <div class="pmi"><div class="pml"><div class="pmi-ico">💳</div><div class="pmi-txt">Способи оплати</div></div><div class="pmi-arr">›</div></div>
+            <div class="pmi"><div class="pml"><div class="pmi-ico">⭐</div><div class="pmi-txt">Улюблені заклади</div></div><div class="pmi-arr">›</div></div>
+            <div class="pmi"><div class="pml"><div class="pmi-ico">🎁</div><div class="pmi-txt">Промокоди</div></div><div class="pmi-arr">›</div></div>
+            <div class="pmi"><div class="pml"><div class="pmi-ico">🔔</div><div class="pmi-txt">Сповіщення</div></div><div class="pmi-arr">›</div></div>
+            <div class="pmi"><div class="pml"><div class="pmi-ico">❓</div><div class="pmi-txt">Підтримка</div></div><div class="pmi-arr">›</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADMIN -->
+      <div class="page" id="admin-page">
+        <div class="a-tabs" id="adminTabs">
+          <div class="at active" data-tab="stats">📊 Статистика</div>
+          <div class="at" data-tab="rests">🍽️ Ресторани</div>
+          <div class="at" data-tab="comm">💰 Комісія</div>
+          <div class="at" data-tab="clients">👥 Клієнти</div>
+          <div class="at" data-tab="orders-a">📋 Замовлення</div>
+          <div class="at" data-tab="logs">📜 Логи</div>
+        </div>
+        <div id="adminContent"></div>
+      </div>
+
+      <!-- COURIER -->
+      <div class="page" id="courier-page">
+        <div class="cw">
+          <div class="c-hdr">
+            <div><div class="c-hdr-ttl" id="cHdrTtl">Не на зміні</div><div class="c-hdr-sub" id="cHdrSub">Натисніть кнопку щоб розпочати роботу</div></div>
+            <button class="shift-btn" id="shiftBtn">Вийти на зміну</button>
+          </div>
+          <div class="c-stats">
+            <div class="cs"><div class="cs-n" id="cEarn">0₴</div><div class="cs-l">Дохід сьогодні</div></div>
+            <div class="cs"><div class="cs-n" id="cCnt">0</div><div class="cs-l">Замовлень</div></div>
+            <div class="cs"><div class="cs-n" id="cAvg">—</div><div class="cs-l">Сер. час</div></div>
+          </div>
+          <div id="courierContent"></div>
+        </div>
+      </div>
+
+      <!-- REST OWNER -->
+      <div class="page" id="restowner-page">
+        <div class="row">
+          <div id="roHeader" style="margin-bottom:18px"></div>
+          <div class="a-tabs" id="roTabs">
+            <div class="at active" data-rotab="orders">📋 Нові замовлення</div>
+            <div class="at" data-rotab="history">📜 Історія</div>
+            <div class="at" data-rotab="menu">🍽️ Моє меню</div>
+          </div>
+          <div id="roContent"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mob-nav" id="mobNav" style="display:none">
+  <div class="mob-nav-inner" id="mobNavInner"></div>
+</nav>
+
+<!-- MODAL: RESTAURANT -->
+<div class="mo" id="restMo">
+  <div class="mb">
+    <div class="mh"><div class="mttl" id="restMoTtl">Ресторан</div><button class="mc" id="restMoClose">✕</button></div>
+    <form id="restForm">
+      <input type="hidden" id="rfId">
+      <div class="fr"><label>Назва</label><input class="fi" id="rfName" required></div>
+      <div class="fr"><label>URL фото</label><input class="fi" id="rfPhoto" placeholder="https://..."></div>
+      <div class="fr"><label>Опис</label><textarea class="fi" id="rfDesc" rows="2"></textarea></div>
+      <div class="f2">
+        <div class="fr"><label>Доставка (₴)</label><input class="fi" id="rfDel" type="number" value="50"></div>
+        <div class="fr"><label>Рейтинг</label><input class="fi" id="rfRat" type="number" step="0.1" min="0" max="5" value="4.5"></div>
+      </div>
+      <div class="f2">
+        <div class="fr"><label>Теги (через ,)</label><input class="fi" id="rfTags" placeholder="Піца, Паста"></div>
+        <div class="fr"><label>Час доставки (хв)</label><input class="fi" id="rfTime" placeholder="20–30"></div>
+      </div>
+      <div class="f2">
+        <div class="fr"><label>Бейдж</label><input class="fi" id="rfBadge" placeholder="⚡ Швидко"></div>
+        <div class="fr"><label>Комісія ресторану %</label><input class="fi" id="rfComm" type="number" value="80" min="0" max="100"></div>
+      </div>
+      <div class="mft"><button type="button" class="dl-btn" id="rfDel2" style="display:none">🗑 Видалити</button><button type="submit" class="sv-btn">💾 Зберегти</button></div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: ITEM -->
+<div class="mo" id="itemMo">
+  <div class="mb">
+    <div class="mh"><div class="mttl" id="itemMoTtl">Страва</div><button class="mc" id="itemMoClose">✕</button></div>
+    <form id="itemForm">
+      <input type="hidden" id="ifRid"><input type="hidden" id="ifId">
+      <div class="fr"><label>Назва</label><input class="fi" id="ifName" required></div>
+      <div class="fr"><label>Опис</label><input class="fi" id="ifDesc"></div>
+      <div class="f2">
+        <div class="fr"><label>Ціна (₴)</label><input class="fi" id="ifPrice" type="number" required></div>
+        <div class="fr"><label>URL фото</label><input class="fi" id="ifPhoto" placeholder="https://..."></div>
+      </div>
+      <div class="mft"><button type="button" class="dl-btn" id="ifDel" style="display:none">🗑 Видалити</button><button type="submit" class="sv-btn">💾 Зберегти</button></div>
+    </form>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════
+// DATA
+// ════════════════════════════════════
+let rests = [
+  {id:1,name:'Піца Маестро',photo:'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&h=400&fit=crop',desc:'Автентична італійська піца на дровах',delivery:50,rating:4.8,tags:['Піца','Паста','Італійська кухня'],badge:'⚡ Швидко',time:'20–30',comm:80},
+  {id:2,name:'Burger House',photo:'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&h=400&fit=crop',desc:"Соковиті бургери з найкращого м'яса",delivery:50,rating:4.7,tags:['Бургери','Американська кухня'],badge:'🔥 Популярно',time:'15–25',comm:80},
+  {id:3,name:'Суші Бар',photo:'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=800&h=400&fit=crop',desc:'Свіжі суші та роли щодня',delivery:50,rating:4.9,tags:['Суші','Роли','Японська кухня'],badge:'⭐ Топ рейтинг',time:'25–35',comm:80},
+  {id:4,name:'Coffee Point',photo:'https://images.unsplash.com/photo-1559305616-3dbb3325bede?w=800&h=400&fit=crop',desc:'Найсмачніша кава та десерти',delivery:50,rating:4.6,tags:['Кава','Десерти','Сніданки'],badge:'',time:'10–20',comm:80},
+  {id:5,name:'Healthy Food',photo:'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=400&fit=crop',desc:'Здорове харчування та смузі',delivery:50,rating:4.8,tags:['Здорова їжа','Салати','Смузі'],badge:'🌱 ЗОЖ',time:'20–30',comm:80},
+  {id:6,name:'Taco Loco',photo:'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=800&h=400&fit=crop',desc:'Мексиканська кухня з вогником',delivery:50,rating:4.5,tags:['Тако','Буріто','Мексиканська кухня'],badge:'',time:'25–35',comm:80},
+];
+let menus = {
+  1:[{id:101,name:'Піца Пепероні',desc:'Томатний соус, моцарелла, пепероні',price:189,photo:''},{id:102,name:'Піца Маргарита',desc:'Томатний соус, моцарелла, базилік',price:149,photo:''},{id:103,name:'Паста Карбонара',desc:'Спагеті, бекон, яйце, пармезан',price:165,photo:''}],
+  2:[{id:201,name:'Чізбургер',desc:'Яловичина, чеддер, соус, овочі',price:129,photo:''},{id:202,name:'Дабл Бургер',desc:'Подвійна яловичина, бекон, сир',price:179,photo:''},{id:203,name:'Картопля фрі',desc:'Хрустка картопля з соусом',price:59,photo:''}],
+  3:[{id:301,name:'Філадельфія',desc:'Лосось, вершковий сир, огірок',price:219,photo:''},{id:302,name:'Каліфорнія',desc:'Краб, авокадо, огірок, ікра',price:199,photo:''},{id:303,name:'Суші сет 24 шт',desc:'24 штуки, різні роли',price:399,photo:''}],
+  4:[{id:401,name:'Латте',desc:'Ароматна кава з молоком',price:75,photo:''},{id:402,name:'Капучіно',desc:'Еспресо з пінкою',price:65,photo:''},{id:403,name:'Тірамісу',desc:'Класичний десерт',price:99,photo:''}],
+  5:[{id:501,name:'Боул з куркою',desc:'Рис, курка, овочі, соус',price:185,photo:''},{id:502,name:'Цезар з куркою',desc:'Листя, курка, гренки',price:159,photo:''},{id:503,name:'Смузі манго',desc:'Манго, банан, апельсин',price:89,photo:''}],
+  6:[{id:601,name:'Тако з куркою',desc:'Тортилья, курка, сальса',price:115,photo:''},{id:602,name:'Буріто',desc:"Велике буріто з м'ясом",price:145,photo:''},{id:603,name:'Начос',desc:'Чіпси, сальса, гуакамоле',price:95,photo:''}],
+};
+let clients = [
+  {id:1,name:'Іван Петренко',phone:'+380 66 123 4567',orders:24,blocked:false},
+  {id:2,name:'Марія Коваль',phone:'+380 67 987 6543',orders:12,blocked:false},
+  {id:3,name:'Олег Мороз',phone:'+380 50 555 4444',orders:3,blocked:true},
+  {id:4,name:'Аліна Бойко',phone:'+380 63 111 2222',orders:8,blocked:false},
+];
+let liveOrders = [
+  {id:'#2001',rid:1,rname:'Піца Маестро',items:'Пепероні, Маргарита',total:338,status:'preparing',cid:null,delay:false,ts:Date.now()-180000},
+  {id:'#2002',rid:2,rname:'Burger House',items:'Чізбургер х2, Фрі',total:317,status:'preparing',cid:null,delay:false,ts:Date.now()-90000},
+  {id:'#2003',rid:3,rname:'Суші Бар',items:'Філадельфія сет',total:269,status:'ready',cid:null,delay:false,ts:Date.now()-60000},
+];
+let logs = [
+  {t:'10:24',ico:'🛵',txt:"<b>Кур'єр #1</b> вийшов на зміну",warn:false},
+  {t:'10:31',ico:'📦',txt:'Замовлення <b>#2001</b> прийнято рестораном',warn:false},
+  {t:'10:45',ico:'⚠️',txt:'<b>Підозрілий IP</b>: 3 скасування за 5 хв від клієнта Олег Мороз',warn:true},
+  {t:'11:02',ico:'✅',txt:'Замовлення <b>#1999</b> доставлено успішно',warn:false},
+  {t:'11:15',ico:'⚠️',txt:'<b>Великий чек</b>: замовлення 2400₴ від нового клієнта',warn:true},
+];
+let gComm = 20, gDel = 50;
+let courierOn = false, cEarnings = 0, cCount = 0, cTimes = [], cMyOrder = null;
+let curUser = null, curRestId = null, adminSelRest = null;
+
+// ════════════════════════════════════
+// NAV CONFIGS
+// ════════════════════════════════════
+const NAV = {
+  client:[
+    {s:'Головне'},{p:'home-page',i:'🏠',l:'Головна'},{p:'order-page',i:'🛍️',l:'Замовити'},{p:'restaurants-page',i:'🍽️',l:'Ресторани'},
+    {s:'Особисте'},{p:'cart-page',i:'🛒',l:'Кошик',badge:'0'},{p:'orders-page',i:'📋',l:'Замовлення'},
+  ],
+  admin:[
+    {s:'Головне'},{p:'home-page',i:'🏠',l:'Головна'},{p:'order-page',i:'🛍️',l:'Замовити'},{p:'restaurants-page',i:'🍽️',l:'Ресторани'},
+    {s:'Особисте'},{p:'cart-page',i:'🛒',l:'Кошик',badge:'0'},{p:'orders-page',i:'📋',l:'Замовлення'},
+    {s:'Адміністрування'},{p:'admin-page',i:'🔧',l:'Адмін панель'},
+  ],
+  courier:[
+    {s:'Кур\'єр'},{p:'courier-page',i:'🛵',l:'Мої замовлення'},{p:'orders-page',i:'📋',l:'Історія'},
+  ],
+  restaurant:[
+    {s:'Мій ресторан'},{p:'restowner-page',i:'🍽️',l:'Панель ресторану'},
+  ],
+};
+const META = {
+  'home-page':{t:'Головна 🏠',s:'Що будемо замовляти сьогодні?'},
+  'order-page':{t:'Замовити 🛍️',s:'Оберіть тип послуги'},
+  'restaurants-page':{t:'Ресторани 🍽️',s:'Обирайте з 50+ закладів'},
+  'cart-page':{t:'Кошик 🛒',s:'Оформіть замовлення'},
+  'orders-page':{t:'Замовлення 📋',s:'Історія ваших покупок'},
+  'restaurant-page':{t:'',s:''},
+  'admin-page':{t:'Адмін панель 🔧',s:'Управління платформою'},
+  'courier-page':{t:"Кур'єрська панель 🛵",s:''},
+  'restowner-page':{t:'',s:'Панель ресторану'},
+  'profile-page':{t:'Профіль 👤',s:''},
+};
+
+// ════════════════════════════════════
+// MOBILE NAV
+// ════════════════════════════════════
+const MOB_NAV = {
+  client:[
+    {p:'home-page',i:'🏠',l:'Головна'},
+    {p:'order-page',i:'🛍️',l:'Замовити'},
+    {p:'orders-page',i:'📋',l:'Замовлення'},
+    {p:'cart-page',i:'🛒',l:'Кошик'},
+    {p:'profile-page',i:'👤',l:'Профіль'},
+  ],
+  admin:[
+    {p:'home-page',i:'🏠',l:'Головна'},
+    {p:'admin-page',i:'🔧',l:'Адмін'},
+    {p:'order-page',i:'🛍️',l:'Замовити'},
+    {p:'orders-page',i:'📋',l:'Замовлення'},
+    {p:'profile-page',i:'👤',l:'Профіль'},
+  ],
+  courier:[
+    {p:'courier-page',i:'🛵',l:'Замовлення'},
+    {p:'orders-page',i:'📋',l:'Історія'},
+    {p:'profile-page',i:'👤',l:'Профіль'},
+  ],
+  restaurant:[
+    {p:'restowner-page',i:'🍽️',l:'Ресторан'},
+    {p:'profile-page',i:'👤',l:'Профіль'},
+  ],
+};
+
+function buildMobileNav(role){
+  const el=document.getElementById('mobNavInner');
+  const cfg=MOB_NAV[role]||MOB_NAV.client;
+  el.innerHTML=cfg.map(x=>`
+    <div class="mn-item" data-mp="${x.p}" onclick="nav('${x.p}')">
+      <span class="mn-ico">${x.i}</span>
+      <span class="mn-lbl">${x.l}</span>
+    </div>`).join('');
+  // show mob nav only on mobile
+  document.getElementById('mobNav').style.display='';
+  syncMobNav(null);
+}
+
+function syncMobNav(pid){
+  document.querySelectorAll('.mn-item').forEach(n=>n.classList.toggle('active',n.dataset.mp===pid));
+}
+
+// ════════════════════════════════════
+// SIDEBAR
+// ════════════════════════════════════
+function buildNav(role){
+  const el=document.getElementById('sbNav');
+  el.innerHTML=(NAV[role]||NAV.client).map(x=>{
+    if(x.s!==undefined) return x.s?`<div class="nav-sec">${x.s}</div>`:'';
+    return `<div class="ni" data-p="${x.p}"><span class="ni-ico">${x.i}</span><span class="ni-lbl">${x.l}</span>${x.badge!==undefined?`<span class="ni-badge">${x.badge}</span>`:''}</div>`;
+  }).join('');
+  el.querySelectorAll('.ni[data-p]').forEach(n=>n.addEventListener('click',()=>nav(n.dataset.p)));
+}
+
+// ════════════════════════════════════
+// NAVIGATE
+// ════════════════════════════════════
+function nav(pid){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const t=document.getElementById(pid);
+  if(t) t.classList.add('active');
+  document.querySelectorAll('.ni').forEach(n=>n.classList.toggle('active',n.dataset.p===pid));
+  syncMobNav(pid);
+  const m=META[pid]||{};
+  document.getElementById('tbTtl').textContent=m.t||'';
+  document.getElementById('tbSub').textContent=m.s||'';
+  if(pid==='admin-page') renderAdminTab('stats');
+  if(pid==='restowner-page') renderROTab('orders');
+  if(pid==='courier-page') renderCourier();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ════════════════════════════════════
+// AUTH
+// ════════════════════════════════════
+document.getElementById('startBtn').addEventListener('click',()=>{
+  document.getElementById('wp').classList.add('hidden');
+  document.getElementById('authPage').classList.remove('hidden');
+});
+
+function doLogin(asGuest){
+  const phone=asGuest?'guest':document.getElementById('aiPhone').value.trim();
+  const name=document.getElementById('aiName').value.trim()||'Користувач';
+  let role='client',rid=null,label='';
+  if(phone==='3'){role='admin';label='👑 Адмін';}
+  else if(phone==='1'){role='courier';label="🛵 Кур'єр";}
+  else if(/^rest_(\d+)$/i.test(phone)){
+    const id=parseInt(phone.match(/\d+/)[0]);
+    const r=rests.find(x=>x.id===id);
+    if(r){role='restaurant';rid=id;label='🍽️ '+r.name;}
+  }
+  curUser={role,name,phone,rid,label};
+  document.getElementById('authPage').classList.add('hidden');
+  document.getElementById('app').style.display='flex';
+  document.getElementById('ucNm').textContent=role==='admin'?'Адміністратор':role==='courier'?"Кур'єр":role==='restaurant'?(rests.find(x=>x.id===rid)?.name||name):name;
+  document.getElementById('ucPh').textContent=phone;
+  document.getElementById('ucRole').textContent=label;
+  document.getElementById('ucAv').textContent=role==='admin'?'👑':role==='courier'?'🛵':role==='restaurant'?'🍽️':'👤';
+  document.getElementById('profNm').textContent=document.getElementById('ucNm').textContent;
+  document.getElementById('profPh').textContent=phone;
+  document.getElementById('profAv').textContent=document.getElementById('ucAv').textContent;
+  buildNav(role);
+  buildMobileNav(role);
+  renderRests();renderHome();
+  const fp=role==='courier'?'courier-page':role==='restaurant'?'restowner-page':role==='admin'?'home-page':'home-page';
+  nav(fp);
+  if(role==='restaurant'){const r=rests.find(x=>x.id===rid);document.getElementById('tbTtl').textContent=r?r.name:'Ресторан';document.getElementById('tbSub').textContent='Панель ресторану';}
+}
+
+document.getElementById('loginMainBtn').addEventListener('click',()=>doLogin(false));
+document.getElementById('guestBtn').addEventListener('click',()=>doLogin(true));
+
+// User card → profile
+document.getElementById('userCard').addEventListener('click',()=>nav('profile-page'));
+
+// LOGOUT
+document.getElementById('logoutBtn').addEventListener('click',()=>{
+  curUser=null;courierOn=false;cMyOrder=null;cEarnings=0;cCount=0;cTimes=[];
+  document.getElementById('app').style.display='none';
+  document.getElementById('authPage').classList.remove('hidden');
+  document.getElementById('aiPhone').value='';
+  document.getElementById('aiName').value='';
+});
+
+// ════════════════════════════════════
+// RENDER RESTAURANTS & HOME
+// ════════════════════════════════════
+function renderRests(){
+  const g=document.getElementById('restGrid');
+  if(!g)return;
+  g.innerHTML=rests.map(r=>`
+    <div class="rc" onclick="openRest(${r.id})">
+      <div class="rc-img" style="background-image:url('${r.photo}')">
+        ${r.badge?`<div class="rc-tag">${r.badge}</div>`:''}
+      </div>
+      <div class="rc-body">
+        <div class="rc-hd"><div class="rc-nm">${r.name}</div><div class="rc-rat">⭐ ${r.rating}</div></div>
+        <div class="rc-cuis">${r.tags.join(', ')}</div>
+        <div class="rc-meta"><span>🚚 ${r.delivery}₴</span><span>⏱️ ${r.time} хв</span></div>
+      </div>
+    </div>`).join('');
+}
+function renderHome(){
+  const mk=r=>`<div class="nc" onclick="openRest(${r.id})"><div class="nc-img" style="background-image:url('${r.photo}')"></div><div class="nc-info"><div class="nc-nm">${r.name}</div><div class="nc-desc">${r.tags[0]} • ⭐ ${r.rating}</div><div class="nc-del">🚚 Доставка ${r.delivery}₴</div></div></div>`;
+  document.getElementById('nearbyGrid').innerHTML=rests.slice(0,4).map(mk).join('');
+  document.getElementById('popularGrid').innerHTML=rests.map(mk).join('');
+}
+
+// ════════════════════════════════════
+// RESTAURANT DETAIL
+// ════════════════════════════════════
+function openRest(id){
+  const r=rests.find(x=>x.id===id);if(!r)return;
+  curRestId=id;
+  document.getElementById('rdHero').style.backgroundImage=`url('${r.photo}')`;
+  document.getElementById('rdNm').textContent=r.name;
+  document.getElementById('rdTags').innerHTML=r.tags.map(t=>`<span class="rtag">${t}</span>`).join('');
+  document.getElementById('rdRat').textContent=`⭐ ${r.rating}`;
+  document.getElementById('rdDel').textContent=`🚚 ${r.delivery}₴`;
+  document.getElementById('rdTime').textContent=`⏱️ ${r.time} хв`;
+  document.getElementById('rdDesc').textContent=r.desc;
+  const isAdm=curUser?.role==='admin', isOwn=curUser?.role==='restaurant'&&curUser.rid===id;
+  document.getElementById('rdEdit').style.display=(isAdm||isOwn)?'block':'none';
+  document.getElementById('rdAddItem').style.display=(isAdm||isOwn)?'flex':'none';
+  document.getElementById('rdEdit').onclick=()=>openRestMo(id);
+  document.getElementById('rdAddItem').onclick=()=>openItemMo(id,null);
+  renderMenuGrid(id);
+  document.getElementById('tbTtl').textContent=r.name;
+  document.getElementById('tbSub').textContent=r.tags.join(' • ');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('restaurant-page').classList.add('active');
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function renderMenuGrid(rid){
+  const menu=menus[rid]||[];
+  const g=document.getElementById('rdMenu');
+  const isAdm=curUser?.role==='admin', isOwn=curUser?.role==='restaurant'&&curUser.rid===rid;
+  if(!menu.length){g.innerHTML='<div style="color:var(--mu);padding:30px;text-align:center;grid-column:1/-1">Меню порожнє</div>';return;}
+  g.innerHTML=menu.map(item=>`
+    <div class="ic">
+      <div class="ic-img" style="${item.photo?`background-image:url('${item.photo}');background-size:cover;background-position:center;font-size:0`:''}">
+        ${!item.photo?'🍽️':''}
+      </div>
+      <div class="ic-body">
+        <div class="ic-nm">${item.name}</div>
+        <div class="ic-desc">${item.desc}</div>
+        <div class="ic-ft">
+          <div class="ic-price">${item.price}₴</div>
+          <div style="display:flex;gap:4px">
+            ${(isAdm||isOwn)?`<button class="add-btn" style="background:rgba(255,140,0,.75);font-size:12px" onclick="openItemMo(${rid},${item.id})">✏️</button>`:''}
+            <button class="add-btn" onclick="this.textContent='✓';this.style.background='linear-gradient(135deg,#00c853,#00e676)';setTimeout(()=>{this.textContent='+';this.style.background=''},1000)">+</button>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+document.getElementById('backBtn').addEventListener('click',()=>nav('restaurants-page'));
+
+// ════════════════════════════════════
+// RESTAURANT MODAL
+// ════════════════════════════════════
+function openRestMo(id){
+  const r=id?rests.find(x=>x.id===id):null;
+  document.getElementById('restMoTtl').textContent=r?'Редагувати ресторан':'Новий ресторан';
+  document.getElementById('rfId').value=r?r.id:'';
+  document.getElementById('rfName').value=r?r.name:'';
+  document.getElementById('rfPhoto').value=r?r.photo:'';
+  document.getElementById('rfDesc').value=r?r.desc:'';
+  document.getElementById('rfDel').value=r?r.delivery:50;
+  document.getElementById('rfRat').value=r?r.rating:4.5;
+  document.getElementById('rfTags').value=r?r.tags.join(', '):'';
+  document.getElementById('rfTime').value=r?r.time:'20–30';
+  document.getElementById('rfBadge').value=r?r.badge:'';
+  document.getElementById('rfComm').value=r?(r.comm||80):80;
+  document.getElementById('rfDel2').style.display=r?'flex':'none';
+  document.getElementById('restMo').classList.add('active');
+}
+document.getElementById('restForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const id=document.getElementById('rfId').value;
+  const d={name:document.getElementById('rfName').value.trim(),photo:document.getElementById('rfPhoto').value.trim(),desc:document.getElementById('rfDesc').value.trim(),delivery:parseInt(document.getElementById('rfDel').value),rating:parseFloat(document.getElementById('rfRat').value),tags:document.getElementById('rfTags').value.split(',').map(t=>t.trim()).filter(Boolean),time:document.getElementById('rfTime').value.trim(),badge:document.getElementById('rfBadge').value.trim(),comm:parseInt(document.getElementById('rfComm').value)||80};
+  if(id){const i=rests.findIndex(x=>x.id==id);rests[i]={...rests[i],...d};}
+  else{const nid=Date.now();rests.push({id:nid,...d});menus[nid]=[];}
+  closeMo('restMo');renderRests();renderHome();
+  if(document.getElementById('admin-page').classList.contains('active'))renderAdminTab(document.querySelector('#adminTabs .at.active')?.dataset.tab||'rests');
+});
+document.getElementById('rfDel2').addEventListener('click',()=>{
+  const id=parseInt(document.getElementById('rfId').value);
+  if(!confirm('Видалити ресторан?'))return;
+  rests=rests.filter(x=>x.id!==id);delete menus[id];
+  closeMo('restMo');renderRests();renderHome();nav('restaurants-page');
+});
+
+// ════════════════════════════════════
+// ITEM MODAL
+// ════════════════════════════════════
+function openItemMo(rid,iid){
+  const item=iid?(menus[rid]||[]).find(x=>x.id===iid):null;
+  document.getElementById('itemMoTtl').textContent=item?'Редагувати страву':'Нова страва';
+  document.getElementById('ifRid').value=rid;
+  document.getElementById('ifId').value=item?item.id:'';
+  document.getElementById('ifName').value=item?item.name:'';
+  document.getElementById('ifDesc').value=item?item.desc:'';
+  document.getElementById('ifPrice').value=item?item.price:'';
+  document.getElementById('ifPhoto').value=item?item.photo:'';
+  document.getElementById('ifDel').style.display=item?'flex':'none';
+  document.getElementById('itemMo').classList.add('active');
+}
+document.getElementById('itemForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const rid=parseInt(document.getElementById('ifRid').value);
+  const iid=document.getElementById('ifId').value;
+  const d={name:document.getElementById('ifName').value.trim(),desc:document.getElementById('ifDesc').value.trim(),price:parseInt(document.getElementById('ifPrice').value),photo:document.getElementById('ifPhoto').value.trim()};
+  if(!menus[rid])menus[rid]=[];
+  if(iid){const i=menus[rid].findIndex(x=>x.id==iid);menus[rid][i]={...menus[rid][i],...d};}
+  else menus[rid].push({id:Date.now(),...d});
+  closeMo('itemMo');
+  if(curRestId===rid)renderMenuGrid(rid);
+  if(document.getElementById('restowner-page').classList.contains('active'))renderROTab('menu');
+  if(document.getElementById('admin-page').classList.contains('active'))renderAdminTab('rests');
+});
+document.getElementById('ifDel').addEventListener('click',()=>{
+  const rid=parseInt(document.getElementById('ifRid').value),iid=parseInt(document.getElementById('ifId').value);
+  menus[rid]=menus[rid].filter(x=>x.id!==iid);
+  closeMo('itemMo');
+  if(curRestId===rid)renderMenuGrid(rid);
+  if(document.getElementById('restowner-page').classList.contains('active'))renderROTab('menu');
+});
+
+function closeMo(id){document.getElementById(id).classList.remove('active');}
+document.getElementById('restMoClose').addEventListener('click',()=>closeMo('restMo'));
+document.getElementById('itemMoClose').addEventListener('click',()=>closeMo('itemMo'));
+document.getElementById('restMo').addEventListener('click',e=>{if(e.target===e.currentTarget)closeMo('restMo');});
+document.getElementById('itemMo').addEventListener('click',e=>{if(e.target===e.currentTarget)closeMo('itemMo');});
+
+// ════════════════════════════════════
+// STATUS HELPERS
+// ════════════════════════════════════
+function sCls(s){return{preparing:'pr',accepted:'pr',cooking:'pr',ready:'rd',going_rest:'de',picked:'de',delivering:'de',delivered:'ok',cancelled:'no'}[s]||'no';}
+function sLbl(s){return{preparing:'Готується',accepted:'Прийнято',cooking:'Готується',ready:'Готово',going_rest:"Їду в ресторан",picked:'Забрав замовлення',delivering:'В дорозі',delivered:'Доставлено',cancelled:'Скасовано'}[s]||s;}
+function addLog(ico,txt,warn=false){const n=new Date();logs.unshift({t:`${n.getHours()}:${String(n.getMinutes()).padStart(2,'0')}`,ico,txt,warn});}
+
+// ════════════════════════════════════
+// ADMIN TABS
+// ════════════════════════════════════
+document.getElementById('adminTabs').addEventListener('click',e=>{
+  const t=e.target.closest('.at');if(!t)return;
+  document.querySelectorAll('#adminTabs .at').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');renderAdminTab(t.dataset.tab);
+});
+
+function renderAdminTab(tab){
+  const c=document.getElementById('adminContent');
+  if(tab==='stats'){
+    const total=liveOrders.length+4;
+    const rev=liveOrders.reduce((s,o)=>s+o.total,0)+1471;
+    const profit=Math.round(rev*gComm/100)+gDel*total;
+    const susp=logs.filter(l=>l.warn).length;
+    c.innerHTML=`
+      <div class="sg">
+        <div class="sc"><div class="sc-lbl">Оборот за день</div><div class="sc-val">${rev}₴</div><div class="sc-sub">+12% від вчора</div><div class="sc-ico">💰</div></div>
+        <div class="sc"><div class="sc-lbl">Ваш прибуток (${gComm}%+${gDel}₴)</div><div class="sc-val">${profit}₴</div><div class="sc-sub">Комісія + доставки</div><div class="sc-ico">📈</div></div>
+        <div class="sc"><div class="sc-lbl">Замовлень сьогодні</div><div class="sc-val">${total}</div><div class="sc-sub">${liveOrders.length} активних</div><div class="sc-ico">📦</div></div>
+        <div class="sc"><div class="sc-lbl">Активних кур'єрів</div><div class="sc-val">${courierOn?1:0}</div><div class="sc-sub">із 3 зареєстрованих</div><div class="sc-ico">🛵</div></div>
+        <div class="sc"><div class="sc-lbl">Сер. час доставки</div><div class="sc-val">24 хв</div><div class="sc-sub">Норма: 30 хв</div><div class="sc-ico">⏱️</div></div>
+        ${susp>0?`<div class="sc warn"><div class="sc-lbl">⚠️ Підозрілі операції</div><div class="sc-val">${susp}</div><div class="sc-sub">Потребують уваги</div><div class="sc-ico">🚨</div></div>`:''}
+      </div>
+      <div class="sp"><div class="sp-ttl">Активні замовлення</div>
+        <table class="ot" style="width:100%"><thead><tr><th>№</th><th>Ресторан</th><th>Страви</th><th>Статус</th><th>Сума</th><th>Дія</th></tr></thead>
+        <tbody>${liveOrders.map(o=>`<tr><td><div class="o-nm">${o.id}</div></td><td>${o.rname}</td><td style="font-size:11px;color:var(--mu)">${o.items}</td><td><span class="os ${sCls(o.status)}">${sLbl(o.status)}</span></td><td><div class="o-tot">${o.total}₴</div></td><td><button class="can-btn" onclick="adminCancelOrder('${o.id}')">Скасувати</button></td></tr>`).join('')}</tbody>
+        </table></div>`;
+  } else if(tab==='rests'){
+    c.innerHTML=`<div style="display:flex;justify-content:flex-end;margin-bottom:13px"><button class="add-item-btn" onclick="openRestMo(null)">+ Новий ресторан</button></div>
+      <div class="al">
+        <div class="ap"><div class="aph"><div class="sec-ttl">Ресторани</div></div>
+          ${rests.map(r=>`<div class="ar ${adminSelRest===r.id?'sel':''}" onclick="selAdmRest(${r.id})"><div class="a-thumb" style="background-image:url('${r.photo}')"></div><div class="a-inf"><div class="a-nm">${r.name}</div><div class="a-mt">⭐${r.rating} • 🚚${r.delivery}₴ • Комісія ${r.comm||80}%</div></div><button class="eb" onclick="event.stopPropagation();openRestMo(${r.id})">✏️</button></div>`).join('')}
+        </div>
+        <div class="ap" id="admMenuPanel" style="${adminSelRest?'':'display:none'}">
+          <div class="aph"><div class="sec-ttl" id="admMenuTtl">Меню</div><button class="add-item-btn" id="admAddItem">+ Додати</button></div>
+          <div id="admMenuList"></div>
+        </div>
+      </div>`;
+    if(adminSelRest){renderAdmMenu(adminSelRest);document.getElementById('admAddItem').onclick=()=>openItemMo(adminSelRest,null);}
+  } else if(tab==='comm'){
+    c.innerHTML=`
+      <div class="cmg">
+        <div class="cmc"><div class="cmc-ttl">Ваша комісія з замовлень</div><div class="cmc-sub">Відсоток від суми замовлення, який отримуєте ВИ як власник платформи. Ресторан отримує решту.<br><i>Приклад: замовлення 500₴ → ви отримуєте ${Math.round(500*gComm/100)}₴, ресторан ${Math.round(500*(100-gComm)/100)}₴</i></div>
+          <div class="cm-row"><input class="cm-inp" id="cmPlat" type="number" value="${gComm}"><span style="color:var(--mu);font-size:13px">%</span><button class="cm-save" onclick="savePlat()">Зберегти</button><span class="cm-badge" id="cmbP">Зараз: ${gComm}%</span></div></div>
+        <div class="cmc"><div class="cmc-ttl">Вартість доставки для клієнта</div><div class="cmc-sub">Фіксована сума яку платить клієнт. Повністю залишається BRINGO.</div>
+          <div class="cm-row"><input class="cm-inp" id="cmDel" type="number" value="${gDel}"><span style="color:var(--mu);font-size:13px">₴</span><button class="cm-save" onclick="saveDel()">Зберегти</button><span class="cm-badge" id="cmbD">Зараз: ${gDel}₴</span></div></div>
+      </div>
+      <div class="sp"><div class="sp-ttl">Комісія по ресторанах</div>
+        ${rests.map(r=>`<div class="ar"><div class="a-thumb" style="background-image:url('${r.photo}')"></div><div class="a-inf"><div class="a-nm">${r.name}</div><div class="a-mt">Власник отримує: <b>${100-(r.comm||80)}%</b> · Ресторан отримує: ${r.comm||80}%</div></div>
+          <div style="display:flex;align-items:center;gap:5px;flex-shrink:0"><input class="cm-inp" type="number" value="${100-(r.comm||80)}" id="rc_${r.id}" min="0" max="100" style="width:65px"><span style="font-size:12px;color:var(--mu)">%</span><button class="cm-save" style="font-size:11px;padding:6px 11px" onclick="saveRC(${r.id})">OK</button></div></div>`).join('')}
+      </div>`;
+  } else if(tab==='clients'){
+    c.innerHTML=`<div class="sp"><div class="sp-ttl">Клієнти платформи</div>
+      ${clients.map(cl=>`<div class="cl-row"><div class="cl-av">👤</div><div class="cl-inf"><div class="cl-nm">${cl.name}</div><div class="cl-ph">${cl.phone} • ${cl.orders} замовлень</div></div>
+        <span class="cl-st ${cl.blocked?'bl':'ok'}">${cl.blocked?'Заблокований':'Активний'}</span>
+        <button class="blk-btn ${cl.blocked?'unblk':''}" onclick="toggleBlock(${cl.id})">${cl.blocked?'Розблокувати':'Заблокувати'}</button>
+      </div>`).join('')}</div>`;
+  } else if(tab==='orders-a'){
+    c.innerHTML=`<div class="tw"><table class="ot"><thead><tr><th>Замовлення</th><th>Ресторан</th><th>Статус</th><th>Сума</th><th>Дія</th></tr></thead><tbody>
+      ${liveOrders.map(o=>`<tr><td><div class="o-nm">${o.id}</div><div class="o-rs">${o.items}</div></td><td>${o.rname}</td><td><span class="os ${sCls(o.status)}">${sLbl(o.status)}</span></td><td><div class="o-tot">${o.total}₴</div></td><td><button class="can-btn" onclick="adminCancelOrder('${o.id}')">Скасувати</button></td></tr>`).join('')}
+      <tr><td><div class="o-nm">#1234</div><div class="o-rs">Пепероні, Маргарита</div></td><td>Піца Маестро</td><td><span class="os ok">Доставлено</span></td><td><div class="o-tot">489₴</div></td><td></td></tr>
+      <tr><td><div class="o-nm">#1232</div><div class="o-rs">Філадельфія сет</div></td><td>Суші Бар</td><td><span class="os ok">Доставлено</span></td><td><div class="o-tot">599₴</div></td><td></td></tr>
+    </tbody></table></div>`;
+  } else if(tab==='logs'){
+    c.innerHTML=`<div class="sp"><div class="sp-ttl">Системні логи</div>${logs.map(l=>`<div class="le ${l.warn?'warn':''}"><div class="le-t">${l.t}</div><div class="le-ico">${l.ico}</div><div class="le-txt">${l.txt}</div></div>`).join('')}</div>`;
+  }
+}
+
+function selAdmRest(id){adminSelRest=id;renderAdminTab('rests');}
+function renderAdmMenu(rid){
+  const el=document.getElementById('admMenuList');if(!el)return;
+  const r=rests.find(x=>x.id===rid);
+  document.getElementById('admMenuTtl').textContent=`Меню: ${r?.name||''}`;
+  const menu=menus[rid]||[];
+  el.innerHTML=menu.length?menu.map(item=>`<div class="ar"><div class="a-inf"><div class="a-nm">${item.name}</div><div class="a-mt">${item.price}₴ • ${item.desc}</div></div><button class="eb" onclick="openItemMo(${rid},${item.id})">✏️</button></div>`).join(''):'<div style="color:var(--mu);padding:18px;text-align:center">Меню порожнє</div>';
+}
+function savePlat(){gComm=parseInt(document.getElementById('cmPlat').value)||20;document.getElementById('cmbP').textContent=`Зараз: ${gComm}%`;}
+function saveDel(){gDel=parseInt(document.getElementById('cmDel').value)||50;document.getElementById('cmbD').textContent=`Зараз: ${gDel}₴`;}
+function saveRC(id){const v=parseInt(document.getElementById(`rc_${id}`).value)||20;const r=rests.find(x=>x.id===id);if(r){r.comm=100-v;}}
+function toggleBlock(id){const cl=clients.find(x=>x.id===id);if(cl){cl.blocked=!cl.blocked;addLog(cl.blocked?'🚫':'✅',`Клієнт <b>${cl.name}</b> ${cl.blocked?'заблокований':'розблокований'}`);} renderAdminTab('clients');}
+function adminCancelOrder(oid){
+  const i=liveOrders.findIndex(x=>x.id===oid);
+  if(i>-1){addLog('❌',`Замовлення <b>${oid}</b> скасовано адміністратором`);liveOrders.splice(i,1);}
+  renderAdminTab(document.querySelector('#adminTabs .at.active')?.dataset.tab||'stats');
+}
+
+// ════════════════════════════════════
+// COURIER
+// ════════════════════════════════════
+document.getElementById('shiftBtn').addEventListener('click',()=>{
+  courierOn=!courierOn;
+  const btn=document.getElementById('shiftBtn');
+  if(courierOn){btn.textContent='Завершити зміну';btn.classList.add('on');document.getElementById('cHdrTtl').textContent='На зміні 🟢';document.getElementById('cHdrSub').textContent='Ви отримуєте доступні замовлення';addLog('🛵',"<b>Кур'єр</b> вийшов на зміну");}
+  else{btn.textContent='Вийти на зміну';btn.classList.remove('on');document.getElementById('cHdrTtl').textContent='Не на зміні';document.getElementById('cHdrSub').textContent='Натисніть кнопку щоб розпочати роботу';cMyOrder=null;addLog('🛵',"<b>Кур'єр</b> завершив зміну");}
+  renderCourier();
+});
+
+function renderCourier(){
+  document.getElementById('cEarn').textContent=cEarnings+'₴';
+  document.getElementById('cCnt').textContent=cCount;
+  document.getElementById('cAvg').textContent=cTimes.length?Math.round(cTimes.reduce((a,b)=>a+b,0)/cTimes.length)+' хв':'—';
+  const c=document.getElementById('courierContent');
+  if(!courierOn){c.innerHTML='<div style="color:var(--mu);text-align:center;padding:36px;font-size:14px">Вийдіть на зміну щоб бачити замовлення</div>';return;}
+  if(cMyOrder){
+    const o=liveOrders.find(x=>x.id===cMyOrder);
+    if(!o){cMyOrder=null;renderCourier();return;}
+    c.innerHTML=`<div style="font-size:15px;font-weight:800;margin-bottom:13px">Моє поточне замовлення</div>
+      <div class="my-order">
+        <div class="mo-hd"><div class="mo-nm">${o.id}</div><div class="mo-st">${sLbl(o.status)}</div></div>
+        <div class="mo-det">🍽️ ${o.rname}<br>📦 ${o.items}<br>💰 ${o.total}₴</div>
+        <div class="st-btns">
+          ${o.status==='ready'?`<button class="stb pr" onclick="cSetStatus('${o.id}','going_rest')">🛵 Їду в ресторан</button>`:''}
+          ${o.status==='going_rest'?`<button class="stb pr" onclick="cSetStatus('${o.id}','picked')">✅ Забрав замовлення</button>`:''}
+          ${o.status==='picked'?`<button class="stb pr" onclick="cSetStatus('${o.id}','delivered')">🏁 Доставлено</button>`:''}
+        </div>
+      </div>`;
+  } else {
+    const avail=liveOrders.filter(o=>o.status==='ready'&&!o.cid);
+    if(!avail.length){c.innerHTML=`<div class="sp"><div class="sp-ttl">Доступні замовлення</div><div style="color:var(--mu);padding:22px;text-align:center">Немає доступних замовлень — очікуйте</div></div>`;return;}
+    c.innerHTML=`<div style="font-size:15px;font-weight:800;margin-bottom:13px">Доступні замовлення (${avail.length})</div>`+
+      avail.map(o=>`<div class="avail-card"><div class="ac-hd"><div class="ac-nm">${o.id} — ${o.rname}</div><div class="ac-pr">${o.total}₴</div></div><div class="ac-det">📦 ${o.items}</div><button class="acc-btn" onclick="cAccept('${o.id}')">Прийняти замовлення</button></div>`).join('');
+  }
+}
+
+function cAccept(oid){
+  const o=liveOrders.find(x=>x.id===oid);
+  if(!o||o.cid)return;
+  o.cid='c1';o.status='going_rest';cMyOrder=oid;
+  addLog('🛵',`<b>Кур'єр прийняв</b> замовлення <b>${oid}</b>`);
+  renderCourier();
+}
+function cSetStatus(oid,st){
+  const o=liveOrders.find(x=>x.id===oid);if(!o)return;
+  o.status=st;
+  if(st==='picked')addLog('📦',`<b>Кур'єр забрав</b> замовлення <b>${oid}</b> — клієнту: "Кур'єр вже в дорозі"`);
+  if(st==='delivered'){
+    const earn=Math.round(o.total*0.1)+gDel;
+    cEarnings+=earn;cCount++;
+    cTimes.push(Math.round((Date.now()-o.ts)/60000)||25);
+    cMyOrder=null;liveOrders=liveOrders.filter(x=>x.id!==oid);
+    addLog('✅',`<b>Кур'єр доставив</b> замовлення <b>${oid}</b>. Зароблено: ${earn}₴`);
+  }
+  renderCourier();
+}
+
+// ════════════════════════════════════
+// RESTAURANT OWNER
+// ════════════════════════════════════
+document.getElementById('roTabs').addEventListener('click',e=>{
+  const t=e.target.closest('.at');if(!t)return;
+  document.querySelectorAll('#roTabs .at').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');renderROTab(t.dataset.rotab);
+});
+
+function renderROTab(tab){
+  const rid=curUser?.rid;
+  const r=rests.find(x=>x.id===rid);if(!r)return;
+  document.getElementById('tbTtl').textContent=r.name;
+  document.getElementById('tbSub').textContent='Панель ресторану';
+  const myOrd=liveOrders.filter(o=>o.rid===rid);
+  const dayTot=myOrd.reduce((s,o)=>s+o.total,0)+850;
+  const earn=Math.round(dayTot*(r.comm||80)/100);
+  document.getElementById('roHeader').innerHTML=`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:13px">
+    <div class="sc"><div class="sc-lbl">Замовлень сьогодні</div><div class="sc-val">${myOrd.length+4}</div><div class="sc-ico">📦</div></div>
+    <div class="sc"><div class="sc-lbl">Виручка сьогодні</div><div class="sc-val">${dayTot}₴</div><div class="sc-ico">💰</div></div>
+    <div class="sc"><div class="sc-lbl">Ваш заробіток (${r.comm||80}%)</div><div class="sc-val">${earn}₴</div><div class="sc-ico">📈</div></div>
+  </div>`;
+  const c=document.getElementById('roContent');
+  if(tab==='orders'){
+    if(!myOrd.length){c.innerHTML='<div style="color:var(--mu);padding:28px;text-align:center">Нових замовлень немає</div>';return;}
+    c.innerHTML=myOrd.map(o=>`<div class="roc">
+      <div class="roc-hd"><div class="roc-nm">${o.id}</div><span class="os ${sCls(o.status)}">${sLbl(o.status)}</span></div>
+      <div class="roc-items">📦 ${o.items} • 💰 ${o.total}₴${o.delay?' <span class="dl-badge">⚠️ Затримка</span>':''}</div>
+      <div class="roc-btns">
+        ${o.status==='preparing'?`<button class="rb ok" onclick="roSet('${o.id}','accepted')">✅ Прийнято</button>`:''}
+        ${o.status==='accepted'?`<button class="rb pr" onclick="roSet('${o.id}','cooking')">🍳 Готується</button>`:''}
+        ${o.status==='cooking'?`<button class="rb ry" onclick="roSet('${o.id}','ready')">✅ Готово до видачі</button>`:''}
+        ${o.status!=='ready'?`<button class="rb dl" onclick="roDelay('${o.id}')">⏳ Затримка</button>`:''}
+      </div></div>`).join('');
+  } else if(tab==='history'){
+    c.innerHTML=`<div class="tw"><table class="ot"><thead><tr><th>Замовлення</th><th>Страви</th><th>Статус</th><th>Сума</th></tr></thead><tbody>
+      <tr><td><div class="o-nm">#1050</div></td><td style="font-size:11px;color:var(--mu)">Пепероні х2</td><td><span class="os ok">Доставлено</span></td><td><div class="o-tot">378₴</div></td></tr>
+      <tr><td><div class="o-nm">#1048</div></td><td style="font-size:11px;color:var(--mu)">Маргарита, Напій</td><td><span class="os ok">Доставлено</span></td><td><div class="o-tot">249₴</div></td></tr>
+      <tr><td><div class="o-nm">#1046</div></td><td style="font-size:11px;color:var(--mu)">Карбонара</td><td><span class="os no">Скасовано</span></td><td><div class="o-tot">165₴</div></td></tr>
+    </tbody></table></div>`;
+  } else if(tab==='menu'){
+    const menu=menus[rid]||[];
+    c.innerHTML=`<div style="display:flex;justify-content:flex-end;margin-bottom:13px"><button class="add-item-btn" onclick="openItemMo(${rid},null)">+ Додати страву</button></div>
+      <div class="ig">${menu.map(item=>`<div class="ic">
+        <div class="ic-img" style="${item.photo?`background-image:url('${item.photo}');background-size:cover;background-position:center;font-size:0`:''}">
+          ${!item.photo?'🍽️':''}
+        </div>
+        <div class="ic-body">
+          <div class="ic-nm">${item.name}</div>
+          <div class="ic-desc">${item.desc}</div>
+          <div class="ic-ft"><div class="ic-price">${item.price}₴</div><button class="add-btn" style="background:rgba(255,140,0,.75);font-size:12px" onclick="openItemMo(${rid},${item.id})">✏️</button></div>
+        </div></div>`).join('')}
+      </div>`;
+  }
+}
+
+function roSet(oid,st){
+  const o=liveOrders.find(x=>x.id===oid);if(!o)return;
+  o.status=st;addLog('🍽️',`<b>${o.rname}</b>: замовлення <b>${oid}</b> → ${sLbl(st)}`);
+  renderROTab('orders');
+}
+function roDelay(oid){
+  const o=liveOrders.find(x=>x.id===oid);if(!o)return;
+  o.delay=true;addLog('⏳',`<b>${o.rname}</b>: затримка замовлення <b>${oid}</b>`,true);
+  renderROTab('orders');
+}
+
+// ════════════════════════════════════
+// MISC
+// ════════════════════════════════════
+document.querySelectorAll('.otc[data-target]').forEach(c=>c.addEventListener('click',()=>nav(c.dataset.target)));
+document.querySelectorAll('.cc').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('.cc').forEach(x=>x.classList.remove('active'));c.classList.add('active');}));
+document.querySelectorAll('.fc').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('.fc').forEach(x=>x.classList.remove('active'));c.classList.add('active');}));
+
+document.getElementById('themeBtn').addEventListener('click',()=>{
+  const d=document.body.classList.toggle('dark');
+  document.getElementById('themeBtn').textContent=d?'☀️':'🌙';
+});
+
+// PROMO SLIDER
+let cb=0;const sl=document.querySelectorAll('.promo-slide'),dt=document.querySelectorAll('.dot');
+function sb(i){
+  sl.forEach(s=>s.classList.remove('active'));
+  dt.forEach(d=>d.classList.remove('active'));
+  sl[i].classList.add('active');
+  dt[i].classList.add('active');
+  cb=i;
+}
+dt.forEach(d=>d.addEventListener('click',()=>sb(+d.dataset.i)));
+setInterval(()=>sb((cb+1)%sl.length),5000);
+let sx2=0;const tr=document.querySelector('.promo-track');
+tr.addEventListener('mousedown',e=>sx2=e.screenX);
+tr.addEventListener('mouseup',e=>{const dx=e.screenX-sx2;if(Math.abs(dx)>50)sb(dx<0?(cb+1)%sl.length:(cb-1+sl.length)%sl.length);});
+
+// Auto-refresh courier & owner panels
+setInterval(()=>{
+  if(document.getElementById('courier-page').classList.contains('active'))renderCourier();
+  if(document.getElementById('restowner-page').classList.contains('active'))renderROTab(document.querySelector('#roTabs .at.active')?.dataset.rotab||'orders');
+},8000);
+
+// Fix promo banner on mobile
+function fixPromoBannerForMobile(){
+  const isMob=window.innerWidth<=700;
+  const track=document.querySelector('.promo-track');
+  if(isMob) track.classList.add('mob');
+  else track.classList.remove('mob');
+}
+window.addEventListener('resize',fixPromoBannerForMobile);
+fixPromoBannerForMobile();
+</script>
+</body>
+</html>
