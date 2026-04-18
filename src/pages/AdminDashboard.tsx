@@ -5,7 +5,7 @@ import { TrendingUp, Users, ShoppingBag, Bike, AlertTriangle, DollarSign, Search
 import { cn } from '../lib/utils';
 import { toast } from 'sonner';
 import { useData } from '../hooks/useData';
-import { Restaurant } from '../types';
+import { Restaurant } from '../types'; 
 import {
   DndContext,
   closestCenter,
