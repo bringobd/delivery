@@ -11,7 +11,7 @@ export const OwnerDashboard: React.FC = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('orders');
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
-  const [myOrders, setMyOrders] = useState<Order[]>([]);
+  const [myOrders, setMyOrders] = useState<Order[]>([]); 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
