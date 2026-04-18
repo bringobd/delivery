@@ -4,7 +4,7 @@ import { RestaurantCard } from '../components/RestaurantCard';
 import { motion } from 'motion/react';
 import { ArrowRight, Search, Filter } from 'lucide-react';
 import { cn } from '../lib/utils';
-
+ 
 export const Restaurants: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
