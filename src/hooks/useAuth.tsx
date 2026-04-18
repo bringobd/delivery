@@ -6,7 +6,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (name: string, phone: string) => Promise<void>;
-  logout: () => Promise<void>;
+  logout: () => Promise<void>; 
   updateProfile: (data: Partial<User>) => Promise<void>;
   isAuthenticated: boolean;
 }
