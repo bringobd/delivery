@@ -10,7 +10,7 @@ import { CartProvider } from './hooks/useCart';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import { Navbar } from './components/Navbar';
 import { MobileHeader } from './components/MobileHeader';
-import { BottomNav } from './components/BottomNav';
+import { BottomNav } from './components/BottomNav'; 
 import { CartDrawer } from './components/CartDrawer';
 import { MenuDrawer } from './components/MenuDrawer';
 import { useCart } from './hooks/useCart';
