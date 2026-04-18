@@ -6,7 +6,7 @@ import { cn } from '../lib/utils';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'motion/react';
 
-export const BottomNav: React.FC = () => {
+export const BottomNav: React.FC = () => { 
   const { user } = useAuth();
   const { totalItems } = useCart();
   const location = useLocation();
