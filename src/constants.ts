@@ -5,7 +5,7 @@ export const CATEGORIES: Category[] = [
   { id: '2', name: 'Burgers', icon: '🍔' },
   { id: '3', name: 'Sushi', icon: '🍣' },
   { id: '4', name: 'Pasta', icon: '🍝' },
-  { id: '5', name: 'Desserts', icon: '🍰' },
+  { id: '5', name: 'Desserts', icon: '🍰' }, 
   { id: '6', name: 'Healthy Food', icon: '🥗' },
   { id: '7', name: 'Tacos', icon: '🌮' },
   { id: '8', name: 'Coffee', icon: '☕' },
