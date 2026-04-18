@@ -3,7 +3,7 @@ import { Search, ShoppingCart, User, MapPin, X, Bike, ChevronRight, LogOut } fro
 import { useCart } from '../hooks/useCart';
 import { useAuth } from '../hooks/useAuth';
 import { motion, AnimatePresence } from 'motion/react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom'; 
 import { cn } from '../lib/utils';
 
 export const Navbar: React.FC<{ onOpenCart: () => void; onOpenMenu: () => void }> = ({ onOpenCart, onOpenMenu }) => {
