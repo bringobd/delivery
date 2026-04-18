@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Package, Clock, CheckCircle2, XCircle, ChevronRight } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../hooks/useAuth'; 
 import { Order } from '../types';
 
 export const Orders: React.FC = () => {
