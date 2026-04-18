@@ -10,7 +10,7 @@ export const CourierDashboard: React.FC = () => {
   const { user } = useAuth();
   const [isOnShift, setIsOnShift] = useState(false);
   const [activeOrderId, setActiveOrderId] = useState<string | null>(null);
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]); 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
