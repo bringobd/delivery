@@ -9,7 +9,7 @@ import { useData } from '../hooks/useData';
 
 export const Home: React.FC = () => {
   const { restaurants, banners } = useData();
-  const [currentPromo, setCurrentPromo] = useState(0);
+  const [currentPromo, setCurrentPromo] = useState(0); 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
