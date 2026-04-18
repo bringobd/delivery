@@ -1,0 +1,5 @@
+{
+  "name": "BRINGO",
+  "description": "Fast delivery of food, groceries, and more. Premium experience with real-time tracking and multi-role support.",
+  "requestFramePermissions": ["geolocation"]
+}

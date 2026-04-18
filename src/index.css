@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Nunito", sans-serif;
+  
+  --color-brand-light: #0CEDE9;
+  --color-brand-dark: #1A7EDB;
+  --color-brand: #0CEDE9;
+}
+
+@layer base {
+  html, body {
+    @apply bg-[#0a0a0a] text-white antialiased;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  html::-webkit-scrollbar, body::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.brand-gradient {
+  background: linear-gradient(135deg, #0CEDE9, #1A7EDB);
+}
+
+.brand-text-gradient {
+  background: linear-gradient(135deg, #0CEDE9, #1A7EDB);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass {
+  @apply bg-black/40 backdrop-blur-md border border-white/10;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.pill-shadow {
+  box-shadow: 0 10px 30px rgba(12, 199, 190, 0.2);
+}
+
+

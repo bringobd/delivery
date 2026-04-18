@@ -1,29 +1,20 @@
-# Bringo Delivery 🛵
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
-Сучасний додаток для доставки їжі в Білгороді-Дністровському.
+# Run and deploy your AI Studio app
 
-## Як запустити на GitHub Pages?
+This contains everything you need to run your app locally.
 
-Оскільки проект використовує **TypeScript (TSX)** та **React**, GitHub Pages не зможе запустити його напряму без збірки. У вас є два варіанти:
+View your app in AI Studio: https://ai.studio/apps/30ab6994-08a7-4126-83ed-cc88523f8005
 
-### Варіант 1: Автоматично через GitHub Actions (Рекомендовано)
-1. Створіть у вашому репозиторії папку `.github/workflows/`.
-2. Створіть там файл `deploy.yml`.
-3. Скопіюйте туди стандартний шаблон для деплою Vite/React проектів.
-4. У налаштуваннях репозиторію (**Settings > Pages**) виберіть **GitHub Actions** як джерело деплою.
+## Run Locally
 
-### Варіант 2: Локальна збірка
-Якщо ви використовуєте Vite:
-1. Виконайте команду `npm run build`. 
-2. Завантажте вміст папки `dist` у гілку `gh-pages`.
+**Prerequisites:**  Node.js
 
-## Особливості розробки
-- **Frontend**: React 19, TypeScript.
-- **Styling**: Tailwind CSS.
-- **State**: LocalStorage (для демо-версії).
 
-## Ролі в системі
-- **Код 1**: Клієнт
-- **Код 2**: Кур'єр
-- **Код 3**: Ресторан
-- **Код 4**: Адмін
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
