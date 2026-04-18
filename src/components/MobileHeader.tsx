@@ -8,7 +8,7 @@ export const MobileHeader: React.FC = () => {
   return (
     <header className="lg:hidden fixed top-0 left-0 right-0 z-50 w-full glass shadow-sm border-b border-slate-100 dark:border-[#272727] px-4 py-3">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        {/* Logo */}
+        {/* Logo */} 
         <Link to="/" className="flex items-center space-x-3">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white overflow-hidden">
             <img 
