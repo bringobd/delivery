@@ -12,7 +12,7 @@ export const CartDrawer: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
       {isOpen && (
         <>
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
