@@ -14,7 +14,7 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({ isOpen, onClose }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
 
-  if (!user) return null;
+  if (!user) return null; 
 
   const navLinks = [
     { path: '/', label: 'Home' },
