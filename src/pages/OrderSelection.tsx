@@ -10,7 +10,7 @@ export const OrderSelection: React.FC = () => {
     {
       id: 'restaurants',
       title: 'Restaurants',
-      icon: Utensils,
+      icon: Utensils, 
       color: 'bg-brand-light',
       available: true,
       path: '/restaurants'
