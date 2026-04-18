@@ -14,7 +14,7 @@ export const useData = () => {
     const loadData = () => {
       // Load Restaurants
       const savedRes = localStorage.getItem(RESTAURANTS_KEY);
-      if (savedRes) {
+      if (savedRes) { 
         setRestaurants(JSON.parse(savedRes));
       } else {
         localStorage.setItem(RESTAURANTS_KEY, JSON.stringify(INITIAL_RESTAURANTS));
