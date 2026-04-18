@@ -8,7 +8,7 @@ import { Star, Clock, Bike, ArrowLeft, Plus, Edit2 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { Restaurant, MenuItem } from '../types';
 
-export const RestaurantDetail: React.FC = () => {
+export const RestaurantDetail: React.FC = () => { 
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { addToCart } = useCart();
