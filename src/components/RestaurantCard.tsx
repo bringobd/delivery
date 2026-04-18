@@ -1,6 +1,6 @@
 import React from 'react';
 import { Star, Clock, Bike } from 'lucide-react';
-import { Restaurant } from '../types';
+import { Restaurant } from '../types'; 
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 
