@@ -8,7 +8,7 @@ interface CartContextType {
   addToCart: (item: MenuItem, restaurantId: string) => void;
   removeFromCart: (itemId: string) => void;
   updateQuantity: (itemId: string, delta: number) => void;
-  clearCart: () => void;
+  clearCart: () => void; 
   checkout: (restaurantName: string) => Promise<void>;
   totalItems: number;
   totalPrice: number;
