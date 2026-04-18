@@ -8,7 +8,7 @@ export const AuthPage: React.FC = () => {
   const [isRegistering, setIsRegistering] = useState(true);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-
+ 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     login(name, phone);
