@@ -5,7 +5,7 @@ export interface User {
   name: string;
   phone: string;
   email?: string;
-  role: UserRole;
+  role: UserRole; 
   restaurantId?: string;
   avatar?: string;
 }
