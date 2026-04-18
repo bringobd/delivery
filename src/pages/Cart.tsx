@@ -13,7 +13,7 @@ export const Cart: React.FC = () => {
     <div className="max-w-2xl mx-auto px-4 py-8 pb-32">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2"> 
             <ShoppingBag className="w-6 h-6 text-brand-light" />
             <h1 className="text-2xl font-black uppercase tracking-tight text-slate-900 dark:text-white">Your Cart</h1>
           </div>
