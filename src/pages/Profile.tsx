@@ -11,7 +11,7 @@ export const Profile: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(user?.name || '');
   const [editedPhone, setEditedPhone] = useState(user?.phone || '');
-  const [editedRole, setEditedRole] = useState(user?.role || 'client');
+  const [editedRole, setEditedRole] = useState(user?.role || 'client'); 
 
   if (!user) return null;
 
